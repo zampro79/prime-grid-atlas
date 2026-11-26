@@ -79,6 +79,6 @@ The Phase I audit records a fixed scalar-FFT cache corruption bug and three then
 
 ## Working and publication context
 
-Run commands from this project directory. It is a source application with flat local imports, not an installable package: no `pyproject.toml`, setup metadata, test configuration or CI workflow exists in the inspected project tree. The application starts with `python main.py`; NumPy suffices for numerical headless use, while desktop/plotting dependencies are declared in `requirements.txt`.
+Run commands from this project directory. It is a source application with flat local imports, not an installable package: no `pyproject.toml`, setup metadata or dedicated test-configuration file exists in the inspected project tree. The repository includes `.github/workflows/cpu-tests.yml`, which runs the CPU test suite and the Phase II identity verifier on Python 3.11 and 3.12. This workflow does not validate CUDA, interactive OpenGL or unlisted environments. The application starts with `python main.py`; NumPy suffices for numerical headless use, while desktop/plotting dependencies are declared in `requirements.txt`.
 
 Use the repository root reported by `git rev-parse --show-toplevel`; do not rely on machine-specific paths. Local `results/` are ignored/untracked. Earlier audit statements about tracked results describe a former parent repository, not the current index. Preserve those outputs and inspect Git status before staging. The public author and copyright holder are `zampro79`; the project is licensed under MIT.

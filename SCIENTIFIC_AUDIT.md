@@ -506,11 +506,23 @@ From the project directory, with NumPy installed:
 python tools/scientific_audit_experiments.py --trials 500 --replicates 50 --seed 20260910
 ```
 
-Writes to `results/scientific_audit/` (ignored by Git). To regenerate the published tables and figure (Matplotlib required):
+Writes to `results/scientific_audit/` (ignored by Git).
+
+> **Post-release documentation note:** To rerun the Research I protocol with
+> the current implementation and generate a figure (Matplotlib required), use
+> a separate ignored output directory:
 
 ```bash
-python tools/scientific_audit_experiments.py --output docs/scientific_audit --trials 500 --replicates 50 --seed 20260910 --plots
+python tools/scientific_audit_experiments.py --output results/scientific_audit-current --trials 500 --replicates 50 --seed 20260910 --plots
 ```
+
+This reruns the protocol under the current implementation; it is not an exact
+numerical reproduction of the archived historical results. Those outputs retain
+the earlier positive-support spectral-entropy normalization, whereas v1.0.0
+uses the fixed non-DC support documented in `RESEARCH.md`. Treat
+`docs/scientific_audit/` as an immutable historical snapshot and do not
+overwrite it. Identification of the exact historical source snapshot is deferred
+to STEP 03; it is not asserted here to have been identified or fully reproduced.
 
 Entire suite, CUDA optional:
 

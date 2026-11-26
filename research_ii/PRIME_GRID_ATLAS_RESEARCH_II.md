@@ -337,9 +337,12 @@ Relevant sources:
 
 ## 7. Counterexamples and falsification attempts
 
-1. Reflections falsify the application's positive-support spectral-entropy
-   invariance; the fixed-denominator alternative passes exact spectral
-   permutations by construction.
+1. **Post-release clarification:** in the audit-era implementation, reflections
+   falsified invariance of the application's positive-support spectral-entropy
+   normalization. The v1.0.0 implementation uses the fixed non-DC denominator
+   and passes the corresponding reflection regression test; the archived audit
+   values retain the former definition. This clarification does not claim
+   invariance beyond the exact spectral permutations and tested reflections.
 2. Factorisations of the same \(M\) falsify invariance of raw axis and peak
    metrics under reshape.
 3. Coprime-conditioned samples falsify interpretation of the parity peak as a
