@@ -55,7 +55,7 @@ This is a dependency/data-flow diagram, not a claim that every path runs every s
 - **Dependencies / used by:** NumPy, `app_config`, `compute_backend`, `grid_model`, `metrics`, `number_theory`; consumed by GUI/workers, audit script and numerical tests.
 - **Scientific relevance:** owns integer assignment, selection dispatch, field routing, Linear restriction, seed selection, comparison delta signs and residual norms. Changes propagate to all views and exports.
 
-`GridConfig` defaults: x=y=z=10, mode=`Primes`, param=2, placement=`Linear`, start=1, placement_param=7. Plane, depth, overlay, backend and display options are separate inputs. Volume and scalar caches each retain two configurations. Returned arrays may share storage; consumers must not modify cached data. The scalar FFT now explicitly allocates a private buffer before centering.
+`GridConfig` defaults: x=y=z=10, mode=`Primes`, param=2, placement=`Linear`, start=1, placement_param=7. Plane, depth, overlay, backend and display options are separate inputs. Volume and scalar caches each retain two configurations. Their cached buffers are private: `build_volume`, `build_scalar_field` and `projection` return writable arrays isolated from internal cache storage. Plane arrays may alias the corresponding 3D arrays within one projection result, but separate public calls do not share storage. Private helpers provide controlled read-only access for internal metric paths and are not protected against deliberate private-API use. The scalar FFT explicitly allocates a private buffer before centering.
 
 `build_volume` validates positive dimensions, the current `max_volume` on every request (including cache hits), the int64 interval and the partner arithmetic used by prime-family modes. Unknown modes/placements raise errors. Fixed planar offset maps are repeated with +zXY; helix rotates square layers or reflects rectangular layers. Seeded random and modulus weave use `placement_param`; other placements ignore it.
 
@@ -77,7 +77,7 @@ This is a dependency/data-flow diagram, not a claim that every path runs every s
 - **Dependencies / used by:** math, NumPy, `lru_cache`; engine, backend CPU fallback callbacks, tests. No Qt/CUDA import.
 - **Scientific relevance:** sieve maximum is inclusive, not interval-relative; family partners are evaluated by engine dispatch. φ is exposed as φ(n)/n, not a standalone totient function. Positive-domain definitions and software conventions for nonpositive inputs must stay distinct.
 
-The CPU sieve cache grows to the largest requested value. `is_prime` and factorization each have an LRU capacity of 1,000,000; `clear_volume_cache` does not clear these caches. Large Start can demand a huge sieve even for a small volume. Scalar primality uses floating `sqrt`; the sieve uses integer `isqrt`.
+The private CPU sieve cache grows to the largest requested value. Public `prime_sieve_upto` returns a writable copy; internal prime-mask construction reads the private buffer directly, so caller mutations cannot alter later classifications. `is_prime` and factorization each have an LRU capacity of 1,000,000; `clear_volume_cache` does not clear these caches. Large Start can demand a huge sieve even for a small volume. Scalar primality uses floating `sqrt`; the sieve uses integer `isqrt`.
 
 ### `grid_model.py`
 
@@ -126,7 +126,9 @@ The default file is `prime_atlas_config.json` beside the module. A profile is no
 
 ## Field and projection contracts
 
-`projection` returns `numbers`, `selected`, `hits`, `visible_depth`, `numbers_3d`, `selected_3d`, `proj_x`, `proj_y`, `depth`, `depth_limit`, and optionally `mode_values`. Depth None selects the final level. Array rows/columns are XY=(Y,X), XZ=(Z,X), YZ=(Z,Y); accumulated axes are z/y/x. `hits` are int32 inclusive sums even without overlay; visible_depth is k+1 with overlay and 1 otherwise.
+`projection` returns `numbers`, `selected`, `hits`, `visible_depth`, `numbers_3d`, `selected_3d`, `proj_x`, `proj_y`, `depth`, `depth_limit`, and optionally `mode_values`. Depth None selects the final level. Public array results are writable and isolated from private cached buffers and from other public calls: caller mutations cannot affect later projections or scientific computations. Within one result, `numbers` may be a view of `numbers_3d`, `selected` a view of `selected_3d`, and `mode_values` a view of that result's private scalar-field copy. `hits` is an independently allocated sum. Cache clearing affects future internal reuse but does not invalidate arrays already returned to callers. This contract does not promise process-wide experiment isolation, thread safety or protection from deliberate access to underscore-prefixed helpers. CPU behavior is regression-tested; CUDA requires real hardware and is not certified by CPU fallback.
+
+Array rows/columns are XY=(Y,X), XZ=(Z,X), YZ=(Z,Y); accumulated axes are z/y/x. `hits` are int32 inclusive sums even without overlay; visible_depth is k+1 with overlay and 1 otherwise.
 
 | Consumer | Selection mode, no overlay | Selection mode, overlay | Scalar diagnostic |
 |---|---|---|---|

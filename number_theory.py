@@ -24,6 +24,12 @@ def is_prime(n):
 
 
 def prime_sieve_upto(limit):
+    """Return a writable sieve copy isolated from the private cached buffer."""
+    return _prime_sieve_upto_cached(limit).copy()
+
+
+def _prime_sieve_upto_cached(limit):
+    """Return the private sieve buffer or a view for internal read-only use."""
     global _prime_sieve_limit, _prime_sieve_values
 
     limit = int(limit)
@@ -57,7 +63,7 @@ def prime_mask_for_values(values):
         return mask
 
     valid_values = arr[valid].astype(np.int64, copy=False)
-    sieve = prime_sieve_upto(int(valid_values.max()))
+    sieve = _prime_sieve_upto_cached(int(valid_values.max()))
     mask[valid] = sieve[valid_values]
     return mask
 

@@ -342,7 +342,13 @@ def _validate_volume_request(config):
 
 
 def build_volume(config):
-    """Validate every request, including cache hits, before building a volume."""
+    """Return writable arrays isolated from the private cached volume."""
+    numbers, selected = _build_volume_internal(config)
+    return numbers.copy(), selected.copy()
+
+
+def _build_volume_internal(config):
+    """Return private cached arrays for controlled read-only internal use."""
     _validate_volume_request(config)
     return _build_volume_cached(config)
 
@@ -419,9 +425,15 @@ def _build_volume_cached(config):
     return numbers, selected
 
 
-@lru_cache(maxsize=2)
 def build_scalar_field(config):
-    numbers, _selected = build_volume(config)
+    """Return a writable scalar field isolated from the private cache."""
+    field = _build_scalar_field_cached(config)
+    return None if field is None else field.copy()
+
+
+@lru_cache(maxsize=2)
+def _build_scalar_field_cached(config):
+    numbers, _selected = _build_volume_internal(config)
     if config.mode == "Residues modulo N":
         modulus = max(1, abs(int(config.param)))
         return np.mod(numbers, modulus).astype(np.float64)
@@ -438,18 +450,38 @@ def build_scalar_field(config):
 
 def clear_volume_cache():
     _build_volume_cached.cache_clear()
-    build_scalar_field.cache_clear()
+    _build_scalar_field_cached.cache_clear()
 
 
 def projection(config, plane="XY", depth=None, overlay=False):
-    numbers, selected = build_volume(config)
+    """Return writable projection arrays isolated from private cached buffers.
+
+    Plane arrays may share memory with the corresponding 3D arrays in this
+    result, but no returned array shares memory with another projection or an
+    internal cached buffer.
+    """
+    return _projection_data(config, plane, depth, overlay, isolate=True)
+
+
+def _projection_internal(config, plane="XY", depth=None, overlay=False):
+    """Return a projection over cached buffers for controlled internal reads."""
+    return _projection_data(config, plane, depth, overlay, isolate=False)
+
+
+def _projection_data(config, plane, depth, overlay, isolate):
+    numbers, selected = _build_volume_internal(config)
+    if isolate:
+        numbers = numbers.copy()
+        selected = selected.copy()
     depth_limit = get_depth_limit_for_plane(plane, config.x, config.y, config.z)
     depth = (
         depth_limit - 1 if depth is None else max(0, min(int(depth), depth_limit - 1))
     )
     data = get_plane_data(plane, depth, overlay, numbers, selected)
-    scalar_field = build_scalar_field(config)
+    scalar_field = _build_scalar_field_cached(config)
     if scalar_field is not None:
+        if isolate:
+            scalar_field = scalar_field.copy()
         field_data = get_plane_data(plane, depth, False, scalar_field, selected)
         data["mode_values"] = np.asarray(field_data["numbers"], dtype=float)
     px, py = plane_dimensions(plane, config.x, config.y, config.z)
@@ -524,7 +556,7 @@ def overlay_metrics(config, plane="XY", depth=None, random_trials=None):
     )
     if random_trials < 1:
         raise ValueError("random_trials must be at least 1")
-    data = projection(config, plane, depth, True)
+    data = _projection_internal(config, plane, depth, True)
     hits = np.asarray(data["hits"]).ravel()
     base, step = _base_and_step(data, plane, config)
     metrics = prime_grid_metrics(hits, base, data["proj_x"], data["proj_y"], step)
@@ -583,7 +615,7 @@ def current_overlay_metrics(config, data, plane):
 
 def placement_geometry_metrics(config, plane="XY", depth=None, overlay=True):
     """Placement-neutral metrics for comparing geometric embeddings."""
-    data = projection(config, plane, depth, overlay)
+    data = _projection_internal(config, plane, depth, overlay)
     values = np.asarray(
         data["hits"] if overlay else data["selected"], dtype=np.float64
     ).ravel()
