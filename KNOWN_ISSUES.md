@@ -44,8 +44,10 @@ respect to abrupt crashes and concurrent writers (PROV-02).
 
 ## Editorial status and historical evidence
 
-R08-07 remains open until the final public artifacts pass privacy review. Old
-preparatory images retain their original source/version and are not release
-1.1.0 screenshots. No screenshot regeneration or publication is implied here.
+R08-07 is **FIXED for the reviewed integrated visual examples and historical
+prototype material only**. The future complete distribution requires another
+privacy review before publication. Original capture metadata and native manifests
+remain unchanged. Preparatory bab02ccf/runtime 1.0.0 images are preserved outside
+the public tree and are not 1.1.0 screenshots. No publication is implied here.
 The diagnostic observation that `ModuleScanTab.thread` shadows `QObject.thread()`
 is not a demonstrated cause of R08-08; that attribute has not been changed.

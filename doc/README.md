@@ -22,6 +22,11 @@ The current application exposes 13 modes covering prime research, scientific con
 - [Research protocol](research_protocol.md): hypotheses, definitions, baselines, falsification criteria and experimental plan.
 - [Scientific audit](../SCIENTIFIC_AUDIT.md): verified behavior, reproducible tests and methodological limitations.
 
+## Visual demonstrations and project origins
+
+- [Seven source-S examples](../examples/release-1.1.0/README.md), [gallery](../examples/release-1.1.0/GALLERY.md), [validation](../examples/release-1.1.0/VALIDATION.md) and [native provenance example](../examples/release-1.1.0/07-provenance-export/README.md).
+- [Project history](../history/README.md): the byte-identical Celle Primi V0.10 source under author-approved MIT licensing, with four contemporary captures and the historical NameError/layout limitations. It is separate from current scientific validation.
+
 ## Historical papers and documents
 
 - [Critical archive index](archive/README.md)

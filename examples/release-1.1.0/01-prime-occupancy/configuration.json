@@ -1,0 +1,39 @@
+{
+  "grid": {
+    "mode": "Primes",
+    "mode_parameter": 2,
+    "placement": "Linear",
+    "placement_parameter": 7,
+    "start": 1,
+    "x": 71,
+    "y": 30,
+    "z": 30
+  },
+  "metrics": {
+    "baseline_seed": 20261126,
+    "baseline_trials": 12,
+    "beauty_density_decay": 18.0,
+    "beauty_edge_weight": 0.65,
+    "beauty_entropy_weight": 0.35,
+    "beauty_target_density": 0.27,
+    "edge_threshold": 0.72,
+    "entropy_bins": 8,
+    "export_max_side": 1400,
+    "fft_low_radius": 0.18,
+    "gpu_auto_min_elements": 65536,
+    "max_3d_points": 2000000,
+    "max_text_cells": 12000,
+    "max_volume": 25000000,
+    "memory_available_fraction": 0.5,
+    "memory_budget_mb": 1024,
+    "point_size_3d": 5.0,
+    "redraw_delay_ms": 60,
+    "schema_version": 1
+  },
+  "projection": {
+    "depth": 29,
+    "overlay": true,
+    "plane": "XY"
+  },
+  "view": "Classic"
+}

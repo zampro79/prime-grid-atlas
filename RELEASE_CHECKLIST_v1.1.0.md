@@ -12,8 +12,8 @@ publication gate has been completed by a working-tree test run.
   mathematical definitions, dependencies and 1024 MiB default cap unchanged.
 - [x] Prepare current README, Known Issues, changelog and release notes.
 - [x] Preserve the original v1.0.0 citation, DOI, tag and historical evidence.
-- [ ] Author approves the complete STEP 10R diff and a separately authorized commit.
-- [ ] Record the actual source commit S and verify source hashes and clean status.
+- [x] Author approved STEP 10R and the source commit S (STEP 10R.1).
+- [x] Source S = eaf6c433722521c5f0dd6a6b07e112e643b5d05b; capture and verification used a separate clean checkout.
 
 ## Final validation
 
@@ -21,30 +21,32 @@ publication gate has been completed by a working-tree test run.
   unittest, compileall, theorem verification, native version/export and fresh
   11/11 Research I plus 4/4 Research II CSV baseline comparisons. No new crash
   observed; R08-08 remains unresolved.
-- [ ] Reconcile working-tree validation evidence with committed source S.
-- [ ] Full unittest suite in each existing environment with faulthandler: 169
+- [x] Reconcile original preparation records with S; preserve original evidence and source hashes.
+- [x] STEP 10R.4 full unittest suite in each existing environment with faulthandler: 169
   tests, 168 passed, one real-CUDA skip, no failures or new native crash.
-- [ ] compileall and Research II verifier conform.
+- [x] STEP 10R.4 compileall and Research II verifier conform in both existing environments; no historical module imported by tests/startup.
 - [ ] Fresh fixed non-DC Research I and Research II reruns match relevant
   baselines: 11/11 and 4/4 CSVs in each environment.
-- [ ] Native application launch/title and export report 1.1.0; provenance schema
+- [x] Source-S native launch/title/export evidence reports 1.1.0; integrated current startup smoke passed in both environments. Provenance schema
   remains pga.provenance/1.0, with actual source identity/dirty state.
-- [ ] Historical package/checksums, 33 historical files and 32 preparatory files
-  remain intact; links and CFF syntax/coherence checks pass.
-- [ ] Record validation limits honestly; do not mark CUDA/non-Linux/thread safety
+- [x] Historical package/checksums, 33 scientific historical files and 32 separately preserved preparatory files remain intact; integrated links/checksum checks pass.
+- [ ] Complete the final citation gate: CFF syntax/coherence previously checked; full CFF validation and established publication metadata still required.
+- [x] Record validation limits honestly; do not mark CUDA/non-Linux/thread safety
   validated through skips or simulations.
 
 ## Visual examples and privacy
 
-- [ ] Approve a portable future capture procedure before running it.
-- [ ] Generate authentic 1.1.0 material from S, not from a later asset commit.
-- [ ] Main README uses no more than four approved images; complete gallery has
+- [x] Author approved the portable capture procedure and final STEP 10R.2 artifacts.
+- [x] Eleven authentic modern PNGs and seven examples were generated from S; their bytes are unchanged during integration.
+- [x] Main README uses four approved modern images; complete gallery has
   coprimality, scan and native viewport/framebuffer details.
-- [ ] Inspect actual renderer, configuration/result correspondence, native
+- [x] Inspect actual renderer, configuration/result correspondence, native
   manifests, completeness, hashes and all visible/embedded privacy fields.
-- [ ] Close R08-07 only after the definitive public files pass review.
-- [ ] Keep preparatory bab02ccf/runtime 1.0.0 evidence unchanged/private; use an
+- [x] R08-07 FIXED for reviewed integrated material only; complete-distribution privacy remains a publication gate.
+- [x] Keep all 32 preparatory bab02ccf/runtime 1.0.0 files unchanged outside the public tree; use an
   explicit allow-list for new public assets, never blanket staging of examples/.
+- [x] Preserve author-approved historical Celle Primi source under MIT, with four contemporary captures and its original NameError/layout limits. Exclude it from current scientific validation.
+- [x] Rerun the seven-example numeric verifier on a separate copy against clean S: arithmetic, FFT, 6406 3D positions, 14 placements, 49 scan rows, five sidecars and seven native outputs.
 - [ ] Author approves the distinct documentation/asset commit D. Artifacts still
   identify application source S, not D.
 
@@ -53,7 +55,7 @@ publication gate has been completed by a working-tree test run.
 - [ ] Author explicitly accepts final R08-08 risk for publication separately
   from the already accepted preparation/local-commit risk. It remains HIGH /
   OPEN / NOT REPRODUCED / ROOT CAUSE UNKNOWN, not FIXED.
-- [ ] Public Known Issues and release metadata disclose possible unsaved-work
+- [x] Public Known Issues and release metadata disclose possible unsaved-work
   loss, interrupted exports and unknown root cause/scope without invented odds.
 - [ ] Establish the actual 1.1.0 DOI/date through a separately authorized process;
   resolve citation/source-archive sequencing before publication.
@@ -62,6 +64,12 @@ publication gate has been completed by a working-tree test run.
 - [ ] Obtain explicit final approval before any merge, push, tag, GitHub release
   or Zenodo publication. Preserve the original deposit and concept family.
 
-Until these gates are satisfied, publication remains suspended. A passing test
+STEP 10R.4 checks conserved STEP 10R Research I fixed non-DC and Research II
+outputs against retained baselines (11/11 and 4/4 per environment); it does not
+claim a new regeneration. The unchecked fresh final-candidate rerun above is a
+separate gate. Source S remains fixed in original manifests; no commit D was
+created by this integration.
+
+Until the remaining gates are satisfied, publication remains suspended. A passing test
 run is not a declaration that R08-08 is resolved or that an export is universally
 safe against native termination.

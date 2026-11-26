@@ -1,0 +1,46 @@
+{
+  "application": {
+    "name": "Prime Grid Atlas",
+    "version": "1.1.0"
+  },
+  "compute": {
+    "backend_evidence": "forced_cpu_configuration",
+    "effective_backend": "CPU",
+    "fallback_events": [],
+    "producer_backend": "CPU",
+    "requested_backend": "CPU",
+    "result_origin": "computed"
+  },
+  "experiment": {
+    "command": null,
+    "command_status": "not_recorded_for_privacy",
+    "experiment_completed_at": "2026-11-26T21:31:07Z",
+    "experiment_started_at": "2026-11-26T21:31:05Z",
+    "exported_at": "2026-11-26T21:31:07Z",
+    "kind": "module_scan",
+    "status": "completed"
+  },
+  "metadata_kind": "explanation, not a native manifest",
+  "native_manifest": "../06-parametric-scan/scan.csv.manifest.json",
+  "native_manifest_sha256": "d05ec5fe8f50877e7b4661d321c355ed1260021889012c2ec16b39cb1c718783",
+  "outputs": [
+    {
+      "binary_integrity": "verified_sha256",
+      "path": "scan.csv",
+      "required": true,
+      "scientific_completeness": "complete",
+      "sha256": "154e7e12e68652239f63f9ad2448826a980a9aae6236f5df91814d0e64b93d19",
+      "size": 46609,
+      "status": "complete"
+    },
+    {
+      "binary_integrity": "verified_sha256",
+      "path": "scan.config.json",
+      "required": true,
+      "scientific_completeness": "not_applicable",
+      "sha256": "9deca45a7a783a597405ff5cd2563a313969bad93773daa8a805087cf554aedd",
+      "size": 908,
+      "status": "complete"
+    }
+  ]
+}

@@ -86,8 +86,14 @@ Use the repository root reported by `git rev-parse --show-toplevel`; do not rely
 ## 1.1.0 release-preparation status
 
 The author-approved title is **Integrity, Reproducibility & Reliability Update**.
-The runtime label is formalized; publication, final capture generation and the
-new version DOI/date remain pending. R08-08 stays HIGH/open with unknown cause;
+Source S is eaf6c433722521c5f0dd6a6b07e112e643b5d05b. The approved
+[visual examples](examples/release-1.1.0/README.md) and
+[historical prototype archive](history/README.md) are integrated in the working
+tree; commit D remains separately authorized. Original source-S metadata and
+capture timestamps are preserved. The historical source is MIT by explicit
+author approval, unsupported, and outside the current engine and scientific
+validation. Preparatory bab02ccf/runtime 1.0.0 files remain preserved outside
+the public tree. Publication and the new version DOI/date remain pending. R08-08 stays HIGH/open with unknown cause;
 consult [Known Issues](KNOWN_ISSUES.md), the
 [release notes](RELEASE_NOTES_v1.1.0.md) and
 [version checklist](RELEASE_CHECKLIST_v1.1.0.md). Do not relabel the original

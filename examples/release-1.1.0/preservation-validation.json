@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "mode": "Preserved STEP 10R scientific outputs and baseline bytes verified; not regenerated in STEP 10R.2",
+  "preserved_regressions": {
+    "system/research-i": {
+      "identical_csv": 11,
+      "sha256": {
+        "aspect_summary.csv": "d64d60394480954cf66d4cbdc4caeee3076a116ab04b4508c61c34e7c5af1a92",
+        "aspect_trials.csv": "502f3773c605b968298a07dbfe8bd8afa2f03dbf2a6100938100543eb6ae5bf6",
+        "density_summary.csv": "92fd53eb520fb621566bac248db741faa1aa7ac1f4b38b3167662a972afc17fc",
+        "density_trials.csv": "8b217578724986758ab231faad4e573413260b4119557770d5b9ad53e712a62f",
+        "null_controls.csv": "677095b9d665f723cef8999556e1b90bdda30dff1801d82ebcd71aca55ad7942",
+        "null_summary.csv": "d6b3007c6e08439019c70900565de94457ac839e0e25d7fce7a9652be1be1b0d",
+        "null_trials.csv": "05d5f7361bebbae9ee355f8ad708de3ae689b3162dfed260e9cd3f9df325c317",
+        "placement_metrics.csv": "55140a753e9af4d9c474927420b6786e875faf9fdf89a91edf4d70ae43df2814",
+        "start_z_m30.csv": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+        "symmetry_metrics.csv": "ebec34353848a8e418e06e8615fbb58b7f0475ec156b41ad340103664aa8b8ea",
+        "synthetic_metrics.csv": "ca1fa2b185d3cc3b9af0d331a733ca06a9c05dc0dbdc8aa6d640585c27372d2e"
+      }
+    },
+    "system/research-ii": {
+      "identical_csv": 4,
+      "sha256": {
+        "factorization_anatomy.csv": "d6279af4c13eb9a15fc80497d177419bf8f5ced331ebbf7aa826a663ab14f037",
+        "hierarchy_summary.csv": "daa4e327081f0cf00e7348ef0d2351e17f5037138e3c9f4c35217e2a560acd91",
+        "hierarchy_trials.csv": "422c7b0d509a7209d4bf04525b2e0ca18886231273574d372c68be266b7471f9",
+        "spectral_ramanujan.csv": "19d37c96270b3c5a2cf9050f5cf9119251c1fa4e145d70de2723ac2eaa833949"
+      }
+    },
+    "venv/research-i": {
+      "identical_csv": 11,
+      "sha256": {
+        "aspect_summary.csv": "d64d60394480954cf66d4cbdc4caeee3076a116ab04b4508c61c34e7c5af1a92",
+        "aspect_trials.csv": "502f3773c605b968298a07dbfe8bd8afa2f03dbf2a6100938100543eb6ae5bf6",
+        "density_summary.csv": "92fd53eb520fb621566bac248db741faa1aa7ac1f4b38b3167662a972afc17fc",
+        "density_trials.csv": "8b217578724986758ab231faad4e573413260b4119557770d5b9ad53e712a62f",
+        "null_controls.csv": "677095b9d665f723cef8999556e1b90bdda30dff1801d82ebcd71aca55ad7942",
+        "null_summary.csv": "d6b3007c6e08439019c70900565de94457ac839e0e25d7fce7a9652be1be1b0d",
+        "null_trials.csv": "05d5f7361bebbae9ee355f8ad708de3ae689b3162dfed260e9cd3f9df325c317",
+        "placement_metrics.csv": "55140a753e9af4d9c474927420b6786e875faf9fdf89a91edf4d70ae43df2814",
+        "start_z_m30.csv": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+        "symmetry_metrics.csv": "ebec34353848a8e418e06e8615fbb58b7f0475ec156b41ad340103664aa8b8ea",
+        "synthetic_metrics.csv": "ca1fa2b185d3cc3b9af0d331a733ca06a9c05dc0dbdc8aa6d640585c27372d2e"
+      }
+    },
+    "venv/research-ii": {
+      "identical_csv": 4,
+      "sha256": {
+        "factorization_anatomy.csv": "d6279af4c13eb9a15fc80497d177419bf8f5ced331ebbf7aa826a663ab14f037",
+        "hierarchy_summary.csv": "daa4e327081f0cf00e7348ef0d2351e17f5037138e3c9f4c35217e2a560acd91",
+        "hierarchy_trials.csv": "422c7b0d509a7209d4bf04525b2e0ca18886231273574d372c68be266b7471f9",
+        "spectral_ramanujan.csv": "19d37c96270b3c5a2cf9050f5cf9119251c1fa4e145d70de2723ac2eaa833949"
+      }
+    }
+  },
+  "checksum_counts": {
+    "Research I SHA256SUMS": 12,
+    "Historical CSV_SHA256SUMS": 11,
+    "Preparatory SHA256SUMS": 30
+  },
+  "historical_files_unchanged": 33,
+  "preparatory_files_unchanged": 32
+}

@@ -172,7 +172,7 @@ The random baseline fixes K=count(h>0), chooses K distinct positions uniformly o
 
 ## Configuration, state and exports
 
-`config.example.json` matches AppConfig defaults. There is no `examples/` directory. When changing a field, trace default → coercion/clamp → GUI range → consumer → snapshot/export → test → documentation. `export_max_side` is currently exposed but unused by `save_heatmap_figure`, which uses 10×8 inches at 180 dpi. Do not document a working size cap until behavior is deliberately resolved.
+`config.example.json` matches AppConfig defaults. The integrated [examples/release-1.1.0](examples/release-1.1.0/README.md) documents source-S demonstrations; the [historical prototype](history/README.md) is preserved separately and is not imported by the current engine or tests. When changing a field, trace default → coercion/clamp → GUI range → consumer → snapshot/export → test → documentation. `export_max_side` is currently exposed but unused by `save_heatmap_figure`, which uses 10×8 inches at 180 dpi. Do not document a working size cap until behavior is deliberately resolved.
 
 ### Preventive memory policy
 

@@ -1,0 +1,98 @@
+[
+  {
+    "captured_at": "2026-11-26T21:30:59Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "01-prime-occupancy/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:30:59Z",
+    "kind": "native desktop viewport PNG export",
+    "path": "01-prime-occupancy/viewport.png"
+  },
+  {
+    "captured_at": "2026-11-26T21:31:00Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "04-fft/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:00Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt FFT viewport capture",
+    "path": "04-fft/viewport.png",
+    "qt_platform": "wayland",
+    "size": [
+      2451,
+      1339
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:03Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "03-cartesian-3d/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:03Z",
+    "kind": "native desktop OpenGL framebuffer",
+    "path": "03-cartesian-3d/framebuffer.png",
+    "size": [
+      2451,
+      1239
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:04Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "02-coprime-support/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:05Z",
+    "kind": "native desktop viewport PNG export",
+    "path": "02-coprime-support/viewport.png"
+  },
+  {
+    "captured_at": "2026-11-26T21:31:05Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "05-placement-comparison/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  },
+  {
+    "captured_at": "2026-11-26T21:31:07Z",
+    "device_pixel_ratio": 1.25,
+    "kind": "desktop Qt widget screenshot",
+    "path": "06-parametric-scan/interface.png",
+    "qt_platform": "wayland",
+    "size": [
+      2474,
+      1468
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "application_version": "1.1.0",
+  "compute": {
+    "evidence": "CPU explicitly selected; real NumPy arrays returned; unchanged CPU branch exercised",
+    "gpu_path_for_large_input": false,
+    "observed_policy": {
+      "cuda_available": false,
+      "cuda_error": "",
+      "requested": "CPU",
+      "runtime_policy": "CPU / NumPy"
+    },
+    "requested": "CPU"
+  },
+  "configuration": "configuration.json",
+  "display": {
+    "table": "49 computed rows; visible row/column excerpt; full CSV authoritative"
+  },
+  "environment": "../environment-public.json",
+  "metadata_kind": "editorial observation, not native provenance",
+  "observed_at": "2026-11-26T21:31:07Z",
+  "profile": "../shared-profile.json",
+  "randomness": {
+    "baseline_seed": 20261126,
+    "baseline_trials": 12,
+    "generator": "numpy.random.default_rng",
+    "independent_seed_for_deterministic_projection_fft_3d": null
+  },
+  "source_commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+  "source_git_clean": true,
+  "source_identity": "../source-origin.json",
+  "worker_cleanup": {
+    "status": "finished through native signals",
+    "thread": null,
+    "worker": null
+  }
+}

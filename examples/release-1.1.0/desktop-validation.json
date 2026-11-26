@@ -1,0 +1,19 @@
+{
+  "R08-08": "HIGH / OPEN / NOT REPRODUCED / ROOT CAUSE UNKNOWN",
+  "application_version": "1.1.0",
+  "finished_at": "2026-11-26T21:31:08Z",
+  "scope": "One successful capture process on the observed Linux Wayland desktop; no general stability guarantee",
+  "source_commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+  "source_git_clean_before_and_after": true,
+  "stages_completed": [
+    "2D prime",
+    "FFT real Matplotlib native export",
+    "OpenGL context and framebuffer",
+    "coprime 2D",
+    "14 placement rows",
+    "49 scan rows",
+    "native exports",
+    "scan worker and thread normal completion",
+    "window.close and app.quit"
+  ]
+}

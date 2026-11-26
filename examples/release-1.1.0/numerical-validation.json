@@ -1,0 +1,115 @@
+{
+  "3d_positions_exactly_verified": 6406,
+  "3d_subsampling": false,
+  "absolute_tolerance": 1e-12,
+  "application_version": "1.1.0",
+  "independent_gcd": {
+    "projected_support": 560,
+    "selected_cells": 16800
+  },
+  "independent_numpy_fft": {
+    "maximum_absolute_matrix_difference": 0.0,
+    "metrics": {
+      "fft_axis_ratio": 0.0048685271233571544,
+      "fft_lowfreq_ratio": 0.0028790293927428725,
+      "fft_peak_ratio": 0.1482098047068339,
+      "fft_spectral_entropy": 0.4637480357783625
+    },
+    "shape": [
+      30,
+      71
+    ]
+  },
+  "independent_trial_division": {
+    "prime_cells": 6406,
+    "projected_prime_support": 564
+  },
+  "limits": [
+    "Scan/comparison metric reruns use the same implementation; no new mathematical proof or significance claim.",
+    "Native producer backend unknown remains unknown; editorial CPU observation is recorded separately."
+  ],
+  "native_csv_rows": {
+    "05-placement-comparison/placements.csv": 14,
+    "06-parametric-scan/scan.csv": 49
+  },
+  "native_sidecars": [
+    {
+      "compute": {
+        "backend_evidence": "not_observed_per_operation",
+        "effective_backend": null,
+        "fallback_events": [],
+        "producer_backend": null,
+        "requested_backend": "CPU",
+        "result_origin": "computed"
+      },
+      "outputs": 1,
+      "path": "01-prime-occupancy/viewport.png.manifest.json",
+      "sha256": "e5fcfe27bfbe5f5970aa189846859d9e459aa146271984844c86223b65329d01",
+      "source_clean": true
+    },
+    {
+      "compute": {
+        "backend_evidence": "not_observed_per_operation",
+        "effective_backend": null,
+        "fallback_events": [],
+        "producer_backend": null,
+        "requested_backend": "CPU",
+        "result_origin": "computed"
+      },
+      "outputs": 1,
+      "path": "02-coprime-support/viewport.png.manifest.json",
+      "sha256": "d9e3e468608c61aecca6037c1fd6a1d0bfb32c2b313577c1a8645bc23a526a0b",
+      "source_clean": true
+    },
+    {
+      "compute": {
+        "backend_evidence": "not_observed_per_operation",
+        "effective_backend": null,
+        "fallback_events": [],
+        "producer_backend": null,
+        "requested_backend": "CPU",
+        "result_origin": "computed"
+      },
+      "outputs": 1,
+      "path": "04-fft/native-fft.png.manifest.json",
+      "sha256": "cfcaf531d6e1230379ef3b44c9532b0113eaabe33ab859a7ce0e7aac31f73e6d",
+      "source_clean": true
+    },
+    {
+      "compute": {
+        "backend_evidence": "forced_cpu_configuration",
+        "effective_backend": "CPU",
+        "fallback_events": [],
+        "producer_backend": "CPU",
+        "requested_backend": "CPU",
+        "result_origin": "computed"
+      },
+      "outputs": 2,
+      "path": "05-placement-comparison/placements.csv.manifest.json",
+      "sha256": "94c21876bd60413db59b68f60dd870fcf84ef57afdb2bba60e169177a1bf42f5",
+      "source_clean": true
+    },
+    {
+      "compute": {
+        "backend_evidence": "forced_cpu_configuration",
+        "effective_backend": "CPU",
+        "fallback_events": [],
+        "producer_backend": "CPU",
+        "requested_backend": "CPU",
+        "result_origin": "computed"
+      },
+      "outputs": 2,
+      "path": "06-parametric-scan/scan.csv.manifest.json",
+      "sha256": "d05ec5fe8f50877e7b4661d321c355ed1260021889012c2ec16b39cb1c718783",
+      "source_clean": true
+    }
+  ],
+  "relative_tolerance": 1e-12,
+  "same_implementation_recalculations": {
+    "comparison_rows": 14,
+    "numeric_assertions": 5953,
+    "scan_rows": 49
+  },
+  "source_commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+  "status": "PASS"
+}

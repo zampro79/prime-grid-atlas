@@ -1,0 +1,158 @@
+{
+  "metadata_kind": "contemporary editorial capture metadata; not a native historical manifest",
+  "source": {
+    "filename": "celle_primi_z.py",
+    "bytes": 15541,
+    "lines": 582,
+    "sha256": "5d94188e58e4de43a8a5d035f19e31af7d78d37f3636526552bb4990e0d89d70",
+    "historical_git_commit": "not established",
+    "author": "zampro79 (author-supplied attribution)"
+  },
+  "original_title": "Celle Primi - livelli Z - V0.10 - 2025",
+  "year_in_title": 2025,
+  "historical_creation_date": "not established",
+  "contemporary_capture": true,
+  "environment": {
+    "python": "3.14.10",
+    "implementation": "CPython",
+    "environment_kind": "existing author-provided virtual environment",
+    "OS": "Linux",
+    "architecture": "x86_64",
+    "Tk": "9.0.2",
+    "Tcl": "9.0.2",
+    "windowing_system": "x11",
+    "desktop_session": "wayland",
+    "capture_tool": "ImageMagick import; original X11/XWayland window, including frame, stdout PNG"
+  },
+  "started_at": "2026-11-26T22:15:42.020714+00:00",
+  "captures": [
+    {
+      "path": "screenshots/01-prime-interface.png",
+      "captured_at": "2026-11-26T22:15:44.269444+00:00",
+      "bytes": 117769,
+      "sha256": "982552739c654b91bdbf04fab7c5f6c855de932548912b2af67edf0d9216a8c5",
+      "width": 2000,
+      "height": 1074,
+      "kind": "authentic desktop Tk original-window capture",
+      "configuration": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10,
+        "mode": "Primi",
+        "parameter": 2,
+        "placement": "Lineare",
+        "numbering_shift": 1,
+        "overlay": false,
+        "current_Z_index": 0,
+        "zoom": 1.0,
+        "hide_numbers": false,
+        "show_grid": true,
+        "actual_window_geometry": "1900x900+20+20"
+      },
+      "observed_status_text": [
+        " X: 10 | Y: 10 | Z: 10 | Celle totali: 1000 | Livello corrente: 1/10 | Selezionati livello (Primi): 25 | Selezionati totali: 168 | Zoom: 1.00x | Numerazione: da 1 "
+      ],
+      "meaning": "Prime numbers, original default zero-based Z index 0; numbering from one.",
+      "raster_edits": false
+    },
+    {
+      "path": "screenshots/02-cumulative-overlay.png",
+      "captured_at": "2026-11-26T22:15:44.999539+00:00",
+      "bytes": 88859,
+      "sha256": "2f2cf686178715b973d77391ed429c5d4e34970e44cbc4a37fdab76c42263789",
+      "width": 2000,
+      "height": 1074,
+      "kind": "authentic desktop Tk original-window capture",
+      "configuration": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10,
+        "mode": "Primi",
+        "parameter": 2,
+        "placement": "Lineare",
+        "numbering_shift": 1,
+        "overlay": true,
+        "current_Z_index": 9,
+        "zoom": 1.0,
+        "hide_numbers": false,
+        "show_grid": true,
+        "actual_window_geometry": "1900x900+20+20"
+      },
+      "observed_status_text": [
+        " X: 10 | Y: 10 | Z: 10 | Celle totali: 1000 | Livello corrente: 10/10 | Celle non vuote overlay (Primi): 42 | Selezionati totali: 168 | Zoom: 1.00x [overlay] | Numerazione: da 1 "
+      ],
+      "meaning": "Cumulative prime-hit overlay across all ten Z layers, nonlinear intensity exponent 0.6.",
+      "raster_edits": false
+    },
+    {
+      "path": "screenshots/03-interlaced-placement.png",
+      "captured_at": "2026-11-26T22:15:45.738007+00:00",
+      "bytes": 121613,
+      "sha256": "f83fa13307735eecb32826b07ba88798392526f3dfea5b029ee3603fbe59a989",
+      "width": 2000,
+      "height": 1074,
+      "kind": "authentic desktop Tk original-window capture",
+      "configuration": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10,
+        "mode": "Primi",
+        "parameter": 2,
+        "placement": "Estremi interlacciati",
+        "numbering_shift": 0,
+        "overlay": false,
+        "current_Z_index": 0,
+        "zoom": 1.0,
+        "hide_numbers": false,
+        "show_grid": true,
+        "actual_window_geometry": "1900x900+20+20"
+      },
+      "observed_status_text": [
+        " X: 10 | Y: 10 | Z: 10 | Celle totali: 1000 | Livello corrente: 1/10 | Selezionati livello (Primi): 22 | Selezionati totali: 168 | Zoom: 1.00x | Numerazione: da 0 "
+      ],
+      "meaning": "Interlaced interval ends, numbering from zero, first Z layer; actual placement control.",
+      "raster_edits": false
+    },
+    {
+      "path": "screenshots/04-modular-residues.png",
+      "captured_at": "2026-11-26T22:15:46.489239+00:00",
+      "bytes": 169620,
+      "sha256": "e70517d357531d2026089199a14bbf923381129c711f088287870794e3270029",
+      "width": 2000,
+      "height": 1074,
+      "kind": "authentic desktop Tk original-window capture",
+      "configuration": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10,
+        "mode": "Residui modulo N",
+        "parameter": 7,
+        "placement": "Lineare",
+        "numbering_shift": 1,
+        "overlay": true,
+        "current_Z_index": 4,
+        "zoom": 1.0,
+        "hide_numbers": false,
+        "show_grid": true,
+        "actual_window_geometry": "1900x900+20+20"
+      },
+      "observed_status_text": [
+        " X: 10 | Y: 10 | Z: 10 | Celle totali: 1000 | Livello corrente: 5/10 | Celle non vuote overlay (Residui modulo N): 100 | Selezionati totali: 1000 | Zoom: 1.00x [overlay] | Numerazione: da 1 "
+      ],
+      "meaning": "Residues modulo 7 with overlay enabled through layer index 4; color and label use the last visible layer, not cumulative red intensity.",
+      "raster_edits": false
+    }
+  ],
+  "source_modified": false,
+  "status": "captured with limitations",
+  "process_exit_code": 0,
+  "finished_at": "2026-11-26T22:15:46.700779+00:00",
+  "execution_errors": {
+    "stderr_nonempty": true,
+    "public_exception_summaries": [
+      "NameError: name 'level_spin' is not defined. Did you mean: 'level_scale'?"
+    ],
+    "raw_stderr": "preserved privately, excluded from public package"
+  },
+  "prototype_exit_code": 0
+}

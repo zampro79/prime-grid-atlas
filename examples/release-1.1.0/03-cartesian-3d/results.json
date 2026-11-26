@@ -1,0 +1,12 @@
+{
+  "context_valid": true,
+  "geometry": "Cartesian grid",
+  "rendered_points": 6406,
+  "renderer": {
+    "renderer": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 7.3.4-200.fc44.x86_64)",
+    "vendor": "AMD",
+    "version": "4.6 (Compatibility Profile) Mesa 26.2.7"
+  },
+  "selected_points": 6406,
+  "subsampling": false
+}

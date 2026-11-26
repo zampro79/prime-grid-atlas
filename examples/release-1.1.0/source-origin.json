@@ -1,0 +1,107 @@
+{
+  "all_tracked_python_sha256": {
+    "app_config.py": "40792692ac58ba5439dd9745559af1dc7b447dec1ad80421512b1935d5d6c86d",
+    "atlas_engine.py": "3b919a342799318b58cbbeb1695a78e7930b10b1916c010ec6ef9ef8506379ec",
+    "compute_backend.py": "e21340e18f16d7fb8cd7ce266072c06411ea7dd86996cd16318101d7072c2bbe",
+    "docs/reproducibility/research_i/diagnostics/compare_research_i_csv.py": "bf1ba08bb1803f45b8d7ac7d7db3371237b092f7252e817de38c0c37f5f12b0c",
+    "grid_model.py": "3ae0a8db6fe5bad40437205acdab64c0ee1d80f8efd8aa9a3ddafc5cdac1668d",
+    "main.py": "a581dcce5029490221a7c747670ebfeefe754631c0a870b35899a2f96e847ec5",
+    "memory_policy.py": "34490b11185992f2eaf3241aef65e2734a54c98bf6657b185e41dac5fa447cfd",
+    "metrics.py": "cd6e46022700d8019c5961ff98ab30302d76d4e62ce294cb4ba32283f352b2f1",
+    "mode_catalog.py": "d53a31c68f5dd9db661785bab0e69e7bbf3896da920ababca0b24d14e592aa9d",
+    "number_theory.py": "d5585834789c324b0c76e94ce244572c8c606ce76c55f8fa7a5deb9b88414d11",
+    "provenance.py": "2c8d970babd7ba7d8ec3f4c8dcbed88cad03494e95d562afd0a9c6cd6b8ea233",
+    "qt_app.py": "45b27be5c743505d9a4562cc9417be279afe15970d93a453700cece607669ac4",
+    "research_ii/research_ii_experiments.py": "33883f6c0b296ac20f6570a827aeeed5c39412eca1b2d2dc34721cae798d15fa",
+    "research_ii/verify_theorems.py": "e1b6d00661f1b4a659d65dbab195ca475dc53470e0e67413eef606c0a7e6c489",
+    "tests/scientific_reference.py": "869dcab74eca7a681aad8b76784e5e17e3c591b8480b09a26c18c4344677ef09",
+    "tests/test_backend.py": "c071beaaa1770faf810f45abad83e37b5b9a367c03cfe57c9928eeb324c1dc54",
+    "tests/test_cache_isolation.py": "17a836ba4edf4f4df4a0f16c328cff708a113e0304a5a8089cbedae48a3ca6d5",
+    "tests/test_coprime_mask.py": "71031cf337d99ee69767768a7c595316f31f49a38d7ac6e254a01b03d5e7aabb",
+    "tests/test_core.py": "c1d13960263a806ae9d39e31dfc505fde44faa3b6b1027d08e6628a029876e68",
+    "tests/test_export_provenance.py": "cbeeff4d3c3120f85e218af4357b8e48eeba5e4f0d03485c59a4a75389f8bd52",
+    "tests/test_fft_metrics.py": "be4deac2684efabb55d8984f9a7d21ef0b43d97cff8cd20621611f4c28969521",
+    "tests/test_known_scientific_issues.py": "78d1072afdda7dc571b56f0cb6d070cef031d41976c8de8574c46b6a9af745f4",
+    "tests/test_linear_embedding.py": "ce003e1d2764773c042b299a0d00b2df8c489bfa7d0e2f2f62d9023a5e7d33a8",
+    "tests/test_memory_policy.py": "56179ed0cefa83fd734f5ad13089f375b42cff14dc2a492be1da08f8fd1bfc1d",
+    "tests/test_metrics.py": "96816d96f6e2f102f42102682932a4c72a2edbf1103d3d19d2ac8a94232a7259",
+    "tests/test_number_theory.py": "3714deb219ddb86d4f2bac6612ae1e1c820378c4774d7410d33e24b1dbb38da9",
+    "tests/test_placements.py": "8265f9269043aaf430eb1b2698a098be54cba2bda653692540f1693b4b7949ce",
+    "tests/test_projections.py": "52afac600af6000a8871d4a93b01275af2ffca9cc58caaa2778e09bb0e12676c",
+    "tests/test_provenance.py": "1b8c30d35c5a555de3614f909bb76b01f7f4dc301162094235a8a987c5c3eacc",
+    "tests/test_random_baseline.py": "b970b270ff599fc038beae53f8f05749343cc885a042af9b85e2d2487f506962",
+    "tests/test_scientific_ui.py": "2ba0e6375f6180f6476df5dbe226e4b823ed37172b874a813737ac0bbb91502c",
+    "tools/scientific_audit_experiments.py": "b181e1c29dac023dd944da15474c0347f3361995e8901639729d0c85bf277b3b"
+  },
+  "git_clean": true,
+  "metadata_kind": "editorial observation, not a native manifest",
+  "runtime_application_version": "1.1.0",
+  "source_commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+  "source_identity": {
+    "files": [
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "provenance.py",
+        "sha256": "2c8d970babd7ba7d8ec3f4c8dcbed88cad03494e95d562afd0a9c6cd6b8ea233",
+        "size": 17288
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "qt_app.py",
+        "sha256": "45b27be5c743505d9a4562cc9417be279afe15970d93a453700cece607669ac4",
+        "size": 99170
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "atlas_engine.py",
+        "sha256": "3b919a342799318b58cbbeb1695a78e7930b10b1916c010ec6ef9ef8506379ec",
+        "size": 32656
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "app_config.py",
+        "sha256": "40792692ac58ba5439dd9745559af1dc7b447dec1ad80421512b1935d5d6c86d",
+        "size": 3953
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "compute_backend.py",
+        "sha256": "e21340e18f16d7fb8cd7ce266072c06411ea7dd86996cd16318101d7072c2bbe",
+        "size": 7654
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "grid_model.py",
+        "sha256": "3ae0a8db6fe5bad40437205acdab64c0ee1d80f8efd8aa9a3ddafc5cdac1668d",
+        "size": 2720
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "metrics.py",
+        "sha256": "cd6e46022700d8019c5961ff98ab30302d76d4e62ce294cb4ba32283f352b2f1",
+        "size": 14534
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "number_theory.py",
+        "sha256": "d5585834789c324b0c76e94ce244572c8c606ce76c55f8fa7a5deb9b88414d11",
+        "size": 4666
+      },
+      {
+        "observed_at": "2026-11-26T21:30:57Z",
+        "path": "memory_policy.py",
+        "sha256": "34490b11185992f2eaf3241aef65e2734a54c98bf6657b185e41dac5fa447cfd",
+        "size": 19074
+      }
+    ],
+    "git": {
+      "available": true,
+      "commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+      "dirty": false
+    },
+    "identity_status": "git_commit_and_file_hashes_clean",
+    "loaded_code_identity": "not_verified",
+    "missing_files": [],
+    "observed_at": "2026-11-26T21:30:57Z"
+  }
+}

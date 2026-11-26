@@ -22,15 +22,41 @@ from finite experimental observations.
 
 ## Screenshots and gallery
 
-The four approved main views are prime occupancy, desktop 3D, desktop FFT and
-placement comparison. The complete gallery will also include coprimality,
-parametric scan, viewports and an OpenGL framebuffer.
+These authentic desktop captures were generated from application source
+**S = eaf6c433722521c5f0dd6a6b07e112e643b5d05b**, runtime **1.1.0**.
+They are demonstrations, not evidence of a new mathematical discovery.
 
-**Final 1.1.0 images have not been generated.** The preparatory bab02ccf images
-retain runtime 1.0.0 and their original provenance; they are not displayed here
-as 1.1.0 evidence. See the [capture specification](screenshots/CAPTURE_PLAN_v1.1.0.md)
-and [screenshot provenance requirements](screenshots/README.md). Gallery links
-will be added only after the actual files exist and pass review.
+![Prime-hit occupancy projected from a Linear 71 × 30 × 30 volume, Start = 1, across all 30 layers.](examples/release-1.1.0/01-prime-occupancy/interface.png)
+
+![Actual OpenGL view of 6406 selected prime cells in the Cartesian volume; no subsampling.](examples/release-1.1.0/03-cartesian-3d/interface.png)
+
+![Mean-centered binary occupancy FFT power, DC removed, displayed as log1p power; qualitative application view.](examples/release-1.1.0/04-fft/interface.png)
+
+![Fourteen placements of one integer interval; descriptive geometric metrics relative to Linear, not a significance test.](examples/release-1.1.0/05-placement-comparison/interface.png)
+
+See the [complete gallery](examples/release-1.1.0/GALLERY.md),
+[local HTML gallery](examples/release-1.1.0/gallery.html),
+[seven reproducible examples](examples/release-1.1.0/README.md),
+[validation](examples/release-1.1.0/VALIDATION.md),
+[actual provenance export](examples/release-1.1.0/07-provenance-export/README.md)
+and [Known Issues](KNOWN_ISSUES.md). Coprimality, scan, viewports and the
+OpenGL framebuffer are included in the separate gallery. FFT viewport images
+are qualitative; the numerical matrix and native Matplotlib export are supplied.
+A later documentation commit D does not replace S in the original manifests.
+
+## Project Origins
+
+Prime Grid Atlas originated from a discussion at my local chess club on a Friday evening in October 2025.
+
+Observing several stacked vinyl tournament chessboards led to a discussion about playing chess across multiple levels and identifying each square through three-dimensional coordinates.
+
+This inspired the idea of arranging integers across successive numerical grids and cumulatively projecting prime-number occurrences along the Z-axis.
+
+The first implementation was Celle Primi — livelli Z (V0.10), a small Python/Tkinter application whose original source is preserved in this repository.
+
+[Read about the project's origins](history/README.md).
+
+![Contemporary capture of Celle Primi V0.10: original Italian interface and cumulative prime-hit overlay.](history/celle_primi_v0.10/screenshots/02-cumulative-overlay.png)
 
 ## Features
 
@@ -87,12 +113,14 @@ The [software manual](doc/software_manual.md) describes the interface.
 
 ## Reproducible examples
 
-The approved example plan covers prime occupancy, coprimality, 3D, FFT, placement
-comparison, scan and native provenance export. Each final case must include
-configuration, seed policy, actual environment/backend, source identity, runtime
-version, results, screenshots, manifests and checksums. These demonstrations are
-separate from Research I/II. The [capture plan](screenshots/CAPTURE_PLAN_v1.1.0.md)
-specifies their provenance and privacy gates; the final package is still pending.
+The [seven demonstrations](examples/release-1.1.0/README.md) cover prime
+occupancy, coprimality, Cartesian 3D, FFT, placement comparison, scan and
+[scientific provenance](examples/release-1.1.0/07-provenance-export/README.md).
+They include full configurations, seed policy, observed environment/backend,
+source S, numerical results, authentic images, native sidecars and checksums.
+They are separate from Research I/II. Reproduction uses a clean checkout of S
+and separate diagnostic output; original evidence is not overwritten. See
+[the integration/provenance record](examples/release-1.1.0/INTEGRATION.md).
 
 ## Research I and Research II
 
@@ -141,9 +169,15 @@ non-DC and Research II reruns matched 11/11 and 4/4 relevant baseline CSVs in ea
 environment; compileall and the Research II verifier also passed. These checks
 apply to the observed source hashes and environments; committed-source and
 final-asset acceptance remain in the [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
-Recorded desktop validation applies to its actual source/driver environment and
-must not be relabelled as a final 1.1.0 capture. No CUDA or general thread-safety
-certification is claimed.
+The integrated desktop evidence identifies S and its actual Linux Wayland/driver
+environment; see [visual validation](examples/release-1.1.0/VALIDATION.md). No CUDA
+or general thread-safety certification is claimed. The historical prototype is
+not imported by current application tests and is outside this scientific validation.
+STEP 10R.4 repeated both full suites and the Research II verifier, recalculated
+only the demonstration examples on a clean S checkout, and checked the preserved
+Research I/II outputs without regenerating those studies. The
+[integration checksum index](EDITORIAL_SHA256SUMS) covers the integrated assets
+and updated documents, excluding the index itself; it is not a complete-distribution checksum.
 
 ## Known issues
 

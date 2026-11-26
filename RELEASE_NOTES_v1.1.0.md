@@ -64,6 +64,24 @@ scan exports reported 1.1.0 with the existing schemas. Source identity correctly
 reported the uncommitted working tree based on 39b50c4; this is not a new release
 commit or permission to publish. No new native crash was observed in these runs.
 
+## Integrated visual documentation and project origins
+
+The author approved the source-S [seven demonstrations](examples/release-1.1.0/README.md),
+[complete gallery](examples/release-1.1.0/GALLERY.md) and
+[validation evidence](examples/release-1.1.0/VALIDATION.md). Eleven original PNGs,
+numerical outputs/configurations and five unchanged native manifests retain
+source S = eaf6c433722521c5f0dd6a6b07e112e643b5d05b and original capture times.
+A later documentation commit D does not replace that source identity. No image
+or Research dataset was regenerated during editorial integration.
+
+[Project history](history/README.md) preserves the author-provided Celle Primi
+V0.10 source byte for byte under explicitly approved MIT licensing. Its four
+images are contemporary executions, not original 2025 screenshots. The observed
+level_spin startup NameError and layout limits remain documented and unfixed.
+The prototype is not a current feature, dependency or scientifically validated
+part of the 1.1.0 engine. Its future inclusion in the 1.1.0 archive is approved
+in principle; no release or Zenodo publication is performed by this integration.
+
 ## Known unresolved issues and scope
 
 **R08-08: HIGH / OPEN / NOT REPRODUCED / ROOT CAUSE UNKNOWN.** An intermittent
@@ -78,15 +96,15 @@ Real CUDA, non-Linux platforms and general thread safety are not validated.
 Memory estimates vary with libraries/allocators; shared configuration and
 concurrent execution are not isolated (PGA-ARCH-04 remains deferred). Historical
 Research I CSV reconstruction does not identify the complete original source
-snapshot or recover the original environment. R08-07 remains open for final
-public artifacts. No speculative Qt cleanup change is included.
+snapshot or recover the original environment. R08-07 is FIXED for the reviewed integrated visual/historical material only;
+the complete future distribution must undergo a fresh privacy check. No speculative Qt cleanup change is included.
 
 ## Remaining publication gates
 
-- Author approval and commit of the versioned source/documents; no commit is
-  created by STEP 10R itself.
-- Actual 1.1.0 screenshots/examples from that source, with native-renderer,
-  numerical, provenance and privacy checks; preparatory images remain 1.0.0.
+- Author approval of the integrated editorial diff and a separately authorized
+  commit D; application source S is already established.
+- Final candidate validation and complete-distribution privacy check; preserve
+  the original source-S evidence and separately retained preparatory material.
 - Verified future version DOI and release date, consistent citation/archive
   metadata, final source/assets review and explicit publication authorization.
 

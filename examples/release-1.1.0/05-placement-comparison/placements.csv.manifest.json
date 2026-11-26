@@ -1,0 +1,305 @@
+{
+  "application": {
+    "name": "Prime Grid Atlas",
+    "version": "1.1.0"
+  },
+  "compute": {
+    "backend_evidence": "forced_cpu_configuration",
+    "effective_backend": "CPU",
+    "fallback_events": [],
+    "producer_backend": "CPU",
+    "requested_backend": "CPU",
+    "result_origin": "computed"
+  },
+  "configuration": {
+    "effective": {
+      "comparison_metrics": [
+        "alive_density",
+        "local_entropy_mean",
+        "edge_density",
+        "global_entropy",
+        "fft_peak_ratio",
+        "fft_axis_ratio",
+        "fft_lowfreq_ratio",
+        "fft_spectral_entropy"
+      ],
+      "comparison_reference": "Linear",
+      "grid": {
+        "mode": "Primes",
+        "mode_parameter": 2130,
+        "placement": "Linear",
+        "placement_parameter": 7,
+        "start": 1001,
+        "x": 30,
+        "y": 30,
+        "z": 2
+      },
+      "metrics": {
+        "baseline_seed": 20261126,
+        "baseline_trials": 12,
+        "beauty_density_decay": 18.0,
+        "beauty_edge_weight": 0.65,
+        "beauty_entropy_weight": 0.35,
+        "beauty_target_density": 0.27,
+        "edge_threshold": 0.72,
+        "entropy_bins": 8,
+        "export_max_side": 1400,
+        "fft_low_radius": 0.18,
+        "gpu_auto_min_elements": 65536,
+        "max_3d_points": 2000000,
+        "max_text_cells": 12000,
+        "max_volume": 25000000,
+        "memory_available_fraction": 0.5,
+        "memory_budget_mb": 1024,
+        "point_size_3d": 5.0,
+        "redraw_delay_ms": 60,
+        "schema_version": 1
+      },
+      "projection": {
+        "depth": 1,
+        "overlay": true,
+        "plane": "XY"
+      }
+    },
+    "requested": {
+      "comparison_metrics": [
+        "alive_density",
+        "local_entropy_mean",
+        "edge_density",
+        "global_entropy",
+        "fft_peak_ratio",
+        "fft_axis_ratio",
+        "fft_lowfreq_ratio",
+        "fft_spectral_entropy"
+      ],
+      "comparison_reference": "Linear",
+      "grid": {
+        "mode": "Primes",
+        "mode_parameter": 2130,
+        "placement": "Linear",
+        "placement_parameter": 7,
+        "start": 1001,
+        "x": 30,
+        "y": 30,
+        "z": 2
+      },
+      "metrics": {
+        "baseline_seed": 20261126,
+        "baseline_trials": 12,
+        "beauty_density_decay": 18.0,
+        "beauty_edge_weight": 0.65,
+        "beauty_entropy_weight": 0.35,
+        "beauty_target_density": 0.27,
+        "edge_threshold": 0.72,
+        "entropy_bins": 8,
+        "export_max_side": 1400,
+        "fft_low_radius": 0.18,
+        "gpu_auto_min_elements": 65536,
+        "max_3d_points": 2000000,
+        "max_text_cells": 12000,
+        "max_volume": 25000000,
+        "memory_available_fraction": 0.5,
+        "memory_budget_mb": 1024,
+        "point_size_3d": 5.0,
+        "redraw_delay_ms": 60,
+        "schema_version": 1
+      },
+      "projection": {
+        "depth": 1,
+        "overlay": true,
+        "plane": "XY"
+      }
+    }
+  },
+  "environment": {
+    "cuda_availability_status": "observed",
+    "cuda_available": false,
+    "observed_at": "2026-11-26T21:31:05Z",
+    "packages": {
+      "cupy": null,
+      "cupy_status": "not_applicable",
+      "numpy": "2.5.3"
+    },
+    "platform": {
+      "machine": "x86_64",
+      "system": "Linux"
+    },
+    "python": "3.14.10"
+  },
+  "experiment": {
+    "command": null,
+    "command_status": "not_recorded_for_privacy",
+    "experiment_completed_at": "2026-11-26T21:31:05Z",
+    "experiment_started_at": "2026-11-26T21:31:05Z",
+    "exported_at": "2026-11-26T21:31:05Z",
+    "kind": "placement_comparison",
+    "status": "completed"
+  },
+  "experiment_id": "372d141f-5506-4898-bbbe-a95016c1f9fb",
+  "limitations": [
+    "The manifest is persisted at export time; no destination existed when the comparison started."
+  ],
+  "outputs": [
+    {
+      "binary_integrity": "verified_sha256",
+      "path": "placements.csv",
+      "required": true,
+      "scientific_completeness": "complete",
+      "sha256": "2443571258f22fb144800802db4b7aa06de09933e89891051820faa9e66e2945",
+      "size": 2990,
+      "status": "complete"
+    },
+    {
+      "binary_integrity": "verified_sha256",
+      "path": "placements.config.json",
+      "required": true,
+      "scientific_completeness": "not_applicable",
+      "sha256": "07319635efada9a8491cf0c694038f7d7ef6baddd2603c5520d571633fc30077",
+      "size": 1214,
+      "status": "complete"
+    }
+  ],
+  "randomness": {
+    "algorithm": null,
+    "seed": null,
+    "status": "not_applicable"
+  },
+  "schema": "pga.provenance/1.0",
+  "schema_version": "1.0",
+  "source": {
+    "changed_since_initial_observation": false,
+    "files": [
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "provenance.py",
+        "sha256": "2c8d970babd7ba7d8ec3f4c8dcbed88cad03494e95d562afd0a9c6cd6b8ea233",
+        "size": 17288
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "qt_app.py",
+        "sha256": "45b27be5c743505d9a4562cc9417be279afe15970d93a453700cece607669ac4",
+        "size": 99170
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "atlas_engine.py",
+        "sha256": "3b919a342799318b58cbbeb1695a78e7930b10b1916c010ec6ef9ef8506379ec",
+        "size": 32656
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "app_config.py",
+        "sha256": "40792692ac58ba5439dd9745559af1dc7b447dec1ad80421512b1935d5d6c86d",
+        "size": 3953
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "compute_backend.py",
+        "sha256": "e21340e18f16d7fb8cd7ce266072c06411ea7dd86996cd16318101d7072c2bbe",
+        "size": 7654
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "grid_model.py",
+        "sha256": "3ae0a8db6fe5bad40437205acdab64c0ee1d80f8efd8aa9a3ddafc5cdac1668d",
+        "size": 2720
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "metrics.py",
+        "sha256": "cd6e46022700d8019c5961ff98ab30302d76d4e62ce294cb4ba32283f352b2f1",
+        "size": 14534
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "number_theory.py",
+        "sha256": "d5585834789c324b0c76e94ce244572c8c606ce76c55f8fa7a5deb9b88414d11",
+        "size": 4666
+      },
+      {
+        "observed_at": "2026-11-26T21:31:05Z",
+        "path": "memory_policy.py",
+        "sha256": "34490b11185992f2eaf3241aef65e2734a54c98bf6657b185e41dac5fa447cfd",
+        "size": 19074
+      }
+    ],
+    "git": {
+      "available": true,
+      "commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+      "dirty": false
+    },
+    "identity_status": "git_commit_and_file_hashes_clean",
+    "initial_observation": {
+      "files": [
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "provenance.py",
+          "sha256": "2c8d970babd7ba7d8ec3f4c8dcbed88cad03494e95d562afd0a9c6cd6b8ea233",
+          "size": 17288
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "qt_app.py",
+          "sha256": "45b27be5c743505d9a4562cc9417be279afe15970d93a453700cece607669ac4",
+          "size": 99170
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "atlas_engine.py",
+          "sha256": "3b919a342799318b58cbbeb1695a78e7930b10b1916c010ec6ef9ef8506379ec",
+          "size": 32656
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "app_config.py",
+          "sha256": "40792692ac58ba5439dd9745559af1dc7b447dec1ad80421512b1935d5d6c86d",
+          "size": 3953
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "compute_backend.py",
+          "sha256": "e21340e18f16d7fb8cd7ce266072c06411ea7dd86996cd16318101d7072c2bbe",
+          "size": 7654
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "grid_model.py",
+          "sha256": "3ae0a8db6fe5bad40437205acdab64c0ee1d80f8efd8aa9a3ddafc5cdac1668d",
+          "size": 2720
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "metrics.py",
+          "sha256": "cd6e46022700d8019c5961ff98ab30302d76d4e62ce294cb4ba32283f352b2f1",
+          "size": 14534
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "number_theory.py",
+          "sha256": "d5585834789c324b0c76e94ce244572c8c606ce76c55f8fa7a5deb9b88414d11",
+          "size": 4666
+        },
+        {
+          "observed_at": "2026-11-26T21:31:05Z",
+          "path": "memory_policy.py",
+          "sha256": "34490b11185992f2eaf3241aef65e2734a54c98bf6657b185e41dac5fa447cfd",
+          "size": 19074
+        }
+      ],
+      "git": {
+        "available": true,
+        "commit": "eaf6c433722521c5f0dd6a6b07e112e643b5d05b",
+        "dirty": false
+      },
+      "identity_status": "git_commit_and_file_hashes_clean",
+      "loaded_code_identity": "not_verified",
+      "missing_files": [],
+      "observed_at": "2026-11-26T21:31:05Z"
+    },
+    "loaded_code_identity": "not_verified",
+    "missing_files": [],
+    "observed_at": "2026-11-26T21:31:05Z"
+  },
+  "warnings": []
+}

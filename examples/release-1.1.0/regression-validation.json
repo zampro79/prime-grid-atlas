@@ -1,0 +1,44 @@
+[
+  {
+    "environment": "system",
+    "task": "unittest",
+    "command": "python -X faulthandler -m unittest discover -s tests -v",
+    "exit_code": 0,
+    "seconds": 7.329443563998211
+  },
+  {
+    "environment": "system",
+    "task": "compileall",
+    "command": "python -X faulthandler -m compileall -q .",
+    "exit_code": 0,
+    "seconds": 0.31447551299788756
+  },
+  {
+    "environment": "system",
+    "task": "research-ii",
+    "command": "python -X faulthandler research_ii/verify_theorems.py",
+    "exit_code": 0,
+    "seconds": 0.7157515950020752
+  },
+  {
+    "environment": "venv",
+    "task": "unittest",
+    "command": "python -X faulthandler -m unittest discover -s tests -v",
+    "exit_code": 0,
+    "seconds": 7.689977424997778
+  },
+  {
+    "environment": "venv",
+    "task": "compileall",
+    "command": "python -X faulthandler -m compileall -q .",
+    "exit_code": 0,
+    "seconds": 0.31510849200276425
+  },
+  {
+    "environment": "venv",
+    "task": "research-ii",
+    "command": "python -X faulthandler research_ii/verify_theorems.py",
+    "exit_code": 0,
+    "seconds": 0.7175881349976407
+  }
+]

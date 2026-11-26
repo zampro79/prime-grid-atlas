@@ -2,16 +2,26 @@
 
 ## 1.1.0 preparation
 
-Final 1.1.0 images have not been generated or approved. Follow the
-[definitive capture/privacy specification](CAPTURE_PLAN_v1.1.0.md) after the
-versioned application source is committed and author approval permits capture.
-The main README will use at most four actual views: prime occupancy, desktop
-3D, desktop FFT and placement comparison. Coprimality, scan, viewport and
-framebuffer details belong in the complete gallery.
+The approved source-S material is integrated under
+[examples/release-1.1.0](../examples/release-1.1.0/README.md):
+[complete gallery](../examples/release-1.1.0/GALLERY.md),
+[HTML gallery](../examples/release-1.1.0/gallery.html),
+[validation](../examples/release-1.1.0/VALIDATION.md) and
+[privacy](../examples/release-1.1.0/PRIVACY_REVIEW.md).
+The main README uses four modern views: prime occupancy, desktop 3D, desktop FFT
+and placement comparison. Coprimality, scan, viewports and framebuffer remain
+in the complete gallery. All PNGs are original unretouched captures/exports.
 
-Preparatory images from bab02ccf/runtime 1.0.0 remain unchanged and must not be
-relabeled as 1.1.0. R08-07 remains open for final public artifacts. No synthetic
-image, substitute renderer, raster retouching or fabricated manifest is allowed.
+Source S is eaf6c433722521c5f0dd6a6b07e112e643b5d05b, runtime 1.1.0.
+Original timestamps, native sidecars, UUIDs and unknown backend fields remain
+unchanged; a future asset commit D is not their computational source. The
+[capture specification](CAPTURE_PLAN_v1.1.0.md) is preserved as the planning record.
+
+Preparatory bab02ccf/runtime 1.0.0 images remain unchanged in approved backups
+and a dedicated local preservation directory outside the public tree. The
+[historical prototype gallery](../history/celle_primi_v0.10/gallery.html) contains
+four contemporary captures of Celle Primi, not original 2025 screenshots.
+Publication remains pending and requires a complete-distribution privacy check.
 
 ## Preserved historical exclusions
 
