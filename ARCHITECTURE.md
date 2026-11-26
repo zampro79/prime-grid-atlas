@@ -188,6 +188,154 @@ Scan metadata snapshots configuration at start and records `_scan` parameters/st
 
 CSV/batch metadata do not include every commit/dependency/actual-backend detail. Historical `results/` manifests predate current provenance changes. Preserve them rather than repairing their labels. Rendering subsamples at most `max_3d_points` equally spaced flattened indices; it does not subsample engine metrics. Qt/OpenGL visual tests and numerical tests cover different claims.
 
+## Scientific provenance sidecars
+
+Future interactive exports add a sibling `<complete-output-name>.manifest.json`
+using schema `pga.provenance/1.0`: for example, `atlas.csv` produces
+`atlas.csv.manifest.json` and `atlas.png` produces
+`atlas.png.manifest.json`. Preserving the complete filename prevents CSV/PNG
+collisions for a shared stem. The batch sidecar is
+`metric_screenshots.json.manifest.json`. Existing CSV, PNG, `.config.json` and
+`metric_screenshots.json` contents and names are unchanged. The common
+standard-library implementation is in `provenance.py`; historical Research I
+and Research II scripts, manifests and published datasets do not use this new
+schema and remain immutable evidence.
+
+The public API is:
+
+- `collect_source_identity(project_root, source_paths)`: hash a curated source
+  set and, only when `project_root` is itself the Git top level, observe the
+  full commit and working-tree clean/dirty state without exporting filenames;
+- `collect_environment(...)`: record an allow-listed Python, package and coarse
+  platform environment;
+- `new_experiment_manifest(...)`: create an in-memory run record with a UUID,
+  start time and requested/effective configuration;
+- `finalize_experiment_manifest(...)`: classify and hash outputs relative to an
+  authorized directory;
+- `write_manifest_atomic(...)`: serialize strict JSON to a temporary sibling
+  and replace the destination atomically;
+- `sha256_file(...)`: calculate SHA-256 incrementally with constant memory.
+
+GUI exporters additionally use `ExportConsistencyGuard`. Before changing an
+existing output, the guard moves a recognized active PGA manifest to a uniquely
+named `.inactive-<uuid>.json` location. An unrecognized file at the active
+sidecar path stops the export before any output is changed. On a handled
+failure, the old manifest is restored only if all of its output sizes and
+SHA-256 values still match; otherwise it remains clearly inactive and no stale
+manifest occupies the active path. Successful replacement removes the inactive
+copy. Before invalidation, the guard also rejects duplicate destinations,
+manifest self-overwrite and user output names ending in the reserved
+`.manifest.json` suffix, preventing an output from replacing another export's
+active sidecar. This is a conservative consistency protocol, not a general
+transaction.
+
+Manifest states are `running`, `completed`, `failed`, `cancelled` and
+`partial`. Output states are `complete`, `partial`, `missing` and `invalid`.
+Missing or invalid required outputs prevent a `completed` state. Interactive
+runs usually have no export destination when calculation starts, so their
+running state exists only in memory: the manifest is first persisted after the
+user selects a destination. `experiment_started_at`,
+`experiment_completed_at` and `exported_at` distinguish these events.
+Each present output separately records `binary_integrity: verified_sha256` and
+`scientific_completeness`. A cancelled scan/comparison can therefore have a
+well-formed, hashed CSV with `status: partial`, while its complete configuration
+sidecar uses scientific completeness `not_applicable`.
+
+Source identity has deliberate limits. A clean Git commit plus observed file
+hashes identifies files on disk at observation time; it does not certify code
+already loaded in memory. Dirty repositories retain the commit only as a base
+identity. Extracted archives and directories without a pertinent `.git` use
+`file_hashes_only`. Filesystem timestamps are not identity evidence. A Git
+repository above an extracted project is rejected, and no remote, branch,
+author, email, hostname, username, untracked filename or environment-variable
+dump is exported. Long-running scan/comparison runs retain an initial source
+observation and compare its curated file hashes with the export-time
+observation; interactive rendering compares the application-start observation
+with export time. `loaded_code_identity` remains `not_verified`, because disk
+hashes do not prove the identity of modules already resident in memory.
+
+Backend fields separate `requested_backend`, `effective_backend`,
+`result_origin`, `producer_backend`, `backend_evidence` and
+`fallback_events`. CPU explicitly forced by an experiment is attributable to
+CPU. Other GUI paths currently lack per-operation instrumentation and therefore
+record a null effective/producer backend rather than inferring it from current
+global state. Cache is an origin, never a computational backend; a directly
+observed cache hit without entry metadata would use `result_origin: cache`,
+`producer_backend: null` and `backend_evidence: cache_hit_unattributed`.
+PGA-ARCH-04 remains deferred until cache entries and operations can carry
+experiment-local evidence without a shared global event list.
+
+Example, abridged:
+
+```json
+{
+  "schema": "pga.provenance/1.0",
+  "schema_version": "1.0",
+  "experiment_id": "550e8400-e29b-41d4-a716-446655440000",
+  "application": {"name": "Prime Grid Atlas", "version": "1.0.0"},
+  "source": {
+    "identity_status": "git_commit_and_file_hashes_clean",
+    "git": {"available": true, "commit": "<full-sha>", "dirty": false},
+    "loaded_code_identity": "not_verified"
+  },
+  "experiment": {
+    "kind": "module_scan",
+    "status": "completed",
+    "experiment_started_at": "2026-11-26T12:00:00Z",
+    "experiment_completed_at": "2026-11-26T12:01:00Z",
+    "exported_at": "2026-11-26T12:02:00Z",
+    "command": null,
+    "command_status": "not_recorded_for_privacy"
+  },
+  "compute": {
+    "requested_backend": "Auto",
+    "effective_backend": null,
+    "result_origin": "computed",
+    "producer_backend": null,
+    "backend_evidence": "not_observed_per_operation",
+    "fallback_events": []
+  },
+  "outputs": [
+    {"path": "atlas.csv", "status": "complete", "size": 1234, "sha256": "<sha256>", "required": true}
+  ],
+  "warnings": [],
+  "limitations": []
+}
+```
+
+Manifest JSON rejects NaN and Infinity. Output paths use relative POSIX form;
+path traversal, external symlinks, external files and self-reference are
+invalid. SHA-256 is computed after each output is written. The manifest itself
+is not listed as its own output. Atomic replacement protects an earlier valid
+manifest if serialization or writing fails, but does not make the set of CSV,
+PNG and sidecar files transactional and cannot guarantee survival of every
+power failure. Errors intended for manifests must be structured and sanitized;
+raw CUDA and traceback text remains outside this provenance format.
+
+The FFT export uses the snapshot attached to `current_data` as its effective
+data-source configuration. Widget values observed later are recorded separately
+under `current_widgets_at_export`, while the overlay choice and DPI actually
+used by the export are explicit FFT options. Deferred UI rendering therefore
+cannot retroactively relabel the data already held by the application.
+
+The provenance module follows an allow-list for environment and Git fields, but
+it is not a universal sanitizer for arbitrary metadata supplied by callers.
+Callers must provide controlled scientific configuration, warning and
+limitation values. GUI callers satisfy this contract with numeric/enum widget
+snapshots and fixed application-authored text; secrets, raw exceptions,
+personal paths and unrestricted environment data must never be passed in.
+
+An abrupt process termination can still occur between output replacement and
+new-manifest publication, leaving no active manifest and an inactive previous
+one. Concurrent writers to the same destination are not serialized. Consumers
+must require an active sidecar and verify every recorded size and checksum;
+inactive manifests are evidence only and never describe the current export.
+
+The RNG section records only an actually supplied or implementation-observed
+seed/constructor and explicitly does not claim universal reproducibility.
+Version, seed and environment metadata cannot eliminate platform, dependency,
+floating-point or algorithm-version differences.
+
 ## Change routes and tests
 
 All tests are `unittest` tests; `tests/scientific_reference.py` supplies independent enumeration/recurrence/direct-DFT oracles and a CPU/config/cache fixture. Tests use flat source imports, so run from the project root. Qt tests use offscreen mode and skip without PySide6. A real-GPU test skips without CuPy/CUDA and rejects silent fallback if it runs.

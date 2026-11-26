@@ -80,9 +80,131 @@ from compute_backend import (
 from metrics import entropy_edge_mask
 from mode_catalog import MODE_GROUPS, PRIME_MODES
 from grid_model import spherical_shell_positions
+from provenance import (
+    ExportConsistencyGuard,
+    collect_environment,
+    collect_source_identity,
+    finalize_experiment_manifest,
+    new_experiment_manifest,
+    manifest_sidecar_path,
+    utc_now,
+    write_manifest_atomic,
+)
 
 
 APP_VERSION = "1.0.0"
+PROJECT_ROOT = Path(__file__).resolve().parent
+PROVENANCE_SOURCE_FILES = (
+    "provenance.py",
+    "qt_app.py",
+    "atlas_engine.py",
+    "app_config.py",
+    "compute_backend.py",
+    "grid_model.py",
+    "metrics.py",
+    "number_theory.py",
+)
+
+
+def _grid_configuration(config, plane, depth, overlay, view=None):
+    result = {
+        "grid": {
+            "x": config.x,
+            "y": config.y,
+            "z": config.z,
+            "mode": config.mode,
+            "mode_parameter": config.param,
+            "placement": config.placement,
+            "placement_parameter": config.placement_param,
+            "start": config.start,
+        },
+        "projection": {"plane": plane, "depth": depth, "overlay": bool(overlay)},
+        "metrics": config_dict(),
+    }
+    if view is not None:
+        result["view"] = view
+    return result
+
+
+def _compute_record(requested_backend, *, cpu_forced=False):
+    requested = requested_backend or None
+    if cpu_forced:
+        return {
+            "requested_backend": requested,
+            "effective_backend": "CPU",
+            "result_origin": "computed",
+            "producer_backend": "CPU",
+            "backend_evidence": "forced_cpu_configuration",
+            "fallback_events": [],
+        }
+    return {
+        "requested_backend": requested,
+        "effective_backend": None,
+        "result_origin": "computed",
+        "producer_backend": None,
+        "backend_evidence": "not_observed_per_operation",
+        "fallback_events": [],
+    }
+
+
+def _write_export_manifest(
+    manifest_path,
+    experiment_kind,
+    outputs,
+    *,
+    requested_configuration,
+    effective_configuration,
+    compute,
+    randomness=None,
+    started_at=None,
+    completed_at=None,
+    status="completed",
+    limitations=None,
+    initial_source=None,
+    cuda_available=None,
+):
+    """Write an additive sidecar without changing an existing export."""
+    source = collect_source_identity(PROJECT_ROOT, PROVENANCE_SOURCE_FILES)
+    if initial_source is not None:
+        initial_hashes = {
+            item["path"]: item["sha256"] for item in initial_source.get("files", [])
+        }
+        final_hashes = {item["path"]: item["sha256"] for item in source["files"]}
+        source["initial_observation"] = initial_source
+        source["changed_since_initial_observation"] = initial_hashes != final_hashes
+    else:
+        source["changed_since_initial_observation"] = None
+    environment = collect_environment(
+        cuda_available=cuda_available,
+        cupy_relevant=(
+            compute.get("effective_backend") == "GPU"
+            or str(compute.get("requested_backend")).upper() in ("AUTO", "GPU")
+        ),
+    )
+    manifest = new_experiment_manifest(
+        APP_VERSION,
+        experiment_kind,
+        source=source,
+        environment=environment,
+        requested_configuration=requested_configuration,
+        effective_configuration=effective_configuration,
+        randomness=randomness,
+        compute=compute,
+        started_at=started_at,
+        status=status,
+        limitations=limitations,
+    )
+    destination = Path(manifest_path)
+    finalized = finalize_experiment_manifest(
+        manifest,
+        destination.parent,
+        outputs,
+        manifest_path=destination,
+        status=status,
+        completed_at=completed_at,
+    )
+    write_manifest_atomic(destination, finalized)
+    return finalized
 
 
 def colorize(
@@ -487,6 +609,12 @@ class PlacementComparisonTab(QWidget):
         self._plane = self.window.plane.currentText()
         self._depth = self.window.level.value()
         self._overlay = self.window.overlay.isChecked()
+        self._experiment_started_at = utc_now()
+        self._initial_source_identity = collect_source_identity(
+            PROJECT_ROOT, PROVENANCE_SOURCE_FILES
+        )
+        self._experiment_completed_at = None
+        self._experiment_status = "running"
         self._placement_index = 0
         self.run_button.setEnabled(False)
         self.cancel_button.setEnabled(True)
@@ -536,6 +664,7 @@ class PlacementComparisonTab(QWidget):
                 self, "Placement comparison", traceback.format_exc()
             )
             self.cancelled = True
+            self._experiment_status = "failed"
             self._complete_run()
 
     def _complete_run(self):
@@ -556,6 +685,9 @@ class PlacementComparisonTab(QWidget):
                 else float("nan")
             )
         self.comparison_finished(self.rows)
+        if self._experiment_status != "failed":
+            self._experiment_status = "cancelled" if self.cancelled else "completed"
+        self._experiment_completed_at = utc_now()
         clear_volume_cache()
         self.running = False
         self.run_button.setEnabled(True)
@@ -598,32 +730,71 @@ class PlacementComparisonTab(QWidget):
         )
         if not path:
             return
-        with open(path, "w", newline="", encoding="utf-8") as handle:
-            writer = csv.DictWriter(handle, fieldnames=COMPARISON_COLUMNS, delimiter=";")
-            writer.writeheader()
-            writer.writerows(self.rows)
-        metadata = {
-            "application_version": APP_VERSION,
-            "comparison_reference": "Linear",
-            "grid": {
-                "x": self._config.x,
-                "y": self._config.y,
-                "z": self._config.z,
-                "mode": self._config.mode,
-                "mode_parameter": self._config.param,
-                "placement_parameter": self._config.placement_param,
-                "start": self._config.start,
-                "plane": self._plane,
-                "depth": self._depth,
-                "overlay": self._overlay,
-            },
-            "metrics": list(COMPARISON_METRICS),
-            "configuration": self._configuration,
-            "backend": self._backend_state,
-        }
-        Path(path).with_suffix(".config.json").write_text(
-            json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
+        output_path = Path(path)
+        config_path = output_path.with_suffix(".config.json")
+        manifest_path = manifest_sidecar_path(output_path)
+        with ExportConsistencyGuard(manifest_path, [output_path, config_path]):
+            with open(path, "w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(handle, fieldnames=COMPARISON_COLUMNS, delimiter=";")
+                writer.writeheader()
+                writer.writerows(self.rows)
+            metadata = {
+                "application_version": APP_VERSION,
+                "comparison_reference": "Linear",
+                "grid": {
+                    "x": self._config.x,
+                    "y": self._config.y,
+                    "z": self._config.z,
+                    "mode": self._config.mode,
+                    "mode_parameter": self._config.param,
+                    "placement_parameter": self._config.placement_param,
+                    "start": self._config.start,
+                    "plane": self._plane,
+                    "depth": self._depth,
+                    "overlay": self._overlay,
+                },
+                "metrics": list(COMPARISON_METRICS),
+                "configuration": self._configuration,
+                "backend": self._backend_state,
+            }
+            config_path.write_text(
+                json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+            requested = _grid_configuration(
+                self._config, self._plane, self._depth, self._overlay
+            )
+            requested["comparison_reference"] = "Linear"
+            requested["comparison_metrics"] = list(COMPARISON_METRICS)
+            result_status = (
+                "partial" if self._experiment_status in ("cancelled", "failed")
+                else "complete"
+            )
+            _write_export_manifest(
+                manifest_path,
+                "placement_comparison",
+                [
+                    {
+                        "path": output_path.name,
+                        "status": result_status,
+                        "scientific_completeness": result_status,
+                    },
+                    {
+                        "path": config_path.name,
+                        "scientific_completeness": "not_applicable",
+                    },
+                ],
+                requested_configuration=requested,
+                effective_configuration=requested,
+                compute=_compute_record("CPU", cpu_forced=True),
+                started_at=self._experiment_started_at,
+                completed_at=self._experiment_completed_at,
+                status=self._experiment_status,
+                limitations=[
+                    "The manifest is persisted at export time; no destination existed when the comparison started."
+                ],
+                initial_source=self._initial_source_identity,
+                cuda_available=self._backend_state["cuda_available"],
+            )
 
     def stop(self):
         if self.running:
@@ -859,6 +1030,12 @@ class ModuleScanTab(QWidget):
             "start": self.window.start_spin.value(), "overlay": True,
             "depth": "full", "status": "running",
         }
+        self._experiment_started_at = utc_now()
+        self._initial_source_identity = collect_source_identity(
+            PROJECT_ROOT, PROVENANCE_SOURCE_FILES
+        )
+        self._experiment_completed_at = None
+        self._experiment_status = "running"
         self.thread = QThread(self)
         self.worker = ScanWorker(
             self.x1.value(),
@@ -925,9 +1102,11 @@ class ModuleScanTab(QWidget):
 
     @Slot(list)
     def scan_finished(self, rows):
-        self.scan_metadata["_scan"]["status"] = (
+        self._experiment_status = (
             "cancelled" if self.worker and self.worker.cancelled else "completed"
         )
+        self._experiment_completed_at = utc_now()
+        self.scan_metadata["_scan"]["status"] = self._experiment_status
         self.rows = rows
         self.table.setUpdatesEnabled(False)
         try:
@@ -951,6 +1130,9 @@ class ModuleScanTab(QWidget):
 
     @Slot(str)
     def scan_failed(self, error):
+        self._experiment_status = "failed"
+        self._experiment_completed_at = utc_now()
+        self.scan_metadata["_scan"]["status"] = "failed"
         self.run_button.setEnabled(True)
         self.cancel_button.setEnabled(False)
         QMessageBox.critical(self, "Scan error", error)
@@ -963,20 +1145,77 @@ class ModuleScanTab(QWidget):
             self, "Export scan", "atlas.csv", "CSV (*.csv)"
         )
         if path:
-            with open(path, "w", newline="", encoding="utf-8") as handle:
-                writer = csv.DictWriter(
-                    handle,
-                    fieldnames=SCAN_COLUMNS,
-                    delimiter=";",
-                    extrasaction="ignore",
+            output_path = Path(path)
+            sidecar = output_path.with_suffix(".config.json")
+            manifest_path = manifest_sidecar_path(output_path)
+            with ExportConsistencyGuard(manifest_path, [output_path, sidecar]):
+                with open(path, "w", newline="", encoding="utf-8") as handle:
+                    writer = csv.DictWriter(
+                        handle,
+                        fieldnames=SCAN_COLUMNS,
+                        delimiter=";",
+                        extrasaction="ignore",
+                    )
+                    writer.writeheader()
+                    writer.writerows(self.rows)
+                metadata = self.scan_metadata
+                sidecar.write_text(
+                    json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
                 )
-                writer.writeheader()
-                writer.writerows(self.rows)
-            metadata = self.scan_metadata
-            sidecar = Path(path).with_suffix(".config.json")
-            sidecar.write_text(
-                json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-            )
+                scan = metadata["_scan"]
+                requested = {
+                    "scan": {
+                        key: value for key, value in scan.items()
+                        if key not in ("status", "backend_runtime_policy")
+                    },
+                    "metrics": {
+                        key: value for key, value in metadata.items()
+                        if key not in ("_scan", "application_version")
+                    },
+                }
+                seed = requested["metrics"].get("baseline_seed")
+                randomness = {
+                    "status": "observed_configuration",
+                    "seed": seed if isinstance(seed, int) and seed >= 0 else None,
+                    "seed_status": "explicit" if isinstance(seed, int) and seed >= 0 else "derived_per_grid",
+                    "algorithm": "numpy.random.default_rng",
+                    "algorithm_status": "constructor_observed_in_implementation",
+                    "trials": scan["trials"],
+                    "universal_reproducibility_guaranteed": False,
+                }
+                result_status = (
+                    "partial" if self._experiment_status in ("cancelled", "failed")
+                    else "complete"
+                )
+                _write_export_manifest(
+                    manifest_path,
+                    "module_scan",
+                    [
+                        {
+                            "path": output_path.name,
+                            "status": result_status,
+                            "scientific_completeness": result_status,
+                        },
+                        {
+                            "path": sidecar.name,
+                            "scientific_completeness": "not_applicable",
+                        },
+                    ],
+                    requested_configuration=requested,
+                    effective_configuration=requested,
+                    compute=_compute_record(
+                        scan["compute"], cpu_forced=scan["compute"] == "CPU"
+                    ),
+                    randomness=randomness,
+                    started_at=self._experiment_started_at,
+                    completed_at=self._experiment_completed_at,
+                    status=self._experiment_status,
+                    limitations=[
+                        "Backend execution is not instrumented per operation; non-CPU producer backend remains unverified.",
+                        "The manifest is persisted at export time; no destination existed when the scan started.",
+                    ],
+                    initial_source=self._initial_source_identity,
+                )
             QMessageBox.information(
                 self, "Export", f"Saved CSV and configuration:\n{sidecar}"
             )
@@ -1021,7 +1260,42 @@ class ModuleScanTab(QWidget):
                 self, "Save scan screenshot", f"{metric}.png", "PNG (*.png)"
             )
             if path:
-                self.save_heatmap_figure(metric, label, path)
+                output_path = Path(path)
+                manifest_path = manifest_sidecar_path(output_path)
+                with ExportConsistencyGuard(manifest_path, [output_path]):
+                    self.save_heatmap_figure(metric, label, path)
+                    scan = self.scan_metadata["_scan"]
+                    configuration = {
+                        "scan": {
+                            key: value for key, value in scan.items()
+                            if key != "backend_runtime_policy"
+                        },
+                        "metric": metric,
+                        "label": label,
+                    }
+                    scientific_status = (
+                        "partial" if self._experiment_status in ("cancelled", "failed")
+                        else "complete"
+                    )
+                    _write_export_manifest(
+                        manifest_path,
+                        "scan_metric_screenshot",
+                        [{
+                            "path": output_path.name,
+                            "status": scientific_status,
+                            "scientific_completeness": scientific_status,
+                        }],
+                        requested_configuration=configuration,
+                        effective_configuration=configuration,
+                        compute=_compute_record(
+                            scan["compute"], cpu_forced=scan["compute"] == "CPU"
+                        ),
+                        started_at=self._experiment_started_at,
+                        completed_at=self._experiment_completed_at,
+                        status=self._experiment_status,
+                        limitations=["The image sidecar is created only after an export destination is selected."],
+                        initial_source=self._initial_source_identity,
+                    )
         else:
             _, _, matrix = self.heatmap_matrix(metric)
             self.window.show_matrix_tab(matrix, metric)
@@ -1043,28 +1317,74 @@ class ModuleScanTab(QWidget):
             return
         output = Path(directory)
         manifest = []
+        metadata_path = output / "metric_screenshots.json"
+        manifest_path = manifest_sidecar_path(metadata_path)
+        batch_paths = [
+            output / f"{index:02d}_{metric}.png"
+            for index, (_, metric) in enumerate(SCAN_HEATMAP_METRICS, 1)
+        ] + [metadata_path]
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
-            for index, (label, metric) in enumerate(SCAN_HEATMAP_METRICS, 1):
-                filename = f"{index:02d}_{metric}.png"
-                self.save_heatmap_figure(metric, label, output / filename)
-                manifest.append(
-                    {"index": index, "label": label, "metric": metric, "file": filename}
+            with ExportConsistencyGuard(manifest_path, batch_paths):
+                for index, (label, metric) in enumerate(SCAN_HEATMAP_METRICS, 1):
+                    filename = f"{index:02d}_{metric}.png"
+                    self.save_heatmap_figure(metric, label, output / filename)
+                    manifest.append(
+                        {"index": index, "label": label, "metric": metric, "file": filename}
+                    )
+                    QApplication.processEvents()
+                metadata = {
+                    "application_version": APP_VERSION,
+                    "screenshots": manifest,
+                    "scan": dict(self.scan_metadata["_scan"]),
+                    "configuration": {
+                        key: value for key, value in self.scan_metadata.items()
+                        if key not in ("_scan", "application_version")
+                    },
+                }
+                metadata_path.write_text(
+                    json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
                 )
-                QApplication.processEvents()
-            metadata = {
-                "application_version": APP_VERSION,
-                "screenshots": manifest,
-                "scan": dict(self.scan_metadata["_scan"]),
-                "configuration": {
-                    key: value for key, value in self.scan_metadata.items()
-                    if key not in ("_scan", "application_version")
-                },
-            }
-            (output / "metric_screenshots.json").write_text(
-                json.dumps(metadata, indent=2, sort_keys=True) + "\n",
-                encoding="utf-8",
-            )
+                scan = self.scan_metadata["_scan"]
+                requested = {
+                    "scan": {
+                        key: value for key, value in scan.items()
+                        if key != "backend_runtime_policy"
+                    },
+                    "metrics": [item["metric"] for item in manifest],
+                }
+                scientific_status = (
+                    "partial" if self._experiment_status in ("cancelled", "failed")
+                    else "complete"
+                )
+                outputs = [
+                    {
+                        "path": item["file"],
+                        "status": scientific_status,
+                        "scientific_completeness": scientific_status,
+                    }
+                    for item in manifest
+                ]
+                outputs.append({
+                    "path": metadata_path.name,
+                    "scientific_completeness": "not_applicable",
+                })
+                _write_export_manifest(
+                    manifest_path,
+                    "scan_metric_screenshot_batch",
+                    outputs,
+                    requested_configuration=requested,
+                    effective_configuration=requested,
+                    compute=_compute_record(
+                        scan["compute"], cpu_forced=scan["compute"] == "CPU"
+                    ),
+                    started_at=self._experiment_started_at,
+                    completed_at=self._experiment_completed_at,
+                    status=self._experiment_status,
+                    limitations=["The batch sidecar is created only after an export directory is selected."],
+                    initial_source=self._initial_source_identity,
+                )
         except Exception as exc:
             QMessageBox.critical(self, "Metric screenshots", str(exc))
             return
@@ -1107,6 +1427,9 @@ class MainWindow(QMainWindow):
         self.analysis_view = None
         self.analysis_title = None
         self._ratio_guard = False
+        self._application_source_identity = collect_source_identity(
+            PROJECT_ROOT, PROVENANCE_SOURCE_FILES
+        )
         self._locked_dims = (10, 10, 10)
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
@@ -1521,6 +1844,7 @@ class MainWindow(QMainWindow):
         self.schedule_render()
 
     def render(self):
+        experiment_started_at = utc_now()
         try:
             cfg = self.config()
             total = cfg.x * cfg.y * cfg.z
@@ -1622,6 +1946,19 @@ class MainWindow(QMainWindow):
                 f"{cfg.x}×{cfg.y}×{cfg.z} | {self.plane.currentText()} level {data['depth'] + 1}/{data['depth_limit']} | "
                 f"selected {int(data['selected_3d'].sum()):,} | {backend_summary()}{metric_text}"
             )
+            self._render_provenance = {
+                "started_at": experiment_started_at,
+                "completed_at": utc_now(),
+                "configuration": _grid_configuration(
+                    cfg,
+                    self.plane.currentText(),
+                    self.level.value(),
+                    self.overlay.isChecked(),
+                    view_name,
+                ),
+                "compute": _compute_record(self.backend.currentText()),
+                "initial_source": self._application_source_identity,
+            }
         except Exception as exc:
             self.image_view.set_error(f"Rendering error:\n{exc}")
             self.statusBar().showMessage(f"Rendering error: {exc}")
@@ -1633,7 +1970,33 @@ class MainWindow(QMainWindow):
             self, "Save PNG", "grid.png", "PNG (*.png)"
         )
         if path:
-            self.image_view.viewport().grab().save(path, "PNG")
+            output_path = Path(path)
+            manifest_path = manifest_sidecar_path(output_path)
+            with ExportConsistencyGuard(manifest_path, [output_path]):
+                if not self.image_view.viewport().grab().save(path, "PNG"):
+                    raise OSError("PNG output could not be written")
+                observed = getattr(self, "_render_provenance", None)
+                configuration = (
+                    observed["configuration"] if observed else {"status": "not_verified"}
+                )
+                _write_export_manifest(
+                    manifest_path,
+                    "grid_screenshot",
+                    [output_path.name],
+                    requested_configuration=configuration,
+                    effective_configuration=configuration,
+                    compute=(
+                        observed["compute"] if observed
+                        else _compute_record(self.backend.currentText())
+                    ),
+                    started_at=observed["started_at"] if observed else None,
+                    completed_at=observed["completed_at"] if observed else None,
+                    limitations=[
+                        "The PNG captures viewport zoom and overlays, which are presentation state rather than scientific array data.",
+                        "The sidecar is created only after an export destination is selected.",
+                    ],
+                    initial_source=(observed["initial_source"] if observed else None),
+                )
 
     def show_fft(self):
         self.view_mode.setCurrentText("FFT 2D")
@@ -1676,18 +2039,61 @@ class MainWindow(QMainWindow):
         )
         if not path:
             return
+        experiment_started_at = utc_now()
+        output_path = Path(path)
+        manifest_path = manifest_sidecar_path(output_path)
+        observed = getattr(self, "_render_provenance", None)
+        fft_overlay = self.overlay.isChecked()
         import matplotlib.pyplot as plt
 
-        spectrum, metrics = fft_spectrum(self.current_data, self.overlay.isChecked())
-        fig, ax = plt.subplots(figsize=(8, 7))
-        image = ax.imshow(spectrum, cmap="viridis", origin="lower")
-        ax.set_title(
-            f"FFT | peak={metrics['fft_peak_ratio']:.4f} axis={metrics['fft_axis_ratio']:.4f}"
-        )
-        fig.colorbar(image, ax=ax)
-        fig.tight_layout()
-        fig.savefig(path, dpi=180)
-        plt.close(fig)
+        with ExportConsistencyGuard(manifest_path, [output_path]):
+            spectrum, metrics = fft_spectrum(self.current_data, fft_overlay)
+            fig, ax = plt.subplots(figsize=(8, 7))
+            try:
+                image = ax.imshow(spectrum, cmap="viridis", origin="lower")
+                ax.set_title(
+                    f"FFT | peak={metrics['fft_peak_ratio']:.4f} axis={metrics['fft_axis_ratio']:.4f}"
+                )
+                fig.colorbar(image, ax=ax)
+                fig.tight_layout()
+                fig.savefig(path, dpi=180)
+            finally:
+                plt.close(fig)
+            current_widgets = _grid_configuration(
+                self.config(),
+                self.plane.currentText(),
+                self.level.value(),
+                self.overlay.isChecked(),
+                self.view_mode.currentText(),
+            )
+            source_configuration = (
+                observed["configuration"] if observed is not None
+                else {"status": "not_verified"}
+            )
+            requested_configuration = {
+                "current_widgets_at_export": current_widgets,
+                "fft_export_options": {"overlay": fft_overlay, "dpi": 180},
+            }
+            effective_configuration = {
+                "current_data_source": source_configuration,
+                "fft_export_options": {"overlay": fft_overlay, "dpi": 180},
+                "fft_metrics": metrics,
+            }
+            _write_export_manifest(
+                manifest_path,
+                "fft_screenshot",
+                [output_path.name],
+                requested_configuration=requested_configuration,
+                effective_configuration=effective_configuration,
+                compute=_compute_record(self.backend.currentText()),
+                started_at=experiment_started_at,
+                completed_at=utc_now(),
+                limitations=["The FFT export sidecar is created only after an export destination is selected."],
+                initial_source=(
+                    observed["initial_source"] if observed is not None
+                    else self._application_source_identity
+                ),
+            )
 
     def show_3d(self):
         try:
