@@ -1,0 +1,72 @@
+test_actual_gpu_equivalence_when_available (test_backend.BackendTests.test_actual_gpu_equivalence_when_available) ... skipped "CUDA unavailable: No module named 'cupy'"
+test_no_gpu_fallback_matches_cpu (test_backend.BackendTests.test_no_gpu_fallback_matches_cpu) ... ok
+test_runtime_failure_retries_prime_gcd_and_metrics (test_backend.BackendTests.test_runtime_failure_retries_prime_gcd_and_metrics) ... ok
+test_m30_residues_exceptional_primes_and_factorizations (test_coprime_mask.CoprimeTests.test_m30_residues_exceptional_primes_and_factorizations) ... ok
+test_small_exact_mask_and_density_every_plane (test_coprime_mask.CoprimeTests.test_small_exact_mask_and_density_every_plane) ... ok
+test_start_shift_by_M_preserves_mask_not_hits (test_coprime_mask.CoprimeTests.test_start_shift_by_M_preserves_mask_not_hits) ... ok
+test_configuration_round_trip (test_core.CoreTests.test_configuration_round_trip) ... ok
+test_every_mode_builds_a_boolean_mask (test_core.CoreTests.test_every_mode_builds_a_boolean_mask) ... ok
+test_every_placement_is_a_complete_permutation (test_core.CoreTests.test_every_placement_is_a_complete_permutation) ... ok
+test_every_placement_supports_orthogonal_accumulation (test_core.CoreTests.test_every_placement_supports_orthogonal_accumulation) ... ok
+test_gcd_scalar_mode_keeps_every_cell_visible (test_core.CoreTests.test_gcd_scalar_mode_keeps_every_cell_visible) ... ok
+test_mobius_first_values (test_core.CoreTests.test_mobius_first_values) ... ok
+test_mode_catalog_is_partitioned (test_core.CoreTests.test_mode_catalog_is_partitioned) ... ok
+test_modulus_weave_groups_residue_classes (test_core.CoreTests.test_modulus_weave_groups_residue_classes) ... ok
+test_placement_geometry_metrics_are_finite (test_core.CoreTests.test_placement_geometry_metrics_are_finite) ... ok
+test_plane_shapes_and_fft (test_core.CoreTests.test_plane_shapes_and_fft) ... ok
+test_precomputed_coprime_mask_preserves_metrics (test_core.CoreTests.test_precomputed_coprime_mask_preserves_metrics) ... ok
+test_residues_mode_produces_modulo_scalar_field (test_core.CoreTests.test_residues_mode_produces_modulo_scalar_field) ... ok
+test_seeded_random_is_reproducible_and_seed_sensitive (test_core.CoreTests.test_seeded_random_is_reproducible_and_seed_sensitive) ... ok
+test_spherical_shell_radii_and_rotation (test_core.CoreTests.test_spherical_shell_radii_and_rotation) ... ok
+test_spherical_shell_sampling_has_no_duplicate_poles (test_core.CoreTests.test_spherical_shell_sampling_has_no_duplicate_poles) ... ok
+test_spiral_inward_placement (test_core.CoreTests.test_spiral_inward_placement) ... ok
+test_spiral_inward_rectangular_and_degenerate_placements (test_core.CoreTests.test_spiral_inward_rectangular_and_degenerate_placements) ... ok
+test_unknown_mode_is_rejected (test_core.CoreTests.test_unknown_mode_is_rejected) ... ok
+test_unknown_placement_is_rejected (test_core.CoreTests.test_unknown_placement_is_rejected) ... ok
+test_volume_limit_is_enforced_by_engine (test_core.CoreTests.test_volume_limit_is_enforced_by_engine) ... ok
+test_exports_keep_calculation_parameters_after_ui_edits (test_export_provenance.ExportProvenanceTests.test_exports_keep_calculation_parameters_after_ui_edits) ... ok
+test_empty_constant_and_singleton_metric_contract (test_fft_metrics.FFTTests.test_empty_constant_and_singleton_metric_contract) ... ok
+test_exact_patterns_axes_peak_and_single_pixel (test_fft_metrics.FFTTests.test_exact_patterns_axes_peak_and_single_pixel) ... ok
+test_generic_fft_ratios_against_direct_power_sums (test_fft_metrics.FFTTests.test_generic_fft_ratios_against_direct_power_sums) ... ok
+test_occupancy_fft_ignores_hit_amplitudes (test_fft_metrics.FFTTests.test_occupancy_fft_ignores_hit_amplitudes) ... ok
+test_scalar_fft_does_not_modify_arithmetic_field_or_cache (test_fft_metrics.FFTTests.test_scalar_fft_does_not_modify_arithmetic_field_or_cache) ... ok
+test_scalar_sinusoid_mean_removal_and_amplitude_invariance (test_fft_metrics.FFTTests.test_scalar_sinusoid_mean_removal_and_amplitude_invariance) ... ok
+test_spectrum_against_direct_dft_without_fft_library (test_fft_metrics.FFTTests.test_spectrum_against_direct_dft_without_fft_library) ... ok
+test_symmetries_for_generic_field (test_fft_metrics.FFTTests.test_symmetries_for_generic_field) ... ok
+test_cached_volume_should_obey_lowered_safety_limit (test_known_scientific_issues.KnownScientificIssues.test_cached_volume_should_obey_lowered_safety_limit) ... expected failure
+test_spectral_entropy_should_be_reflection_invariant (test_known_scientific_issues.KnownScientificIssues.test_spectral_entropy_should_be_reflection_invariant) ... expected failure
+test_volume_should_reject_int64_interval_overflow (test_known_scientific_issues.KnownScientificIssues.test_volume_should_reject_int64_interval_overflow) ... expected failure
+test_exact_interval_axes_starts_and_layout (test_linear_embedding.LinearEmbeddingTests.test_exact_interval_axes_starts_and_layout) ... ok
+test_manual_3_by_2_by_3 (test_linear_embedding.LinearEmbeddingTests.test_manual_3_by_2_by_3) ... ok
+test_nonpositive_dimensions_rejected (test_linear_embedding.LinearEmbeddingTests.test_nonpositive_dimensions_rejected) ... ok
+test_beauty_exact_formula_range_and_limits (test_metrics.EntropyAndScoreTests.test_beauty_exact_formula_range_and_limits) ... ok
+test_edges_are_entropy_threshold_not_image_gradient (test_metrics.EntropyAndScoreTests.test_edges_are_entropy_threshold_not_image_gradient) ... ok
+test_global_entropy_histogram_invariance (test_metrics.EntropyAndScoreTests.test_global_entropy_histogram_invariance) ... ok
+test_gradient_affine_field_and_singletons (test_metrics.EntropyAndScoreTests.test_gradient_affine_field_and_singletons) ... ok
+test_local_entropy_against_window_enumeration (test_metrics.EntropyAndScoreTests.test_local_entropy_against_window_enumeration) ... ok
+test_arithmetic_by_enumeration_and_mobius_recurrence (test_number_theory.NumberTheoryTests.test_arithmetic_by_enumeration_and_mobius_recurrence) ... ok
+test_families_and_external_partners (test_number_theory.NumberTheoryTests.test_families_and_external_partners) ... ok
+test_gcd_modulo_and_multiples_negative_and_zero_parameter (test_number_theory.NumberTheoryTests.test_gcd_modulo_and_multiples_negative_and_zero_parameter) ... ok
+test_nonpositive_conventions (test_number_theory.NumberTheoryTests.test_nonpositive_conventions) ... ok
+test_prime_intervals_against_trial_division (test_number_theory.NumberTheoryTests.test_prime_intervals_against_trial_division) ... ok
+test_sieve_inclusive_repeated_limits (test_number_theory.NumberTheoryTests.test_sieve_inclusive_repeated_limits) ... ok
+test_all_placements_bijective_on_rectangles_and_degenerate_grids (test_placements.PlacementTests.test_all_placements_bijective_on_rectangles_and_degenerate_grids) ... ok
+test_arithmetic_invariants_but_geometry_changes (test_placements.PlacementTests.test_arithmetic_invariants_but_geometry_changes) ... ok
+test_cartesian_coordinate_order (test_placements.PlacementTests.test_cartesian_coordinate_order) ... ok
+test_seeded_placement_and_weave_parameters (test_placements.PlacementTests.test_seeded_placement_and_weave_parameters) ... ok
+test_spherical_formula_area_cells_poles_and_shell_rotation (test_placements.PlacementTests.test_spherical_formula_area_cells_poles_and_shell_rotation) ... ok
+test_depth_clamping_and_default_last_slice (test_projections.ProjectionTests.test_depth_clamping_and_default_last_slice) ... ok
+test_nonoverlay_analysis_uses_integer_field (test_projections.ProjectionTests.test_nonoverlay_analysis_uses_integer_field) ... ok
+test_scalar_overlay_is_current_slice_not_sum (test_projections.ProjectionTests.test_scalar_overlay_is_current_slice_not_sum) ... ok
+test_small_exact_slices_overlays_and_progressions (test_projections.ProjectionTests.test_small_exact_slices_overlays_and_progressions) ... ok
+test_delta_signs_structural_score_and_residual_vectors (test_random_baseline.RandomBaselineTests.test_delta_signs_structural_score_and_residual_vectors) ... ok
+test_empty_and_zero_hits_return_zero_fields (test_random_baseline.RandomBaselineTests.test_empty_and_zero_hits_return_zero_fields) ... ok
+test_repeatability_global_rng_and_process_hash_independence (test_random_baseline.RandomBaselineTests.test_repeatability_global_rng_and_process_hash_independence) ... ok
+test_sample_count_positions_replacement_and_mean (test_random_baseline.RandomBaselineTests.test_sample_count_positions_replacement_and_mean) ... ok
+test_placement_comparison_keeps_full_config (test_scientific_ui.ScientificUITests.test_placement_comparison_keeps_full_config) ... ok
+test_scan_reversed_inclusive_ranges_same_M_and_sort (test_scientific_ui.ScientificUITests.test_scan_reversed_inclusive_ranges_same_M_and_sort) ... ok
+
+----------------------------------------------------------------------
+Ran 67 tests in 0.750s
+
+OK (skipped=1, expected failures=3)

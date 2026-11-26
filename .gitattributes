@@ -1,0 +1,6 @@
+# Preserve generated scientific datasets byte-for-byte and avoid line-ending
+# normalization changing reproducibility hashes across platforms.
+*.csv -text
+*.png binary
+*.pdf binary
+*.docx binary
