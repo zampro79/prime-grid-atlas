@@ -404,6 +404,21 @@ under `current_widgets_at_export`, while the overlay choice and DPI actually
 used by the export are explicit FFT options. Deferred UI rendering therefore
 cannot retroactively relabel the data already held by the application.
 
+Rendering prepares arrays, colors, mandatory metrics, timestamps and the
+provenance snapshot locally before publishing a successful generation to the
+viewport and `current_data`. A budget rejection or calculation exception keeps
+the previous valid image/data/snapshot together, while widgets may retain the
+newly requested parameters. Before any successful render, PNG/FFT export
+actions return without publishing a completed experiment. The snapshot also
+retains the metrics calculated for that rendering generation.
+
+Placement-comparison export uses the scientific profile captured at run start,
+alongside the stored grid, plane, depth and overlay. Later edits to profile,
+seed, backend or grid widgets do not replace the effective run metadata in the
+manifest. The existing CSV layout and `pga.provenance/1.0` schema are preserved.
+The GUI source inventory includes `memory_policy.py`; its size/hash and changes
+since the initial observation are recorded even when Git is unavailable.
+
 The provenance module follows an allow-list for environment and Git fields, but
 it is not a universal sanitizer for arbitrary metadata supplied by callers.
 Callers must provide controlled scientific configuration, warning and

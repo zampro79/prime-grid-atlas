@@ -113,10 +113,11 @@ PROVENANCE_SOURCE_FILES = (
     "grid_model.py",
     "metrics.py",
     "number_theory.py",
+    "memory_policy.py",
 )
 
 
-def _grid_configuration(config, plane, depth, overlay, view=None):
+def _grid_configuration(config, plane, depth, overlay, view=None, *, metric_config=None):
     result = {
         "grid": {
             "x": config.x,
@@ -129,7 +130,7 @@ def _grid_configuration(config, plane, depth, overlay, view=None):
             "start": config.start,
         },
         "projection": {"plane": plane, "depth": depth, "overlay": bool(overlay)},
-        "metrics": config_dict(),
+        "metrics": config_dict() if metric_config is None else dict(metric_config),
     }
     if view is not None:
         result["view"] = view
@@ -797,7 +798,8 @@ class PlacementComparisonTab(QWidget):
                 json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
             )
             requested = _grid_configuration(
-                self._config, self._plane, self._depth, self._overlay
+                self._config, self._plane, self._depth, self._overlay,
+                metric_config=self._configuration,
             )
             requested["comparison_reference"] = "Linear"
             requested["comparison_metrics"] = list(COMPARISON_METRICS)
@@ -1987,17 +1989,8 @@ class MainWindow(QMainWindow):
                 rgb.strides[0],
                 QImage.Format.Format_RGB888,
             ).copy()
-            self.current_image = image
-            self.current_data = data
             is_fft = view_name == "FFT 2D"
-            self.image_view.set_overlays(
-                self.show_numbers.isChecked() and not is_fft,
-                self.show_grid.isChecked() and not is_fft,
-            )
-            self.image_view.set_image(
-                image, np.flipud(spectrum) if is_fft else np.asarray(data["numbers"])
-            )
-            self.backend_label.setText(backend_summary())
+            quick = None
             metric_text = ""
             if (
                 cfg.mode == "Primes"
@@ -2017,11 +2010,11 @@ class MainWindow(QMainWindow):
                     f" | axis {fft_metrics['fft_axis_ratio']:.4f}"
                     f" | H {fft_metrics['fft_spectral_entropy']:.4f}"
                 )
-            self.statusBar().showMessage(
+            status_text = (
                 f"{cfg.x}×{cfg.y}×{cfg.z} | {self.plane.currentText()} level {data['depth'] + 1}/{data['depth_limit']} | "
                 f"selected {int(data['selected_3d'].sum()):,} | {backend_summary()}{metric_text}"
             )
-            self._render_provenance = {
+            render_provenance = {
                 "started_at": experiment_started_at,
                 "completed_at": utc_now(),
                 "configuration": _grid_configuration(
@@ -2033,7 +2026,24 @@ class MainWindow(QMainWindow):
                 ),
                 "compute": _compute_record(self.backend.currentText()),
                 "initial_source": self._application_source_identity,
+                "metrics": {"overlay": quick, "fft": fft_metrics},
             }
+            backend_text = backend_summary()
+            # Publish one successful generation only after calculations and
+            # snapshot preparation succeed. Refused/failed calculations must
+            # leave the previous viewport, data and export identity together.
+            self.image_view.set_overlays(
+                self.show_numbers.isChecked() and not is_fft,
+                self.show_grid.isChecked() and not is_fft,
+            )
+            self.image_view.set_image(
+                image, np.flipud(spectrum) if is_fft else np.asarray(data["numbers"])
+            )
+            self.current_image = image
+            self.current_data = data
+            self._render_provenance = render_provenance
+            self.backend_label.setText(backend_text)
+            self.statusBar().showMessage(status_text)
         except MemoryBudgetExceeded as exc:
             # Preserve the last successfully rendered image and its provenance.
             QMessageBox.warning(
@@ -2044,7 +2054,8 @@ class MainWindow(QMainWindow):
             )
             self.statusBar().showMessage(f"Render rejected: {exc}")
         except Exception as exc:
-            self.image_view.set_error(f"Rendering error:\n{exc}")
+            if self.current_data is None:
+                self.image_view.set_error(f"Rendering error:\n{exc}")
             self.statusBar().showMessage(f"Rendering error: {exc}")
 
     def save_png(self):

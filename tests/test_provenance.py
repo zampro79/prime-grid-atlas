@@ -392,5 +392,230 @@ class FFTTemporalProvenanceTests(unittest.TestCase):
             reset_config()
 
 
+@unittest.skipUnless(HAS_QT, "PySide6 is needed for render/export integration")
+class RenderExportConsistencyTests(unittest.TestCase):
+    def setUp(self):
+        from PySide6.QtWidgets import QApplication
+        from app_config import reset_config
+        from atlas_engine import clear_volume_cache
+        from compute_backend import configure_backend
+        import qt_app
+        reset_config()
+        clear_volume_cache()
+        configure_backend("CPU")
+        self.app = QApplication.instance() or QApplication([])
+        self.window = qt_app.MainWindow()
+        self.window.backend.setCurrentText("CPU")
+        self.window.set_dims(4, 4, 2)
+        self.window.overlay.setChecked(True)
+        self.window.timer.stop()
+
+    def tearDown(self):
+        from app_config import reset_config
+        from atlas_engine import clear_volume_cache
+        self.window.timer.stop()
+        self.window.close()
+        self.app.processEvents()
+        reset_config()
+        clear_volume_cache()
+
+    def test_r08_01_late_budget_refusal_preserves_data_and_png_snapshot(self):
+        from app_config import AppConfig, set_config
+        import qt_app
+        w = self.window
+        w.render()
+        old_data, old_image, old_snapshot = w.current_data, w.current_image, w._render_provenance
+        set_config(AppConfig(memory_budget_mb=1, entropy_bins=64))
+        w.set_dims(100, 100, 1)
+        w.timer.stop()
+        with patch.object(qt_app.QMessageBox, "warning") as warning:
+            w.render()
+        warning.assert_called_once()
+        self.assertIs(w.current_data, old_data)
+        self.assertIs(w.current_image, old_image)
+        self.assertIs(w._render_provenance, old_snapshot)
+        self.assertEqual(w.config().x, 100)
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/"previous.png"
+            with patch.object(qt_app.QFileDialog, "getSaveFileName", return_value=(str(output), "")):
+                w.save_png()
+            manifest = json.loads(manifest_sidecar_path(output).read_text())
+            self.assertEqual(manifest["configuration"]["effective"]["grid"]["x"], 4)
+
+    def test_r08_02_comparison_export_uses_run_profile(self):
+        import qt_app
+        from app_config import AppConfig, set_config
+        w = self.window
+        set_config(AppConfig(baseline_seed=123, baseline_trials=2))
+        w.open_placement_comparison()
+        tab = w.comparison_tab
+        tab.start_comparison()
+        for _ in range(200):
+            self.app.processEvents()
+            if not tab.running:
+                break
+        self.assertFalse(tab.running)
+        self.assertEqual(len(tab.rows), 14)
+        snapshot = dict(tab._configuration)
+        original_grid = tab._config
+        set_config(AppConfig(entropy_bins=16, fft_low_radius=0.4,
+                             baseline_seed=999, baseline_trials=7))
+        w.set_dims(7, 5, 1)
+        w.set_mode("Multiples of k")
+        w.param.setValue(5)
+        w.start_spin.setValue(101)
+        w.placement.setCurrentText("Seeded random")
+        w.placement_param.setValue(42)
+        w.backend.setCurrentText("Auto")
+        w.timer.stop()
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/"placements.csv"
+            with patch.object(qt_app.QFileDialog, "getSaveFileName", return_value=(str(output), "")):
+                tab.export_csv()
+            manifest = json.loads(manifest_sidecar_path(output).read_text())
+            metadata = json.loads(output.with_suffix(".config.json").read_text())
+            self.assertEqual(manifest["configuration"]["effective"]["metrics"]["entropy_bins"], 8)
+            effective = manifest["configuration"]["effective"]
+            self.assertEqual(effective["metrics"], snapshot)
+            self.assertEqual(metadata["configuration"], snapshot)
+            self.assertEqual(effective["grid"]["x"], original_grid.x)
+            self.assertEqual(effective["grid"]["mode"], original_grid.mode)
+            self.assertEqual(effective["grid"]["start"], original_grid.start)
+            self.assertEqual(effective["grid"]["placement_parameter"], original_grid.placement_param)
+            self.assertEqual(effective["comparison_reference"], "Linear")
+            self.assertEqual(manifest["compute"]["requested_backend"], "CPU")
+            self.assertEqual(manifest["compute"]["backend_evidence"], "forced_cpu_configuration")
+
+    def test_r08_06_gui_inventory_includes_memory_policy(self):
+        import qt_app
+        identity = collect_source_identity(qt_app.PROJECT_ROOT, qt_app.PROVENANCE_SOURCE_FILES)
+        sources = {item["path"]: item for item in identity["files"]}
+        self.assertIn("memory_policy.py", sources)
+        self.assertEqual(sources["memory_policy.py"]["sha256"], sha256_file(qt_app.PROJECT_ROOT/"memory_policy.py"))
+
+    def test_r08_01_initial_failure_prevents_exports(self):
+        from app_config import AppConfig, set_config
+        import qt_app
+        w = self.window
+        set_config(AppConfig(memory_budget_mb=1, entropy_bins=64))
+        w.set_dims(100, 100, 1)
+        w.timer.stop()
+        with patch.object(qt_app.QMessageBox, "warning"):
+            w.render()
+        self.assertIsNone(w.current_data)
+        self.assertIsNone(w.current_image)
+        self.assertFalse(hasattr(w, "_render_provenance"))
+        set_config(AppConfig())
+        w.set_dims(4, 4, 2)
+        w.timer.stop()
+        for failure in (MemoryError("initial allocation"), RuntimeError("initial metrics")):
+            with patch.object(qt_app, "current_overlay_metrics", side_effect=failure):
+                w.render()
+            self.assertIsNone(w.current_data)
+            self.assertIsNone(w.current_image)
+            self.assertFalse(hasattr(w, "_render_provenance"))
+        with patch.object(qt_app.QFileDialog, "getSaveFileName") as chooser:
+            w.save_png()
+            w.save_fft()
+        chooser.assert_not_called()
+
+    def test_r08_01_preflight_refusal_and_recovery(self):
+        import qt_app
+        from memory_policy import MemoryBudgetExceeded, MemoryEstimate, BudgetInfo
+        w = self.window
+        w.render()
+        old_data, old_snapshot = w.current_data, w._render_provenance
+        before = w.image_view._item.pixmap().toImage()
+        w.set_dims(6, 4, 2)
+        w.timer.stop()
+        refusal = MemoryBudgetExceeded(MemoryEstimate("test", temporary=2),
+                                       BudgetInfo(1, "test", "test"))
+        with patch.object(qt_app, "require_memory", side_effect=refusal), \
+             patch.object(qt_app.QMessageBox, "warning"), \
+             patch.object(qt_app, "projection") as projection:
+            w.render()
+        projection.assert_not_called()
+        self.assertIs(w.current_data, old_data)
+        self.assertIs(w._render_provenance, old_snapshot)
+        self.assertEqual(w.image_view._item.pixmap().toImage(), before)
+        with patch.object(qt_app, "utc_now", side_effect=["2026-11-26T18:00:00Z", "2026-11-26T18:00:01Z"]):
+            w.render()
+        self.assertEqual(w.current_data["proj_x"], 6)
+        self.assertEqual(w._render_provenance["configuration"]["grid"]["x"], 6)
+        self.assertEqual(w._render_provenance["started_at"], "2026-11-26T18:00:00Z")
+        self.assertEqual(w._render_provenance["completed_at"], "2026-11-26T18:00:01Z")
+
+    def test_r08_01_calculation_errors_preserve_viewport_and_metrics(self):
+        import qt_app
+        w = self.window
+        w.render()
+        old_data, old_image, old_snapshot = w.current_data, w.current_image, w._render_provenance
+        before = w.image_view._item.pixmap().toImage()
+        w.set_dims(6, 4, 2)
+        w.timer.stop()
+        for failure in (MemoryError("allocation"), RuntimeError("metrics")):
+            with self.subTest(failure=type(failure).__name__), \
+                 patch.object(qt_app, "current_overlay_metrics", side_effect=failure):
+                w.render()
+            self.assertIs(w.current_data, old_data)
+            self.assertIs(w.current_image, old_image)
+            self.assertIs(w._render_provenance, old_snapshot)
+            self.assertEqual(w.image_view._item.pixmap().toImage(), before)
+
+    def test_r08_01_fft_export_after_failed_render_uses_valid_data(self):
+        import qt_app
+        w = self.window
+        w.render()
+        previous = w.current_data
+        w.set_dims(6, 4, 2)
+        w.timer.stop()
+        with patch.object(qt_app, "current_overlay_metrics", side_effect=RuntimeError("metrics")):
+            w.render()
+        # Test-only plotting stand-in; real Matplotlib is exercised separately.
+        axes = types.SimpleNamespace(imshow=lambda *a, **k: object(), set_title=lambda *a, **k: None)
+        figure = types.SimpleNamespace(colorbar=lambda *a, **k: None, tight_layout=lambda: None,
+                                      savefig=lambda path, **k: Path(path).write_bytes(b"simulated-test-png"))
+        pyplot = types.ModuleType("matplotlib.pyplot")
+        pyplot.subplots = lambda **k: (figure, axes)
+        pyplot.close = lambda fig: None
+        matplotlib = types.ModuleType("matplotlib")
+        matplotlib.pyplot = pyplot
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/"fft.png"
+            with patch.dict(sys.modules, {"matplotlib": matplotlib, "matplotlib.pyplot": pyplot}), \
+                 patch.object(qt_app.QFileDialog, "getSaveFileName", return_value=(str(output), "")), \
+                 patch.object(qt_app, "fft_spectrum", wraps=qt_app.fft_spectrum) as fft:
+                w.save_fft()
+            self.assertIs(fft.call_args.args[0], previous)
+            manifest = json.loads(manifest_sidecar_path(output).read_text())
+            effective = manifest["configuration"]["effective"]["current_data_source"]
+            self.assertEqual(effective["grid"]["x"], 4)
+            self.assertEqual(manifest["configuration"]["requested"]["current_widgets_at_export"]["grid"]["x"], 6)
+
+    def test_r08_06_changed_memory_policy_detected_without_git(self):
+        import qt_app
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in qt_app.PROVENANCE_SOURCE_FILES:
+                (root/name).write_bytes((qt_app.PROJECT_ROOT/name).read_bytes())
+            initial = collect_source_identity(root, qt_app.PROVENANCE_SOURCE_FILES)
+            self.assertFalse(initial["git"]["available"])
+            target = root/"memory_policy.py"
+            target.write_bytes(target.read_bytes()+b"\n# isolated test fixture change\n")
+            output = root/"result.csv"
+            output.write_text("value\n1\n")
+            with patch.object(qt_app, "PROJECT_ROOT", root):
+                result = qt_app._write_export_manifest(
+                    root/"result.csv.manifest.json", "test", [output.name],
+                    requested_configuration={}, effective_configuration={},
+                    compute=qt_app._compute_record("CPU", cpu_forced=True),
+                    initial_source=initial)
+            self.assertTrue(result["source"]["changed_since_initial_observation"])
+            observed = {item["path"]: item for item in result["source"]["files"]}
+            self.assertEqual(set(observed), set(qt_app.PROVENANCE_SOURCE_FILES))
+            self.assertEqual(observed["memory_policy.py"]["size"], target.stat().st_size)
+            self.assertEqual(observed["memory_policy.py"]["sha256"], sha256_file(target))
+
+
 if __name__ == "__main__":
     unittest.main()
