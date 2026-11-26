@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: "Prime Grid Atlas"
+type: software
+version: "1.0.0"
+authors:
+  - family-names: "zampro79"
+repository-code: "https://github.com/zampro79/prime-grid-atlas"
+license: "MIT"
+abstract: "An experimental mathematics environment for exploring prime-number patterns, modular admissibility, spatial embeddings and controlled baselines."
+keywords:
+  - experimental mathematics
+  - prime numbers
+  - scientific visualization
+  - number theory
+  - modular arithmetic
+# Add date-released at publication; add a Zenodo DOI only after it exists.

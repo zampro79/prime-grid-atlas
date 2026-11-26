@@ -1,0 +1,52 @@
+{
+  "backend": "CPU / NumPy",
+  "configuration": {
+    "baseline_seed": -1,
+    "baseline_trials": 12,
+    "beauty_density_decay": 18.0,
+    "beauty_edge_weight": 0.65,
+    "beauty_entropy_weight": 0.35,
+    "beauty_target_density": 0.27,
+    "edge_threshold": 0.72,
+    "entropy_bins": 8,
+    "export_max_side": 1400,
+    "fft_low_radius": 0.18,
+    "gpu_auto_min_elements": 65536,
+    "max_3d_points": 2000000,
+    "max_text_cells": 12000,
+    "max_volume": 25000000,
+    "point_size_3d": 5.0,
+    "redraw_delay_ms": 60,
+    "schema_version": 1
+  },
+  "null_alive_count": 181,
+  "null_coprime_cell_count": 240,
+  "null_grid": {
+    "mode": "Primes",
+    "param": 2,
+    "placement": "Linear",
+    "placement_param": 7,
+    "start": 1001,
+    "x": 30,
+    "y": 30,
+    "z": 2
+  },
+  "numpy": "2.5.3",
+  "platform": "Linux",
+  "python": "3.14.7",
+  "replicates": 50,
+  "seed": 20260910,
+  "source_sha256": {
+    "app_config.py": "64002e74658ef47099a2e6fe32de9f31162d8747589f3a559c8a98e5fcca0ebe",
+    "atlas_engine.py": "8949df32b932d040b713742a0446e9640d96fea209457db4b1f125724c03b821",
+    "compute_backend.py": "771fbdf2fc6dfdaa7e5c04493b6f6e00473f8638c7eded9feb5c921b4efad54a",
+    "grid_model.py": "8a6ce29ae0f13163dd7fb4bb58b74dc506f258fc209a37c8f42deea07349df5d",
+    "main.py": "fd325f55103dedf46b061c6c7be66bf1982cb8b00b01a0156c83a6d60a272528",
+    "metrics.py": "7850e4761c69bf00d1c26ae2ebbc1587229afd6a83433004f5bd84b8e3701b9a",
+    "mode_catalog.py": "4a782844f07d489364155eacd1e4e68a428a9732bf23778c3f050878606bf09d",
+    "number_theory.py": "48eb64f91f822f848b8a81f92860dcd29712541f8ced61de9d38482c3da47f74",
+    "qt_app.py": "0b50bde0e6939888ae0352359203cc392e1f9a8ba80fa5032e75d79b3c68fa87"
+  },
+  "tail_definition": "inclusive one-sided empirical fractions, not formal p-values; ties isclose rtol=atol=1e-12",
+  "trials": 500
+}

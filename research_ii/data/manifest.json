@@ -1,0 +1,11 @@
+{
+  "seed": 20261126,
+  "trials": 240,
+  "numpy": "2.4.6",
+  "embedding": "n=Start+x+X*y+X*Y*z",
+  "notes": [
+    "Independent implementation; application modules are not imported.",
+    "Empirical tail fractions are descriptive and uncorrected.",
+    "L5 is a finite wheel through 19, not the full Hardy-Littlewood model."
+  ]
+}
