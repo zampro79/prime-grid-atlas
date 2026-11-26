@@ -18,10 +18,10 @@
 - [x] Text privacy scan and accessible Git history inspected; no credentials, private keys, personal email or absolute local path found.
 - [x] Exclude archived PDF/DOCX papers and historical images whose redistribution rights are unverified; preserve local originals and record hashes in `EXCLUDED_MATERIALS.md`.
 - [x] Inspect every formerly untracked file and prepare the isolated, selective 86-file staging set; no `git add .` used.
-- [ ] Create tag `v1.0.0` only after the final release commit is approved.
-- [ ] Create GitHub release with tested-environment details and known limitations.
-- [ ] Enable Zenodo integration if archival DOI publication is desired.
-- [ ] Add the real DOI after release/archive creation; never invent one.
+- [x] Create tag `v1.0.0` only after the final release commit is approved.
+- [x] Create GitHub release with tested-environment details and known limitations.
+- [x] Archive the exact tagged source manually on Zenodo; keep automatic GitHub–Zenodo ingestion disabled to avoid a duplicate record.
+- [x] Verify and add version DOI `10.5281/zenodo.24546973`; document concept DOI `10.5281/zenodo.24546972` separately.
 
 ## Repository safety
 
@@ -43,7 +43,7 @@ Untracked files do not appear in ordinary `git diff`; inspect them through statu
 The checked validation items above record release-preparation checks, not certification of every later environment. Current bootstrap test results and unavailable checks are recorded in [BOOTSTRAP_REPORT.md](BOOTSTRAP_REPORT.md).
 
 Owner identity, repository URL, MIT license and historical-material exclusions
-are resolved for this candidate. The canonical first-release label is `1.0.0`;
-the `v1.0.0` tag above remains a proposed release action, not an instruction to
-create it. Commit, push, merge, tag, public release and DOI creation each remain
-subject to separate explicit approval. This preparation performs none of them.
+were resolved for this candidate. The canonical first-release label is `1.0.0`.
+The approved tag and GitHub release were published, and the exact tagged source
+was archived under the verified Zenodo DOI recorded in [ZENODO.md](ZENODO.md).
+This checklist does not authorize future releases, tags or DOI creation.

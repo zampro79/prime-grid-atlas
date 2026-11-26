@@ -62,4 +62,5 @@ See `README.md`, `RESEARCH_FINDINGS.md` and `RELEASE_CHECKLIST.md` for details.
 ## License and citation
 
 Prime Grid Atlas is Copyright (c) 2026 zampro79 and released under the MIT
-License. Citation metadata are provided in `CITATION.cff`; no DOI is claimed.
+License. Citation metadata are provided in `CITATION.cff`. The preserved source
+archive is available at https://doi.org/10.5281/zenodo.24546973.

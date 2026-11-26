@@ -38,3 +38,8 @@ No public release date or earlier release history is asserted here.
 
 Public author and copyright holder set to `zampro79`; MIT license and verified
 repository URL added for the v1.0.0 public release candidate.
+
+### Documentation maintenance
+
+- Added the verified Zenodo v1.0.0 DOI, concept DOI, citation, archive integrity
+  record and a non-duplicating procedure for future Zenodo versions.

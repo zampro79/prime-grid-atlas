@@ -1,5 +1,10 @@
 # Public release preparation report
 
+> **Post-release archival update (2026-11-26):** v1.0.0 was subsequently
+> published on GitHub and archived on Zenodo under version DOI
+> `10.5281/zenodo.24546973` (concept DOI `10.5281/zenodo.24546972`). Statements
+> below about actions not yet performed describe the preparation snapshot.
+
 **Project:** Prime Grid Atlas 1.0.0
 
 **Subtitle:** An Open Experimental Number Theory Laboratory

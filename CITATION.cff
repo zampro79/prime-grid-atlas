@@ -3,6 +3,8 @@ message: "If you use this software, please cite it using these metadata."
 title: "Prime Grid Atlas"
 type: software
 version: "1.0.0"
+doi: "10.5281/zenodo.24546973"
+date-released: "2026-11-26"
 authors:
   - family-names: "zampro79"
 repository-code: "https://github.com/zampro79/prime-grid-atlas"
@@ -14,4 +16,3 @@ keywords:
   - scientific visualization
   - number theory
   - modular arithmetic
-# Add date-released at publication; add a Zenodo DOI only after it exists.

@@ -6,6 +6,14 @@ The v1.0.0 documentation is organized by status and was preserved during code cl
 
 The current software build is `1.0.0`, the first official release.
 
+## Scientific archive
+
+The exact v1.0.0 source release is preserved on Zenodo under version DOI
+[10.5281/zenodo.24546973](https://doi.org/10.5281/zenodo.24546973). The concept
+DOI [10.5281/zenodo.24546972](https://doi.org/10.5281/zenodo.24546972) identifies
+the collection across versions. See [the archival record](../ZENODO.md) for
+integrity evidence and the future-version procedure.
+
 Version v1.0.0 exposes 13 modes covering prime research, scientific controls and modular diagnostics. The interface provides `Linear` as the scientific reference placement and thirteen exploratory geometric placements.
 
 ## Current documents

@@ -5,6 +5,15 @@ bonifica del codice.
 
 La build software corrente è `1.0.0`, la prima versione ufficiale.
 
+## Archivio scientifico
+
+Il sorgente esatto della release v1.0.0 è conservato su Zenodo con DOI di
+versione [10.5281/zenodo.24546973](https://doi.org/10.5281/zenodo.24546973). Il
+DOI concettuale [10.5281/zenodo.24546972](https://doi.org/10.5281/zenodo.24546972)
+identifica l'insieme di tutte le versioni. Vedere la
+[documentazione dell'archivio](../ZENODO.md) per le verifiche di integrità e la
+procedura per le versioni future.
+
 La v1.0.0 espone 13 modalità divise tra ricerca sui primi, controlli scientifici
 e diagnostiche modulari. L'interfaccia offre `Linear` come placement scientifico
 e tredici placement geometrici esplorativi.

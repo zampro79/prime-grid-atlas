@@ -19,6 +19,7 @@ This is a question, not an established result. The program computes prime masks 
 - [RESEARCH_FINDINGS.md](RESEARCH_FINDINGS.md): concise public synthesis of Phase I and Phase II.
 - [research_ii/PRIME_GRID_ATLAS_RESEARCH_II.md](research_ii/PRIME_GRID_ATLAS_RESEARCH_II.md): Phase II analytical theory and experiments.
 - [VERSIONING.md](VERSIONING.md): project compatibility policy and version approval procedure.
+- [ZENODO.md](ZENODO.md): verified v1.0.0 archive, DOI distinction, integrity evidence and future-version procedure.
 - [BOOTSTRAP_REPORT.md](BOOTSTRAP_REPORT.md): file-by-file review, discrepancies, version inventory and bootstrap validation.
 
 **Documentation describes intent. Code and tests establish current behavior.** Read the relevant implementation rather than inferring behavior from names such as “projection”, “structural” or “Protocol-valid”. Record disagreements before proposing changes.

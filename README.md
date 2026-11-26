@@ -1,5 +1,7 @@
 # Prime Grid Atlas
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24546973.svg)](https://doi.org/10.5281/zenodo.24546973)
+
 ## An Open Experimental Number Theory Laboratory
 
 Prime Grid Atlas is an interactive laboratory for exploring prime-number
@@ -170,14 +172,20 @@ authoritative v1.0.0 specifications or validated release results.
 ## Citation
 
 Machine-readable citation metadata are in [CITATION.cff](CITATION.cff). Author
-identity is the public pseudonym **zampro79**. Do not invent a DOI; add one only
-after an actual archive record exists.
+identity is the public pseudonym **zampro79**. The archived v1.0.0 source is
+available from [Zenodo](https://doi.org/10.5281/zenodo.24546973); archival and
+versioning details are documented in [ZENODO.md](ZENODO.md).
+
+> zampro79. (2026). *Prime Grid Atlas* (Version 1.0.0) [Computer software].
+> Zenodo. https://doi.org/10.5281/zenodo.24546973
+
+Use the version DOI above when citing the exact v1.0.0 archive. The concept DOI
+`10.5281/zenodo.24546972` represents the collection of all Zenodo versions.
 
 ## License and contributions
 
 Prime Grid Atlas is Copyright (c) 2026 zampro79 and is distributed under the
 [MIT License](LICENSE).
 
-Contributions are welcome after the public repository is released; see
-[CONTRIBUTING.md](CONTRIBUTING.md). Third-party dependencies retain their own
+Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Third-party dependencies retain their own
 licenses, including the Qt/PySide6 licensing terms.
