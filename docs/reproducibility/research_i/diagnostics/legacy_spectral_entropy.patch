@@ -1,0 +1,14 @@
+diff --git a/metrics.py b/metrics.py
+--- a/metrics.py
++++ b/metrics.py
+@@ -175,8 +175,4 @@
+-    # A fixed support size makes the normalization invariant under exact
+-    # spectral permutations.  Counting merely-positive roundoff bins made a
+-    # reflected field change entropy despite identical mathematical power.
+-    non_dc_bins = expected - 1
+-    if probs.size > 0 and non_dc_bins > 1:
++    if probs.size > 1:
+         spectral_entropy = float(
+-            scalar(-xp.sum(probs * xp.log2(probs))) / math.log2(non_dc_bins)
++            scalar(-xp.sum(probs * xp.log2(probs))) / math.log2(probs.size)
+         )

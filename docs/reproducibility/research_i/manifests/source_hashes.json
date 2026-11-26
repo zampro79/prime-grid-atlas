@@ -1,0 +1,56 @@
+{
+  "document_type": "retrospective provenance index created during STEP 03B",
+  "historical_manifest_is_preserved_separately": true,
+  "public_v1_commit": "b94eab0219d931cda8b8db13d6cad7dcece18d26",
+  "partial_candidate_commit": "4bf12b311d0ed391133ad98d5f0231d03a349058",
+  "modules": {
+    "app_config.py": {
+      "historical": "64002e74658ef47099a2e6fe32de9f31162d8747589f3a559c8a98e5fcca0ebe",
+      "candidate": "64002e74658ef47099a2e6fe32de9f31162d8747589f3a559c8a98e5fcca0ebe",
+      "match": true
+    },
+    "atlas_engine.py": {
+      "historical": "8949df32b932d040b713742a0446e9640d96fea209457db4b1f125724c03b821",
+      "candidate": "25fb2876489b91da4935e12ac087c59b2c60aadb9f450187b001b1eeb0e4320f",
+      "match": false
+    },
+    "compute_backend.py": {
+      "historical": "771fbdf2fc6dfdaa7e5c04493b6f6e00473f8638c7eded9feb5c921b4efad54a",
+      "candidate": "771fbdf2fc6dfdaa7e5c04493b6f6e00473f8638c7eded9feb5c921b4efad54a",
+      "match": true
+    },
+    "grid_model.py": {
+      "historical": "8a6ce29ae0f13163dd7fb4bb58b74dc506f258fc209a37c8f42deea07349df5d",
+      "candidate": "8a6ce29ae0f13163dd7fb4bb58b74dc506f258fc209a37c8f42deea07349df5d",
+      "match": true
+    },
+    "main.py": {
+      "historical": "fd325f55103dedf46b061c6c7be66bf1982cb8b00b01a0156c83a6d60a272528",
+      "candidate": "16268ec653794da8c0679c583f8871a55405996b57f4336e65faa8014c99ecfa",
+      "match": false
+    },
+    "metrics.py": {
+      "historical": "7850e4761c69bf00d1c26ae2ebbc1587229afd6a83433004f5bd84b8e3701b9a",
+      "candidate": "275dd02d10477901e791386d79b0aad56e5b1135ebda0b108558d0946ca62482",
+      "match": false
+    },
+    "mode_catalog.py": {
+      "historical": "4a782844f07d489364155eacd1e4e68a428a9732bf23778c3f050878606bf09d",
+      "candidate": "fa0efdd5e07acb86a50e47764a0a11a953365ab7985250febebccb46a69ff031",
+      "match": false
+    },
+    "number_theory.py": {
+      "historical": "48eb64f91f822f848b8a81f92860dcd29712541f8ced61de9d38482c3da47f74",
+      "candidate": "48eb64f91f822f848b8a81f92860dcd29712541f8ced61de9d38482c3da47f74",
+      "match": true
+    },
+    "qt_app.py": {
+      "historical": "0b50bde0e6939888ae0352359203cc392e1f9a8ba80fa5032e75d79b3c68fa87",
+      "candidate": "4265f166b93e10ebfaad2243d8a7ae6196e3491ea840003b457c36a6b503d70b",
+      "match": false
+    }
+  },
+  "published_script_sha256": "b181e1c29dac023dd944da15474c0347f3361995e8901639729d0c85bf277b3b",
+  "candidate_script_sha256": "b181e1c29dac023dd944da15474c0347f3361995e8901639729d0c85bf277b3b",
+  "script_claim": "The candidate script is byte-identical to the published script; identity with an unavailable earlier script is not asserted."
+}

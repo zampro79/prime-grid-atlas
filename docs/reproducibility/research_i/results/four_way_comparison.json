@@ -1,0 +1,1219 @@
+{
+  "published": "A",
+  "published_hashes": {
+    "aspect_summary.csv": "2ba540517f8d8e53487cb96252a7cfba90311988c7f6a7e06f7bdcf685416cd2",
+    "aspect_trials.csv": "3f4a191eff4e8f45c2aad7f9d03f7804a2e2ab34228aebf0681934db71d0a5fe",
+    "density_summary.csv": "d3fe33fd2ab454376e6b5c912c775fbc048e03f17f7849b980c942caec770dc8",
+    "density_trials.csv": "bae88d40b33d6b6ce2fa23becbaae95fe6616b2548bcfdea940739838b8a443e",
+    "null_controls.csv": "ca2ac04733397dcd4dc4286fb14d7740c012658f1978edd9b387afe073b06add",
+    "null_summary.csv": "7bdcc4d8d0cf86715dc4a0daf10ee7cdde20ae4e300dad635cc2abf92e771498",
+    "null_trials.csv": "5537d968ba5712f7e37d67bd2eae2c404cebe1f0058da837a07eff996a61dc81",
+    "placement_metrics.csv": "21b7497ac83a7aea4f361552d7dcca69efbac9f33bf2ed1f9f36daea1604f456",
+    "start_z_m30.csv": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+    "symmetry_metrics.csv": "050eb031f8601c54af0a427e2ef698fe0a764c77e91fb79118a783094131dc19",
+    "synthetic_metrics.csv": "e8a24199bc4de1dab3926541614eb10f850457a0e54f7cfb9fe75c8763c43128"
+  },
+  "sets": {
+    "B": {
+      "files": {
+        "aspect_summary.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 48,
+          "headers_equal": true,
+          "max_absolute_difference": 1.070320603979713e-05,
+          "max_relative_difference": 1.1581387898424503e-05,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "d64d60394480954cf66d4cbdc4caeee3076a116ab04b4508c61c34e7c5af1a92",
+          "shape": [
+            4,
+            12
+          ],
+          "shape_equal": true
+        },
+        "aspect_trials.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 2400,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0005351603019907447,
+          "max_relative_difference": 0.0005876888073972599,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "502f3773c605b968298a07dbfe8bd8afa2f03dbf2a6100938100543eb6ae5bf6",
+          "shape": [
+            200,
+            12
+          ],
+          "shape_equal": true
+        },
+        "density_summary.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 50,
+          "headers_equal": true,
+          "max_absolute_difference": 4.497186768737116e-05,
+          "max_relative_difference": 4.7909770872123545e-05,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "92fd53eb520fb621566bac248db741faa1aa7ac1f4b38b3167662a972afc17fc",
+          "shape": [
+            5,
+            10
+          ],
+          "shape_equal": true
+        },
+        "density_trials.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 2750,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0007938380885457175,
+          "max_relative_difference": 0.0008487662283457305,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [
+            "fft_spectral_entropy"
+          ],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "8b217578724986758ab231faad4e573413260b4119557770d5b9ad53e712a62f",
+          "shape": [
+            250,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_controls.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 18,
+          "headers_equal": true,
+          "max_absolute_difference": 0.19309944942921442,
+          "max_relative_difference": 0.35387938828606097,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "677095b9d665f723cef8999556e1b90bdda30dff1801d82ebcd71aca55ad7942",
+          "shape": [
+            2,
+            10
+          ],
+          "shape_equal": true
+        },
+        "null_summary.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "mean",
+            "sd"
+          ],
+          "finite_numeric_pairs": 243,
+          "headers_equal": true,
+          "max_absolute_difference": 3.498542910460728e-07,
+          "max_relative_difference": 0.0001137591937364932,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "d6b3007c6e08439019c70900565de94457ac839e0e25d7fce7a9652be1be1b0d",
+          "shape": [
+            27,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_trials.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 15000,
+          "headers_equal": true,
+          "max_absolute_difference": 0.00010015089727077875,
+          "max_relative_difference": 0.00016364061953905455,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [
+            "fft_spectral_entropy"
+          ],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "05d5f7361bebbae9ee355f8ad708de3ae689b3162dfed260e9cd3f9df325c317",
+          "shape": [
+            1500,
+            11
+          ],
+          "shape_equal": true
+        },
+        "placement_metrics.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 378,
+          "headers_equal": true,
+          "max_absolute_difference": 0.2733605098069649,
+          "max_relative_difference": 0.35278158302149026,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [
+            "fft_spectral_entropy"
+          ],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "55140a753e9af4d9c474927420b6786e875faf9fdf89a91edf4d70ae43df2814",
+          "shape": [
+            42,
+            11
+          ],
+          "shape_equal": true
+        },
+        "start_z_m30.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 1600,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+          "shape": [
+            100,
+            16
+          ],
+          "shape_equal": true
+        },
+        "symmetry_metrics.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.8516643332946383,
+          "max_relative_difference": 0.8516643332946383,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [
+            "fft_spectral_entropy"
+          ],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "ebec34353848a8e418e06e8615fbb58b7f0475ec156b41ad340103664aa8b8ea",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        },
+        "synthetic_metrics.csv": {
+          "byte_equal": false,
+          "differing_columns": [
+            "fft_spectral_entropy"
+          ],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.5065609657923373,
+          "max_relative_difference": 0.8271091734326736,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [
+            "fft_spectral_entropy"
+          ],
+          "row_multiset_equal": false,
+          "row_order_equal": null,
+          "rows_equal": false,
+          "sha256": "ca1fa2b185d3cc3b9af0d331a733ca06a9c05dc0dbdc8aa6d640585c27372d2e",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        }
+      },
+      "path": "B"
+    },
+    "C": {
+      "files": {
+        "aspect_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 48,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "2ba540517f8d8e53487cb96252a7cfba90311988c7f6a7e06f7bdcf685416cd2",
+          "shape": [
+            4,
+            12
+          ],
+          "shape_equal": true
+        },
+        "aspect_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 2400,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "3f4a191eff4e8f45c2aad7f9d03f7804a2e2ab34228aebf0681934db71d0a5fe",
+          "shape": [
+            200,
+            12
+          ],
+          "shape_equal": true
+        },
+        "density_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 50,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "d3fe33fd2ab454376e6b5c912c775fbc048e03f17f7849b980c942caec770dc8",
+          "shape": [
+            5,
+            10
+          ],
+          "shape_equal": true
+        },
+        "density_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 2750,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "bae88d40b33d6b6ce2fa23becbaae95fe6616b2548bcfdea940739838b8a443e",
+          "shape": [
+            250,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_controls.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 18,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "ca2ac04733397dcd4dc4286fb14d7740c012658f1978edd9b387afe073b06add",
+          "shape": [
+            2,
+            10
+          ],
+          "shape_equal": true
+        },
+        "null_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 243,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "7bdcc4d8d0cf86715dc4a0daf10ee7cdde20ae4e300dad635cc2abf92e771498",
+          "shape": [
+            27,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 15000,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "5537d968ba5712f7e37d67bd2eae2c404cebe1f0058da837a07eff996a61dc81",
+          "shape": [
+            1500,
+            11
+          ],
+          "shape_equal": true
+        },
+        "placement_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 378,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "21b7497ac83a7aea4f361552d7dcca69efbac9f33bf2ed1f9f36daea1604f456",
+          "shape": [
+            42,
+            11
+          ],
+          "shape_equal": true
+        },
+        "start_z_m30.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 1600,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+          "shape": [
+            100,
+            16
+          ],
+          "shape_equal": true
+        },
+        "symmetry_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "050eb031f8601c54af0a427e2ef698fe0a764c77e91fb79118a783094131dc19",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        },
+        "synthetic_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "e8a24199bc4de1dab3926541614eb10f850457a0e54f7cfb9fe75c8763c43128",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        }
+      },
+      "path": "C"
+    },
+    "D": {
+      "files": {
+        "aspect_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 48,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "2ba540517f8d8e53487cb96252a7cfba90311988c7f6a7e06f7bdcf685416cd2",
+          "shape": [
+            4,
+            12
+          ],
+          "shape_equal": true
+        },
+        "aspect_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 2400,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "3f4a191eff4e8f45c2aad7f9d03f7804a2e2ab34228aebf0681934db71d0a5fe",
+          "shape": [
+            200,
+            12
+          ],
+          "shape_equal": true
+        },
+        "density_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 50,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "d3fe33fd2ab454376e6b5c912c775fbc048e03f17f7849b980c942caec770dc8",
+          "shape": [
+            5,
+            10
+          ],
+          "shape_equal": true
+        },
+        "density_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 2750,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "bae88d40b33d6b6ce2fa23becbaae95fe6616b2548bcfdea940739838b8a443e",
+          "shape": [
+            250,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_controls.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 18,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "ca2ac04733397dcd4dc4286fb14d7740c012658f1978edd9b387afe073b06add",
+          "shape": [
+            2,
+            10
+          ],
+          "shape_equal": true
+        },
+        "null_summary.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 243,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "7bdcc4d8d0cf86715dc4a0daf10ee7cdde20ae4e300dad635cc2abf92e771498",
+          "shape": [
+            27,
+            11
+          ],
+          "shape_equal": true
+        },
+        "null_trials.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 15000,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "5537d968ba5712f7e37d67bd2eae2c404cebe1f0058da837a07eff996a61dc81",
+          "shape": [
+            1500,
+            11
+          ],
+          "shape_equal": true
+        },
+        "placement_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 378,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "21b7497ac83a7aea4f361552d7dcca69efbac9f33bf2ed1f9f36daea1604f456",
+          "shape": [
+            42,
+            11
+          ],
+          "shape_equal": true
+        },
+        "start_z_m30.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 1600,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "732e24fdb49c77abf7e15a56c8f26441606cae36b5758c50f6dd47926f932461",
+          "shape": [
+            100,
+            16
+          ],
+          "shape_equal": true
+        },
+        "symmetry_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "050eb031f8601c54af0a427e2ef698fe0a764c77e91fb79118a783094131dc19",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        },
+        "synthetic_metrics.csv": {
+          "byte_equal": true,
+          "differing_columns": [],
+          "finite_numeric_pairs": 90,
+          "headers_equal": true,
+          "max_absolute_difference": 0.0,
+          "max_relative_difference": 0.0,
+          "missing_values": {
+            "candidate": 0,
+            "reference": 0
+          },
+          "non_finite_values": {
+            "candidate": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            },
+            "reference": {
+              "nan": 0,
+              "negative_infinity": 0,
+              "positive_infinity": 0
+            }
+          },
+          "numeric_statistics_complete": true,
+          "rank_changed_columns": [],
+          "row_multiset_equal": true,
+          "row_order_equal": true,
+          "rows_equal": true,
+          "sha256": "e8a24199bc4de1dab3926541614eb10f850457a0e54f7cfb9fe75c8763c43128",
+          "shape": [
+            10,
+            11
+          ],
+          "shape_equal": true
+        }
+      },
+      "path": "D"
+    }
+  }
+}

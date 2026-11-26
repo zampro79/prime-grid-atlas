@@ -521,8 +521,9 @@ numerical reproduction of the archived historical results. Those outputs retain
 the earlier positive-support spectral-entropy normalization, whereas v1.0.0
 uses the fixed non-DC support documented in `RESEARCH.md`. Treat
 `docs/scientific_audit/` as an immutable historical snapshot and do not
-overwrite it. Identification of the exact historical source snapshot is deferred
-to STEP 03; it is not asserted here to have been identified or fully reproduced.
+overwrite it. The permanent [Research I provenance and reproduction package](docs/reproducibility/research_i/README.md)
+documents the source-hash investigation, exact CSV reproductions and remaining
+limits; the complete historical source snapshot has not been identified.
 
 Entire suite, CUDA optional:
 
