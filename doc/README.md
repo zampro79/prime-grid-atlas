@@ -1,10 +1,10 @@
-# Documentation index — v1.0.0
+# Documentation index — v1.1.0 preparation
 
 [Italian original](README.it.md)
 
-The v1.0.0 documentation is organized by status and was preserved during code cleanup.
+The documentation is organized by status; historical v1.0.0 records and original Italian documents remain preserved.
 
-The current software build is `1.0.0`, the first official release.
+The current software build is `1.1.0`, in release preparation. The first official release remains `1.0.0`. See [Known Issues](../KNOWN_ISSUES.md) and the [1.1.0 checklist](../RELEASE_CHECKLIST_v1.1.0.md).
 
 ## Scientific archive
 
@@ -14,7 +14,7 @@ DOI [10.5281/zenodo.24546972](https://doi.org/10.5281/zenodo.24546972) identifie
 the collection across versions. See [the archival record](../ZENODO.md) for
 integrity evidence and the future-version procedure.
 
-Version v1.0.0 exposes 13 modes covering prime research, scientific controls and modular diagnostics. The interface provides `Linear` as the scientific reference placement and thirteen exploratory geometric placements.
+The current application exposes 13 modes covering prime research, scientific controls and modular diagnostics. The interface provides `Linear` as the scientific reference placement and thirteen exploratory geometric placements.
 
 ## Current documents
 
@@ -34,7 +34,7 @@ The historical papers are preserved locally because they document the project's 
 
 ## Previously generated evidence
 
-The v170 CSV datasets are not included in the public release. The inventory in `evidence/README.md` retains their names and checksums for a possible future archive. Historical images are also excluded; new local v1.0.0 outputs belong in `results/` (ignored by Git). See [RESEARCH.md](../RESEARCH.md) for the implemented methodology; the 30p protocol also includes future proposals.
+The v170 CSV datasets are not included in the public release. The inventory in `evidence/README.md` retains their names and checksums for a possible future archive. Historical images are also excluded; new local experimental outputs belong in `results/` (ignored by Git). See [RESEARCH.md](../RESEARCH.md) for the implemented methodology; the 30p protocol also includes future proposals.
 
 ## Languages
 

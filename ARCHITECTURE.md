@@ -388,7 +388,7 @@ Example, abridged:
   "schema": "pga.provenance/1.0",
   "schema_version": "1.0",
   "experiment_id": "550e8400-e29b-41d4-a716-446655440000",
-  "application": {"name": "Prime Grid Atlas", "version": "1.0.0"},
+  "application": {"name": "Prime Grid Atlas", "version": "1.1.0"},
   "source": {
     "identity_status": "git_commit_and_file_hashes_clean",
     "git": {"available": true, "commit": "<full-sha>", "dirty": false},
@@ -496,3 +496,19 @@ python tools/scientific_audit_experiments.py --output /tmp/prime-atlas-smoke --t
 ```
 
 Do not overwrite curated `docs/scientific_audit/` merely to test the CLI. The documented historical test totals are snapshots, not a substitute for running the current suite. `test_known_scientific_issues.py` intentionally tracks unresolved expectations; unexpected success needs investigation rather than automatic removal of the decorator.
+
+### 1.1.0 release identity and limits
+
+The active runtime constant remains `qt_app.APP_VERSION`, now **1.1.0**; no new
+version module or packaging system has been introduced. The release is in
+preparation. Its configuration schema is still 1, provenance schema is still
+`pga.provenance/1.0`, and default memory cap is still 1024 MiB.
+
+[Known Issues](KNOWN_ISSUES.md) records R08-08 as HIGH/open, with no proven causal
+component. The observed native Shiboken destruction stack is not a diagnosis of
+the responsible application object or dependency. Current memory/export guards
+are not a guarantee against abrupt native termination or multi-file partial
+outputs. PGA-ARCH-04 remains deferred; no Qt cleanup change is part of version
+formalization. Final public captures follow the
+[source/privacy specification](screenshots/CAPTURE_PLAN_v1.1.0.md), with original
+native and historical metadata preserved unchanged.

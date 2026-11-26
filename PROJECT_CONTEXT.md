@@ -2,7 +2,7 @@
 
 ## Purpose and scope
 
-Prime Grid Atlas is a desktop environment for experimental mathematics: it places consecutive integers in finite volumes, selects arithmetic subsets, visualizes slices and accumulated occupancy, and compares descriptive metrics against explicit controls. The first official release identifies itself as `1.0.0`; see [VERSIONING.md](VERSIONING.md) for the project's version convention.
+Prime Grid Atlas is a desktop environment for experimental mathematics: it places consecutive integers in finite volumes, selects arithmetic subsets, visualizes slices and accumulated occupancy, and compares descriptive metrics against explicit controls. The current application version is `1.1.0`, in release preparation; the first official release remains `1.0.0`. See [VERSIONING.md](VERSIONING.md) for the project's version convention.
 
 The central research question is:
 
@@ -82,3 +82,13 @@ The Phase I audit records a fixed scalar-FFT cache corruption bug and three then
 Run commands from this project directory. It is a source application with flat local imports, not an installable package: no `pyproject.toml`, setup metadata or dedicated test-configuration file exists in the inspected project tree. The repository includes `.github/workflows/cpu-tests.yml`, which runs the CPU test suite and the Phase II identity verifier on Python 3.11 and 3.12. This workflow does not validate CUDA, interactive OpenGL or unlisted environments. The application starts with `python main.py`; NumPy suffices for numerical headless use, while desktop/plotting dependencies are declared in `requirements.txt`.
 
 Use the repository root reported by `git rev-parse --show-toplevel`; do not rely on machine-specific paths. Local `results/` are ignored/untracked. Earlier audit statements about tracked results describe a former parent repository, not the current index. Preserve those outputs and inspect Git status before staging. The public author and copyright holder are `zampro79`; the project is licensed under MIT.
+
+## 1.1.0 release-preparation status
+
+The author-approved title is **Integrity, Reproducibility & Reliability Update**.
+The runtime label is formalized; publication, final capture generation and the
+new version DOI/date remain pending. R08-08 stays HIGH/open with unknown cause;
+consult [Known Issues](KNOWN_ISSUES.md), the
+[release notes](RELEASE_NOTES_v1.1.0.md) and
+[version checklist](RELEASE_CHECKLIST_v1.1.0.md). Do not relabel the original
+publication or the preparatory bab02ccf/runtime 1.0.0 artifacts.

@@ -1,4 +1,4 @@
-"""Focused mode catalog for the Prime Grid Atlas v1.0.0 interface."""
+"""Focused mode catalog for the Prime Grid Atlas v1.1.0 interface."""
 
 PRIME_MODES = (
     "Primes",

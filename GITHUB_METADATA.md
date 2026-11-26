@@ -14,17 +14,29 @@ statistical baselines.
 
 ## Website, archive and social preview
 
-The scientific archive for v1.0.0 is
-`https://doi.org/10.5281/zenodo.24546973`; use it as the repository website if
-a dedicated project site is not configured.
-A social-preview image should be selected only from an authentic, provenance-
-checked v1.0.0 screenshot.
+The original scientific archive for v1.0.0 is
+`https://doi.org/10.5281/zenodo.24546973`. For a general archive website, use
+concept DOI `https://doi.org/10.5281/zenodo.24546972` if no dedicated project
+site is configured; neither is a newly assigned 1.1.0 version DOI.
+A future social-preview image must be selected from an authentic, provenance-
+checked 1.1.0 capture after regeneration. Preparatory images remain labelled
+with their original source/runtime and are not final release assets.
 
 ## Release identity
 
 - Author and copyright holder: `zampro79`
-- Version: `1.0.0`
+- Version: `1.1.0` (in preparation; not published)
+- Release title: `Integrity, Reproducibility & Reliability Update`
 - License: `MIT`
 - Repository: `https://github.com/zampro79/prime-grid-atlas`
-- Version DOI: `10.5281/zenodo.24546973`
+- Original v1.0.0 version DOI: `10.5281/zenodo.24546973`
+- Version 1.1.0 DOI and publication date: not established
 - Concept DOI: `10.5281/zenodo.24546972`
+
+## Publication gate
+
+These are local preparation instructions only. Keep a visible link to
+[Known Issues](KNOWN_ISSUES.md) and retain R08-08 as HIGH/open. Complete final
+artifact privacy review, source/asset attribution, citation metadata and the
+[1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md) before a separate author decision
+on GitHub publication. No push, tag, release or social-preview upload is implied.

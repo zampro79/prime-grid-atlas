@@ -1,4 +1,4 @@
-# Prime Grid Atlas v1.0.0 — Software manual
+# Prime Grid Atlas v1.1.0 — Software manual
 
 [Italian original](software_manual.it.md)
 
@@ -6,7 +6,7 @@ This English translation includes owner-approved clarifications following the sc
 
 ## 1. Purpose
 
-Prime Grid Atlas is an interactive environment for exploring modular embeddings, primality masks and coprime structures. Build `1.0.0`, the first official release, uses:
+Prime Grid Atlas is an interactive environment for exploring modular embeddings, primality masks and coprime structures. Build `1.1.0` is in release preparation; the original release remains `1.0.0`. It uses:
 
 - PySide6 for the tabbed interface;
 - NumPy as the required numerical backend;
@@ -382,6 +382,31 @@ metrics.py          geometric and spectral metrics
 mode_catalog.py     Prime/Controls/Diagnostics groups
 grid_model.py       slices, cumulative hits and spherical coordinates
 number_theory.py    CPU arithmetic functions
+memory_policy.py    preventive operation-local memory estimates and admission
+provenance.py       observed source/configuration metadata and export integrity
 ```
 
 The v1.0.0 distribution contains only modules belonging to the active pipeline. Earlier theoretical material has been preserved in [`archive/`](archive/README.md) and indexed in [`README.md`](README.md). Read the historical papers with the limitations stated in the archive index.
+
+## 1.1.0 integrity and reliability preparation
+
+**1.1.0 — Integrity, Reproducibility & Reliability Update is not yet published.**
+Read [Known Issues](../KNOWN_ISSUES.md): R08-08 remains HIGH/open with unknown
+root cause; a native crash can lose unsaved results and interrupt exports.
+Neither technical validation nor a successful rerun establishes resolution.
+
+Public arrays are defensive copies of cached numerical data. Scientific
+provenance sidecars on supported exports record observed source identity,
+configuration and output integrity, distinguishing completeness from hashes.
+Rendering preserves the last successful result after handled calculation
+failures; later comparison-profile edits do not relabel the completed run.
+
+Preventive memory checks use the existing 1024 MiB additional-allocation cap by
+default, compose retained buffers and actual entropy bins, and consult available
+resource observations where possible. Do not silently reduce scientific
+parameters to bypass a refusal. See [architecture](../ARCHITECTURE.md) for the
+policy and its limits. Run analyses/profile changes sequentially; shared state
+and concurrent writers do not provide global isolation or crash transactions.
+
+Final 1.1.0 screenshots are pending the [capture plan](../screenshots/CAPTURE_PLAN_v1.1.0.md).
+Existing historical references and illustrations retain their original identity.

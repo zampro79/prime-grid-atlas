@@ -1,10 +1,9 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it using these metadata."
+message: "Version 1.1.0 is in preparation. Cite the actual archived version used; historical v1.0.0 citation details are preserved in ZENODO.md."
 title: "Prime Grid Atlas"
 type: software
-version: "1.0.0"
-doi: "10.5281/zenodo.24546973"
-date-released: "2026-11-26"
+version: "1.1.0"
+# The 1.1.0 version DOI and date-released are intentionally omitted until established.
 authors:
   - family-names: "zampro79"
 repository-code: "https://github.com/zampro79/prime-grid-atlas"

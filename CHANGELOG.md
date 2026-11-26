@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.1.0 — Integrity, Reproducibility & Reliability Update (in preparation)
+
+Not yet published. No publication date or new version DOI is assigned.
+
+### Added
+
+- Standard-library scientific provenance manifests with observed source identity,
+  configuration, environment, backend evidence, output hashes and completeness.
+- Persistent Research I reproducibility evidence, A/B/C/D manifests, source
+  hashes, isolated legacy-normalization procedure and CSV comparison tooling.
+- Configurable preventive memory budgets with host/device estimates and
+  operation-local admission before heavy allocations.
+- Regression tests for cache isolation, export provenance, memory composition,
+  scalar LRU tracking, cgroup detection and simulated portability limitations.
+
+### Fixed
+
+- Isolate public arrays from internal caches through defensive copies, including
+  the CPU sieve, volumes, scalar fields and projections.
+- Keep the last successful data, viewport, metrics and provenance together after
+  handled render failures; prevent completed exports before any valid result.
+- Preserve placement-comparison scientific configuration across later UI edits;
+  include memory_policy.py in observed source identity.
+- Compose cold/warm cache allocations, retained buffers and entropy-bin-dependent
+  NumPy temporaries; preserve scalar LRU tracking including cached None entries.
+- Resolve applicable cgroup v1/v2 mounts and hierarchical limits; retain zero
+  headroom at exhausted limits and make resource/RLIMIT_AS detection optional.
+- Improve handled-export consistency while preserving existing output formats.
+
+### Known limitations
+
+- R08-08 remains HIGH / OPEN / NOT REPRODUCED / ROOT CAUSE UNKNOWN. A native
+  SIGSEGV was observed during Qt object destruction; no causal component has
+  been established. See [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+- Real CUDA, non-Linux platforms and thread safety are not validated. Memory
+  estimates and multi-file crash atomicity have limits; historical Research I
+  source provenance remains incomplete.
+- Final 1.1.0 screenshots, artifact privacy review and publication metadata are
+  pending. Original v1.0.0 datasets, manifests, tag, DOI and release notes remain
+  preserved. No scientific formula, schema or dependency update is part of this
+  version-label/documentation step.
+
 ## v1.0.0 — first official release
 
 No public release date or earlier release history is asserted here.

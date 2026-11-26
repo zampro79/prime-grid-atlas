@@ -53,7 +53,7 @@ class ExportProvenanceTests(unittest.TestCase):
                     self.assertEqual(metadata['_scan']['x_from'], 3)
                     self.assertEqual(metadata['_scan']['start'], 1)
                     self.assertEqual(metadata['entropy_bins'], 8)
-                    self.assertEqual(metadata['application_version'], '1.0.0')
+                    self.assertEqual(metadata['application_version'], '1.1.0')
                     self.assertEqual(metadata['_scan']['compute'], 'CPU')
                     self.assertIn('CPU', metadata['_scan']['backend_runtime_policy'])
                     with patch.object(qt_app.QFileDialog, "getExistingDirectory", return_value=directory), patch.object(scan, "save_heatmap_figure"), patch.object(qt_app.QMessageBox, "information"):

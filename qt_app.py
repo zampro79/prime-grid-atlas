@@ -1,4 +1,4 @@
-"""PySide6 user interface for Prime Grid Atlas v1.0.0."""
+"""PySide6 user interface for Prime Grid Atlas v1.1.0."""
 
 import csv
 import json
@@ -100,7 +100,7 @@ from provenance import (
 )
 
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 PROJECT_ROOT = Path(__file__).resolve().parent
 PROVENANCE_SOURCE_FILES = (
     "provenance.py",

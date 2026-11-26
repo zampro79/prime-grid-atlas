@@ -59,3 +59,21 @@ that integration without an established association could create a second
 record rather than a new version of this concept. It therefore remains disabled.
 Use Zenodo's **New version** workflow unless Zenodo confirms a safe migration of
 the existing manual record into the GitHub integration.
+
+## 1.1.0 preparation — no new deposit or DOI
+
+The application now identifies itself as **1.1.0 — Integrity, Reproducibility &
+Reliability Update**, in preparation. No new release date or version DOI has been
+established. `CITATION.cff` therefore omits those fields temporarily; it must not
+attribute 1.1.0 to the 1.0.0 version DOI.
+
+The verified original record, archive checksums, source commit and citation
+above remain historical and unchanged. Version DOI **10.5281/zenodo.24546973**
+continues to identify 1.0.0 only; concept DOI **10.5281/zenodo.24546972** identifies
+the version family. Finalize the actual new DOI/date and source-archive/citation
+sequence under separately authorized publication planning; do not invent either
+value, change the original deposit, or enable automatic ingestion here.
+
+R08-08 remains HIGH/open and must be disclosed in release metadata. See
+[Known Issues](KNOWN_ISSUES.md) and the [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
+No Zenodo action has been performed by this preparation.
