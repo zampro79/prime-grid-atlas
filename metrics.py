@@ -4,6 +4,7 @@ import numpy as np
 
 from app_config import get_config
 from compute_backend import disable_gpu, gpu_module, scalar, should_use_gpu, to_numpy
+from memory_policy import estimate_entropy, estimate_fft, require_memory
 
 RANDOM_BASELINE_TRIALS = 12
 
@@ -51,6 +52,7 @@ def local_entropy_grid(values, dim_x, dim_y, bins=None):
         return []
 
     bins = get_config().entropy_bins if bins is None else int(bins)
+    require_memory(estimate_entropy((int(dim_y), int(dim_x)), bins))
     use_gpu = should_use_gpu(dim_x * dim_y)
     xp = gpu_module() if use_gpu else np
     try:
@@ -129,6 +131,8 @@ def fft2_structure_metrics(flat_hits, dim_x, dim_y, binary=True):
     }
     if dim_x <= 0 or dim_y <= 0:
         return default
+
+    require_memory(estimate_fft((int(dim_y), int(dim_x))))
 
     use_gpu = should_use_gpu(int(dim_x) * int(dim_y))
     xp = gpu_module() if use_gpu else np

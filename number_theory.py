@@ -3,6 +3,8 @@ from functools import lru_cache
 
 import numpy as np
 
+from memory_policy import MemoryEstimate, estimate_sieve, require_memory
+
 
 _prime_sieve_limit = -1
 _prime_sieve_values = None
@@ -25,6 +27,10 @@ def is_prime(n):
 
 def prime_sieve_upto(limit):
     """Return a writable sieve copy isolated from the private cached buffer."""
+    normalized = int(limit)
+    require_memory(estimate_sieve(
+        max(0, normalized), public_copy=True, old_limit=_prime_sieve_limit
+    ))
     return _prime_sieve_upto_cached(limit).copy()
 
 
@@ -35,6 +41,8 @@ def _prime_sieve_upto_cached(limit):
     limit = int(limit)
     if _prime_sieve_values is not None and limit <= _prime_sieve_limit:
         return _prime_sieve_values[: limit + 1]
+
+    require_memory(estimate_sieve(max(0, limit), old_limit=_prime_sieve_limit))
 
     if limit < 2:
         sieve = np.zeros(max(0, limit) + 1, dtype=bool)
@@ -54,6 +62,11 @@ def _prime_sieve_upto_cached(limit):
 
 def prime_mask_for_values(values):
     arr = np.asarray(values)
+    require_memory(MemoryEstimate(
+        "prime mask input and result",
+        temporary=arr.size,
+        components={"result mask": arr.size},
+    ))
     mask = np.zeros(arr.shape, dtype=bool)
     if arr.size == 0:
         return mask
@@ -63,6 +76,10 @@ def prime_mask_for_values(values):
         return mask
 
     valid_values = arr[valid].astype(np.int64, copy=False)
+    require_memory(estimate_sieve(
+        int(valid_values.max()), values_cells=arr.size,
+        old_limit=_prime_sieve_limit,
+    ))
     sieve = _prime_sieve_upto_cached(int(valid_values.max()))
     mask[valid] = sieve[valid_values]
     return mask

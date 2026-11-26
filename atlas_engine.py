@@ -38,6 +38,16 @@ from number_theory import (
     scalar_sequence_mask,
     scalar_sequence_values,
 )
+from memory_policy import (
+    MemoryEstimate,
+    compose_estimates,
+    estimate_fft,
+    estimate_overlay,
+    estimate_projection,
+    estimate_sieve,
+    estimate_volume,
+    require_memory,
+)
 
 
 GEOMETRY_METRIC_KEYS = (
@@ -66,6 +76,123 @@ PLACEMENTS = (
     "Bit reversal",
     "3D helix",
 )
+
+
+_volume_cache_keys = []
+_scalar_cache_keys = []
+
+
+def _cache_key_is_warm(keys, config):
+    return config in keys
+
+
+def _touch_cache_key(keys, config):
+    if config in keys:
+        keys.remove(config)
+    keys.append(config)
+    del keys[:-2]
+
+
+def _mode_uses_sieve(mode):
+    return mode in (
+        "Primes", "Twin primes", "Sophie Germain primes", "Safe primes"
+    )
+
+
+def _sieve_limit_for_config(config, total):
+    end = int(config.start) + int(total) - 1
+    if config.mode == "Twin primes":
+        return max(0, end + 2)
+    if config.mode == "Sophie Germain primes":
+        return max(0, 2 * end + 1)
+    return max(0, end)
+
+
+def _volume_construction_phases(config, *, force_cold=False, placement=None):
+    total = int(config.x) * int(config.y) * int(config.z)
+    cold = force_cold or not _cache_key_is_warm(_volume_cache_keys, config)
+    if not cold:
+        return []
+    phases = [estimate_volume(
+        (config.z, config.y, config.x), placement=placement or config.placement,
+        cache_entries_alive=len(_volume_cache_keys),
+    )]
+    if _mode_uses_sieve(config.mode):
+        # The integer volume remains live while the selection mask is built.
+        phases.append(estimate_sieve(
+            _sieve_limit_for_config(config, total), values_cells=total,
+        ))
+    return phases
+
+
+def _volume_operation_memory_estimate(config, *, public_copy=False,
+                                      force_cold=False):
+    total = int(config.x) * int(config.y) * int(config.z)
+    phases = _volume_construction_phases(config, force_cold=force_cold)
+    if public_copy:
+        phases.append(MemoryEstimate(
+            "public volume defensive copy", temporary=total * 9,
+            components={"numbers and selection copies": total * 9},
+        ))
+    return compose_estimates("volume operation", phases)
+
+
+def _scalar_operation_memory_estimate(config, *, public_copy=False,
+                                      force_cold=False):
+    phases = _volume_construction_phases(config, force_cold=force_cold)
+    scalar_mode = config.mode in (
+        "Residues modulo N", "Divisor count τ(n)", "Möbius μ(n)", "GCD with N"
+    )
+    total = int(config.x) * int(config.y) * int(config.z)
+    scalar_cold = force_cold or not _cache_key_is_warm(_scalar_cache_keys, config)
+    if scalar_mode and scalar_cold:
+        phases.append(MemoryEstimate(
+            "cached scalar field", persistent=total * 8,
+            components={"float64 scalar field": total * 8},
+        ))
+    if scalar_mode and public_copy:
+        phases.append(MemoryEstimate(
+            "public scalar-field defensive copy", temporary=total * 8,
+            components={"scalar field copy": total * 8},
+        ))
+    return compose_estimates("scalar-field operation", phases)
+
+
+def _projection_operation_memory_estimate(config, plane, *, public_copy=True,
+                                          force_cold=False):
+    phases = _volume_construction_phases(config, force_cold=force_cold)
+    scalar_mode = config.mode in (
+        "Residues modulo N", "Divisor count τ(n)", "Möbius μ(n)", "GCD with N"
+    )
+    total = int(config.x) * int(config.y) * int(config.z)
+    if scalar_mode and (force_cold or not _cache_key_is_warm(_scalar_cache_keys, config)):
+        phases.append(MemoryEstimate("cached scalar field", persistent=total * 8))
+    px, py = plane_dimensions(plane, config.x, config.y, config.z)
+    phases.append(estimate_projection(
+        (config.z, config.y, config.x), px * py,
+        public_copy=public_copy, scalar_field=scalar_mode,
+    ))
+    return compose_estimates("projection operation", phases)
+
+
+def _overlay_operation_memory_estimate(config, plane, *, trials=1,
+                                       placement=None, force_cold=False):
+    phases = _volume_construction_phases(
+        config, force_cold=force_cold, placement=placement,
+    )
+    px, py = plane_dimensions(plane, config.x, config.y, config.z)
+    projection_buffers = estimate_projection(
+        (config.z, config.y, config.x), px * py, public_copy=False,
+    )
+    # Hits and other projection products remain live throughout the metrics.
+    phases.append(MemoryEstimate(
+        "retained projection buffers", persistent=projection_buffers.additional_peak,
+    ))
+    phases.append(estimate_overlay(
+        (config.z, config.y, config.x), px * py, trials=trials,
+        placement=placement or config.placement,
+    ))
+    return compose_estimates("overlay operation", phases)
 
 
 @dataclass(frozen=True)
@@ -343,6 +470,8 @@ def _validate_volume_request(config):
 
 def build_volume(config):
     """Return writable arrays isolated from the private cached volume."""
+    _validate_volume_request(config)
+    require_memory(_volume_operation_memory_estimate(config, public_copy=True))
     numbers, selected = _build_volume_internal(config)
     return numbers.copy(), selected.copy()
 
@@ -350,12 +479,18 @@ def build_volume(config):
 def _build_volume_internal(config):
     """Return private cached arrays for controlled read-only internal use."""
     _validate_volume_request(config)
-    return _build_volume_cached(config)
+    result = _build_volume_cached(config)
+    _touch_cache_key(_volume_cache_keys, config)
+    return result
 
 
 @lru_cache(maxsize=2)
 def _build_volume_cached(config):
     total = int(config.x) * int(config.y) * int(config.z)
+    require_memory(estimate_volume(
+        (config.z, config.y, config.x), placement=config.placement,
+        cache_entries_alive=_build_volume_cached.cache_info().currsize,
+    ))
     if config.placement == "Linear":
         numbers = (np.arange(total, dtype=np.int64) + int(config.start)).reshape(
             config.z, config.y, config.x
@@ -427,12 +562,31 @@ def _build_volume_cached(config):
 
 def build_scalar_field(config):
     """Return a writable scalar field isolated from the private cache."""
-    field = _build_scalar_field_cached(config)
+    _validate_volume_request(config)
+    require_memory(_scalar_operation_memory_estimate(config, public_copy=True))
+    field = _build_scalar_field_internal(config)
     return None if field is None else field.copy()
+
+
+def _build_scalar_field_internal(config):
+    """Track every successful cache access, including cached None results.
+
+    Update after the LRU returns, before callers allocate public copies. A
+    failed cache construction leaves both the real LRU and its registry intact.
+    This mirrors sequential access only; it is not a concurrency guarantee.
+    """
+    field = _build_scalar_field_cached(config)
+    _touch_cache_key(_scalar_cache_keys, config)
+    return field
 
 
 @lru_cache(maxsize=2)
 def _build_scalar_field_cached(config):
+    require_memory(MemoryEstimate(
+        "scalar field construction",
+        persistent=int(config.x) * int(config.y) * int(config.z) * 8,
+        components={"cached float64 field": int(config.x) * int(config.y) * int(config.z) * 8},
+    ))
     numbers, _selected = _build_volume_internal(config)
     if config.mode == "Residues modulo N":
         modulus = max(1, abs(int(config.param)))
@@ -451,6 +605,8 @@ def _build_scalar_field_cached(config):
 def clear_volume_cache():
     _build_volume_cached.cache_clear()
     _build_scalar_field_cached.cache_clear()
+    _volume_cache_keys.clear()
+    _scalar_cache_keys.clear()
 
 
 def projection(config, plane="XY", depth=None, overlay=False):
@@ -469,6 +625,9 @@ def _projection_internal(config, plane="XY", depth=None, overlay=False):
 
 
 def _projection_data(config, plane, depth, overlay, isolate):
+    require_memory(_projection_operation_memory_estimate(
+        config, plane, public_copy=isolate,
+    ))
     numbers, selected = _build_volume_internal(config)
     if isolate:
         numbers = numbers.copy()
@@ -478,7 +637,7 @@ def _projection_data(config, plane, depth, overlay, isolate):
         depth_limit - 1 if depth is None else max(0, min(int(depth), depth_limit - 1))
     )
     data = get_plane_data(plane, depth, overlay, numbers, selected)
-    scalar_field = _build_scalar_field_cached(config)
+    scalar_field = _build_scalar_field_internal(config)
     if scalar_field is not None:
         if isolate:
             scalar_field = scalar_field.copy()
@@ -556,6 +715,9 @@ def overlay_metrics(config, plane="XY", depth=None, random_trials=None):
     )
     if random_trials < 1:
         raise ValueError("random_trials must be at least 1")
+    require_memory(_overlay_operation_memory_estimate(
+        config, plane, trials=random_trials,
+    ))
     data = _projection_internal(config, plane, depth, True)
     hits = np.asarray(data["hits"]).ravel()
     base, step = _base_and_step(data, plane, config)
@@ -615,6 +777,9 @@ def current_overlay_metrics(config, data, plane):
 
 def placement_geometry_metrics(config, plane="XY", depth=None, overlay=True):
     """Placement-neutral metrics for comparing geometric embeddings."""
+    require_memory(_overlay_operation_memory_estimate(
+        config, plane, placement=config.placement,
+    ))
     data = _projection_internal(config, plane, depth, overlay)
     values = np.asarray(
         data["hits"] if overlay else data["selected"], dtype=np.float64
@@ -657,6 +822,17 @@ def fft_spectrum(data, overlay):
         dtype=float,
     )
     binary = scalar_field is None
+    require_memory(compose_estimates(
+        "FFT display and metrics",
+        (
+            MemoryEstimate(
+                "retained FFT display", persistent=estimate_fft(
+                    values.shape, display=True
+                ).additional_peak,
+            ),
+            estimate_fft(values.shape),
+        ),
+    ))
     use_gpu = should_use_gpu(values.size)
     xp = gpu_module() if use_gpu else np
     try:

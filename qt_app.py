@@ -59,6 +59,8 @@ from atlas_engine import (
     overlay_metrics,
     placement_geometry_metrics,
     projection,
+    _overlay_operation_memory_estimate,
+    _projection_operation_memory_estimate,
 )
 from app_config import (
     AppConfig,
@@ -78,6 +80,14 @@ from compute_backend import (
     release_gpu_caches,
 )
 from metrics import entropy_edge_mask
+from memory_policy import (
+    MemoryBudgetExceeded,
+    MemoryEstimate,
+    compose_estimates,
+    estimate_3d,
+    estimate_scan,
+    require_memory,
+)
 from mode_catalog import MODE_GROUPS, PRIME_MODES
 from grid_model import spherical_shell_positions
 from provenance import (
@@ -419,13 +429,27 @@ class ScanWorker(QObject):
     @Slot()
     def run(self):
         x1, x2, y1, y2, z, plane, start, trials, backend_mode = self.args
-        pairs = [
-            (x, y)
-            for y in range(min(y1, y2), max(y1, y2) + 1)
-            for x in range(min(x1, x2), max(x1, x2) + 1)
-        ]
         rows = []
         try:
+            x_count = abs(int(x2) - int(x1)) + 1
+            y_count = abs(int(y2) - int(y1)) + 1
+            pair_count = x_count * y_count
+            largest_config = GridConfig(
+                max(int(x1), int(x2)), max(int(y1), int(y2)), int(z),
+                "Primes", 2, "Linear", int(start),
+            )
+            operation = _overlay_operation_memory_estimate(
+                largest_config, plane, trials=int(trials), force_cold=True,
+            )
+            require_memory(estimate_scan(
+                pair_count, result_columns=len(SCAN_COLUMNS),
+                operation_peak=operation.additional_peak,
+            ))
+            pairs = [
+                (x, y)
+                for y in range(min(y1, y2), max(y1, y2) + 1)
+                for x in range(min(x1, x2), max(x1, x2) + 1)
+            ]
             self.backend_status.emit(configure_backend(backend_mode))
             clear_volume_cache()
             update_step = max(1, len(pairs) // 200)
@@ -600,6 +624,18 @@ class PlacementComparisonTab(QWidget):
 
     def start_comparison(self):
         if self.running:
+            return
+        config = self.window.config()
+        plane = self.window.plane.currentText()
+        # Placements run sequentially.  Use the larger placement model once;
+        # clearing the LRU is not assumed to release all resident memory.
+        try:
+            require_memory(_overlay_operation_memory_estimate(
+                config, plane, placement="Exploratory placement",
+                force_cold=True,
+            ))
+        except MemoryBudgetExceeded as exc:
+            QMessageBox.warning(self, "Memory budget", str(exc))
             return
         self.running = True
         self.cancelled = False
@@ -1007,6 +1043,24 @@ class ModuleScanTab(QWidget):
         count = (abs(self.x2.value() - self.x1.value()) + 1) * (
             abs(self.y2.value() - self.y1.value()) + 1
         )
+        max_x = max(self.x1.value(), self.x2.value())
+        max_y = max(self.y1.value(), self.y2.value())
+        largest_config = GridConfig(
+            max_x, max_y, self.z.value(), "Primes", 2, "Linear",
+            self.window.start_spin.value(),
+        )
+        operation = _overlay_operation_memory_estimate(
+            largest_config, self.window.plane.currentText(),
+            trials=self.trials.value(), force_cold=True,
+        )
+        try:
+            require_memory(estimate_scan(
+                count, result_columns=len(SCAN_COLUMNS),
+                operation_peak=operation.additional_peak,
+            ))
+        except MemoryBudgetExceeded as exc:
+            QMessageBox.warning(self, "Memory budget", str(exc))
+            return
         self.update_cost_label()
         self.run_button.setEnabled(False)
         self.cancel_button.setEnabled(True)
@@ -1853,6 +1907,27 @@ class MainWindow(QMainWindow):
                 raise ValueError(
                     f"Volume {total:,} exceeds the {maximum:,}-cell safety limit"
                 )
+            render_projection = _projection_operation_memory_estimate(
+                cfg, self.plane.currentText(), public_copy=True,
+            )
+            plane_cells = {
+                "XY": cfg.x * cfg.y,
+                "XZ": cfg.x * cfg.z,
+                "YZ": cfg.y * cfg.z,
+            }[self.plane.currentText()]
+            require_memory(compose_estimates(
+                "interactive rendering",
+                (
+                    MemoryEstimate(
+                        "retained projection",
+                        persistent=render_projection.additional_peak,
+                    ),
+                    MemoryEstimate(
+                        "analysis, RGB and QImage buffers",
+                        temporary=plane_cells * 32,
+                    ),
+                ),
+            ))
             data = projection(
                 cfg,
                 self.plane.currentText(),
@@ -1959,6 +2034,15 @@ class MainWindow(QMainWindow):
                 "compute": _compute_record(self.backend.currentText()),
                 "initial_source": self._application_source_identity,
             }
+        except MemoryBudgetExceeded as exc:
+            # Preserve the last successfully rendered image and its provenance.
+            QMessageBox.warning(
+                self,
+                "Memory budget",
+                f"{exc}\n\nReduce the grid dimensions or select a less "
+                "memory-intensive view.",
+            )
+            self.statusBar().showMessage(f"Render rejected: {exc}")
         except Exception as exc:
             self.image_view.set_error(f"Rendering error:\n{exc}")
             self.statusBar().showMessage(f"Rendering error: {exc}")
@@ -2099,10 +2183,16 @@ class MainWindow(QMainWindow):
         try:
             if self.current_data is None:
                 return
-            import pyqtgraph.opengl as gl
-
             cfg = self.config()
             selected = self.current_data["selected_3d"]
+            selected_points = (
+                int(np.count_nonzero(selected))
+                if self.selected_only_3d.isChecked()
+                else min(selected.size, get_config().max_3d_points)
+            )
+            require_memory(estimate_3d(selected.shape, selected_points=selected_points))
+            import pyqtgraph.opengl as gl
+
             if self.selected_only_3d.isChecked():
                 z, y, x = np.nonzero(selected)
                 selected_colors = True
@@ -2254,6 +2344,12 @@ class MainWindow(QMainWindow):
             )
             self.gl_view.update()
             QApplication.processEvents()
+        except MemoryBudgetExceeded as exc:
+            QMessageBox.warning(
+                self,
+                "Memory budget",
+                f"{exc}\n\nReduce X, Y or Z, or enable selected-points-only.",
+            )
         except Exception as exc:
             QMessageBox.critical(
                 self,

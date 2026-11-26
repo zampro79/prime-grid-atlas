@@ -20,6 +20,8 @@ class AppConfig:
     max_volume: int = 25_000_000
     baseline_trials: int = 12
     baseline_seed: int = -1  # -1 = deterministic seed derived from the experiment
+    memory_budget_mb: int = 1024  # MiB cap on additional peak memory per operation
+    memory_available_fraction: float = 0.50
 
     # Scientific metrics
     entropy_bins: int = 8
@@ -48,6 +50,7 @@ def validate_config(config):
         "gpu_auto_min_elements": 1,
         "max_volume": 1,
         "baseline_trials": 1,
+        "memory_budget_mb": 1,
         "entropy_bins": 2,
         "max_text_cells": 0,
         "max_3d_points": 1,
@@ -60,7 +63,7 @@ def validate_config(config):
     finite_fields = (
         "edge_threshold", "fft_low_radius", "beauty_entropy_weight",
         "beauty_edge_weight", "beauty_target_density",
-        "beauty_density_decay", "point_size_3d",
+        "beauty_density_decay", "point_size_3d", "memory_available_fraction",
     )
     for key in finite_fields:
         values[key] = float(values[key])
@@ -75,6 +78,9 @@ def validate_config(config):
     )
     values["beauty_density_decay"] = max(0.0, float(values["beauty_density_decay"]))
     values["point_size_3d"] = max(0.1, float(values["point_size_3d"]))
+    values["memory_available_fraction"] = min(
+        1.0, max(0.01, float(values["memory_available_fraction"]))
+    )
     values["schema_version"] = CONFIG_SCHEMA_VERSION
     return AppConfig(**values)
 

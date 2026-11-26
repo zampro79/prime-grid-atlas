@@ -8,6 +8,12 @@ import numpy as np
 import math
 
 from app_config import get_config
+from memory_policy import (
+    MemoryBudgetExceeded,
+    effective_gpu_budget,
+    estimate_sieve,
+    require_memory,
+)
 
 _requested_mode = "Auto"
 _cupy = None
@@ -154,6 +160,11 @@ def prime_mask(values, cpu_fallback):
     limit = int(array[valid].max())
     cp = gpu_module()
     try:
+        estimate = estimate_sieve(
+            limit, values_cells=array.size, old_limit=_gpu_prime_sieve_limit,
+            device="gpu",
+        )
+        require_memory(estimate, budget=effective_gpu_budget(cp))
         if _gpu_prime_sieve is None or limit > _gpu_prime_sieve_limit:
             sieve = cp.ones(limit + 1, dtype=cp.bool_)
             if limit >= 0:
@@ -172,8 +183,18 @@ def prime_mask(values, cpu_fallback):
         device_values = cp.asarray(array[valid], dtype=cp.int64)
         result[cp.asarray(valid)] = _gpu_prime_sieve[device_values]
         return cp.asnumpy(result)
+    except MemoryBudgetExceeded:
+        # A GPU rejection is not a generic CUDA failure.  Check the independent
+        # host fallback before invoking it and preserve the valid device cache.
+        require_memory(estimate_sieve(
+            limit, values_cells=array.size, device="host"
+        ))
+        return cpu_fallback(array)
     except Exception as exc:
         disable_gpu(exc)
+        require_memory(estimate_sieve(
+            limit, values_cells=array.size, device="host"
+        ))
         return cpu_fallback(array)
 
 

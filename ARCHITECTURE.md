@@ -174,6 +174,92 @@ The random baseline fixes K=count(h>0), chooses K distinct positions uniformly o
 
 `config.example.json` matches AppConfig defaults. There is no `examples/` directory. When changing a field, trace default → coercion/clamp → GUI range → consumer → snapshot/export → test → documentation. `export_max_side` is currently exposed but unused by `save_heatmap_figure`, which uses 10×8 inches at 180 dpi. Do not document a working size cap until behavior is deliberately resolved.
 
+### Preventive memory policy
+
+`memory_policy.py` applies a hybrid, operation-local allocation budget before
+predictably large allocations. `memory_budget_mb` is historically named but is
+explicitly measured in MiB (2^20 bytes); its default is 1024. It caps the
+estimated **additional peak** for one operation, not process RSS, physical RAM
+or a mathematical grid size. `memory_available_fraction` defaults to 0.50. The
+effective host budget is the minimum of the configured cap, that fraction of
+OS-available memory, that fraction of detectable cgroup headroom, and
+`RLIMIT_AS` virtual-address headroom. RSS is reported only as already resident
+context and is not subtracted again. When dynamic sources cannot be read, the
+configured cap remains active with `configured-cap-only` confidence; total
+physical RAM is never substituted for available memory.
+
+`MemoryEstimate` separates already allocated, persistent, temporary and
+host/device-transfer bytes. `MemoryBudgetExceeded` derives from `MemoryError`
+and exposes the operation, additional and total estimated peaks, effective
+budget/source, dominant components and confidence. Headless calls propagate
+this structured error. GUI rejections preserve the last valid render and do not
+rewrite dimensions, Start or trial counts. Scan checks occur before constructing
+the pair list/worker; 3D checks occur before `np.indices`. A rejected operation
+does not clear valid caches or produce a completion manifest.
+
+The estimates use Python integers and a 20% safety margin. Volume/projection
+models itemize int64 numbers, boolean selections, scalar fields, public copies,
+placement temporaries and the fact that an LRU miss can coexist with old
+entries. CPU/GPU sieve models include the growing bool sieve, old cache, public
+copy, masks, int64 indices and transfers. Local entropy models the actual bin
+count, padded int32 grid, `(bins,y,x)` int32 counts and float64 probability/term
+tensors (the STEP 06A observation at eight bins was about 350 bytes/cell). FFT
+metrics and display have distinct conservative starting coefficients of 110
+and 72 bytes/cell. Overlay uses 400 bytes/cell for Linear and 520 for Python-
+heavy placements, plus resident volume context; sequential trials do not
+multiply the peak. Scan includes Python pair/result objects and the maximum
+single-operation peak. 3D includes dense coordinates, masks, positions and
+colors before subsampling.
+
+CUDA admission uses CuPy's device free-memory report when available and never
+infers VRAM from host RAM. The memory-pool value is not subtracted separately
+from already reported free VRAM. If device memory is unknown, the configured
+device cap remains a documented limitation. A device-budget rejection is not
+treated as a generic CUDA failure: the independent host estimate must admit the
+CPU fallback. Mocked CUDA resource tests validate policy routing only, not real
+CUDA execution.
+
+This is an operational guard, not an absolute OOM guarantee. Coefficients vary
+with NumPy/CuPy, FFT libraries, allocators and Python object layouts; abrupt
+external pressure, fragmentation, memory-mapped/device allocations and
+concurrent writers can still cause a real `MemoryError`. The policy deliberately
+does not change formulas, FFT normalization, sieve mathematics, LRU policy,
+scientific output formats, or approximate an excessive request by resizing it.
+`export_max_side` remains descriptive/unused and exports are never silently
+resized by this policy.
+
+Top-level operation guards compose these local estimates to close MEM-01, the
+nested-allocation budget bypass found during final review. A local guard answers
+whether one allocation is admissible; it does not by itself protect a caller
+that retains earlier buffers. `compose_estimates` therefore models ordered
+phases. New persistent buffers remain live in every later phase, while
+temporary/transfer peaks from mutually exclusive phases use their maximum
+rather than their sum. Already-margined child estimates are not margined a
+second time. For example, a cold 25,000,000-cell Linear public volume retains
+the newly cached volume while allocating its defensive copy; both are included
+in the caller's preflight before either allocation starts.
+
+The engine tracks the two configuration keys expected to be resident in each
+LRU solely so a warm operation can budget its public copy without pretending a
+new cache entry is required. This bookkeeping follows accesses through the
+existing private entry points, is cleared with the caches, does not expose
+arrays and does not alter eviction capacity or cached values. A cold estimate
+conservatively includes the new entry before eviction, sieve growth for prime
+modes, scalar fields where applicable, retained projection products and later
+metric/display phases. Scan and placement comparison force a cold estimate
+because their configurations change; interactive rendering composes the
+projection snapshot with analysis, RGB and QImage buffers. If buffer lifetime
+is uncertain, the model retains it through the next phase. This can reject a
+request conservatively but cannot provide cross-thread reservations or a
+guarantee against concurrent memory pressure.
+
+MEM-02 corrected scalar LRU tracking for cached `None` results. All engine
+scalar-cache accesses pass through one helper that updates the key registry
+after a successful cache return, including `None`, and before public copying.
+Construction failures do not update the registry; a later public-copy failure
+does not undo an already successful cache access. This matches sequential LRU
+hits, eviction and clear behavior without claiming thread safety.
+
 Scan metadata snapshots configuration at start and records `_scan` parameters/status plus `application_version`. It is not an immutable runtime execution context: worker calls still consult shared global configuration/backend. Scan and placement comparison disable Grid/Configuration locally but can overlap across tabs; no global job lock exists. Run them sequentially. Capture requested and actual backend separately for scientific reproduction.
 
 | Export | Producer and format | Metadata / consumers / limits |
