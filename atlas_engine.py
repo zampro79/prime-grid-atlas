@@ -41,6 +41,7 @@ from number_theory import (
 from memory_policy import (
     MemoryEstimate,
     compose_estimates,
+    estimate_entropy,
     estimate_fft,
     estimate_overlay,
     estimate_projection,
@@ -181,8 +182,16 @@ def _overlay_operation_memory_estimate(config, plane, *, trials=1,
         config, force_cold=force_cold, placement=placement,
     )
     px, py = plane_dimensions(plane, config.x, config.y, config.z)
+    scalar_mode = config.mode in (
+        "Residues modulo N", "Divisor count τ(n)", "Möbius μ(n)", "GCD with N"
+    )
+    if scalar_mode and (force_cold or not _cache_key_is_warm(_scalar_cache_keys, config)):
+        phases.append(MemoryEstimate(
+            "cached scalar field", persistent=config.x * config.y * config.z * 8,
+        ))
     projection_buffers = estimate_projection(
         (config.z, config.y, config.x), px * py, public_copy=False,
+        scalar_field=scalar_mode,
     )
     # Hits and other projection products remain live throughout the metrics.
     phases.append(MemoryEstimate(
@@ -191,8 +200,40 @@ def _overlay_operation_memory_estimate(config, plane, *, trials=1,
     phases.append(estimate_overlay(
         (config.z, config.y, config.x), px * py, trials=trials,
         placement=placement or config.placement,
+        bins=get_config().entropy_bins, plane_shape=(py, px),
     ))
     return compose_estimates("overlay operation", phases)
+
+
+def _render_operation_memory_estimate(config, plane, view, overlay):
+    """Retain projection/analysis/display buffers across sequential metrics."""
+    px, py = plane_dimensions(plane, config.x, config.y, config.z)
+    cells = px * py
+    shape = (py, px)
+    projection = _projection_operation_memory_estimate(config, plane, public_copy=True)
+    phases = [MemoryEstimate("retained projection", persistent=projection.additional_peak)]
+    if view in ("Local entropy", "Entropy edges only"):
+        analysis = estimate_entropy(shape, get_config().entropy_bins)
+    elif view == "FFT 2D":
+        analysis = compose_estimates("FFT display and metrics", (
+            MemoryEstimate("retained FFT display",
+                           persistent=estimate_fft(shape, display=True).additional_peak),
+            estimate_fft(shape),
+        ))
+    else:
+        analysis = MemoryEstimate("ordinary analysis", temporary=cells * 32)
+    # One float64 analysis output remains while RGB/QImage and quick metrics
+    # are built. Reserve it from the child's peak, without a second margin.
+    retained = min(analysis.additional_peak, (cells * 8 * 6 + 4) // 5)
+    phases.append(MemoryEstimate("analysis", persistent=retained,
+                                 temporary=analysis.additional_peak - retained))
+    phases.append(MemoryEstimate("RGB and QImage workspace", persistent=cells * 32))
+    if config.mode == "Primes" and overlay and config.placement == "Linear":
+        phases.append(estimate_overlay(
+            (config.z, config.y, config.x), cells,
+            bins=get_config().entropy_bins, plane_shape=shape,
+        ))
+    return compose_estimates("interactive rendering", phases)
 
 
 @dataclass(frozen=True)

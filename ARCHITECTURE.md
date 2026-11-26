@@ -188,6 +188,22 @@ context and is not subtracted again. When dynamic sources cannot be read, the
 configured cap remains active with `configured-cap-only` confidence; total
 physical RAM is never substituted for available memory.
 
+Cgroup detection maps the process membership from `/proc/self/cgroup` through
+the matching memory mount's root and mount point in `/proc/self/mountinfo`,
+including escaped paths. It reads v2 `memory.max`/`memory.current` or v1
+`memory.limit_in_bytes`/`memory.usage_in_bytes` in the mapped directory and
+visible applicable ancestors. Legacy ancestors require `memory.use_hierarchy=1`.
+Known usage at or above a finite limit yields zero headroom, not an unknown
+source. Unlimited, malformed, inaccessible or missing values are omitted;
+unrelated hierarchies are not used. Ancestors hidden above a mount root and
+namespace memberships that cannot be mapped reliably remain unknown. Reads
+are observations, not a reservation or an atomic OS snapshot.
+
+The POSIX `resource` module is optional. Without it or `RLIMIT_AS`, that source
+is omitted while other sources and the configured cap remain operational.
+Missing `/proc` or OS availability APIs similarly reduce detection confidence;
+simulated missing APIs do not establish validation on a real non-Linux host.
+
 `MemoryEstimate` separates already allocated, persistent, temporary and
 host/device-transfer bytes. `MemoryBudgetExceeded` derives from `MemoryError`
 and exposes the operation, additional and total estimated peaks, effective
@@ -202,11 +218,21 @@ models itemize int64 numbers, boolean selections, scalar fields, public copies,
 placement temporaries and the fact that an LRU miss can coexist with old
 entries. CPU/GPU sieve models include the growing bool sieve, old cache, public
 copy, masks, int64 indices and transfers. Local entropy models the actual bin
-count, padded int32 grid, `(bins,y,x)` int32 counts and float64 probability/term
-tensors (the STEP 06A observation at eight bins was about 350 bytes/cell). FFT
+count and dtype, including the eager expression's simultaneous temporaries.
+For N plane cells, B bins and P padded cells, retained input/ratios/quantized
+arrays and padding cost `20N+4P` bytes. The expression peak includes counts
+`4BN`, probabilities `8BN`, a condition `BN`, negation `8BN`, logarithm `8BN`
+and product `8BN`: `37BN` bytes. Quantization and reduction alternatives are
+compared by maximum before applying the existing 20% margin once. Constant
+fields use the same conservative admission model; bins below two are rejected
+by the estimator. This accounts for identified array lifetimes, not a universal
+bound for every NumPy/CuPy version or allocator. FFT
 metrics and display have distinct conservative starting coefficients of 110
 and 72 bytes/cell. Overlay uses 400 bytes/cell for Linear and 520 for Python-
-heavy placements, plus resident volume context; sequential trials do not
+heavy placements as an alternative envelope, compared with caller workspace
+plus the maximum bin-dependent entropy/FFT child peak. Already-margined
+children are included once. Actual plane dimensions determine padding; callers
+without dimensions use a conservative singleton plane. Sequential trials do not
 multiply the peak. Scan includes Python pair/result objects and the maximum
 single-operation peak. 3D includes dense coordinates, masks, positions and
 colors before subsampling.
@@ -248,7 +274,11 @@ conservatively includes the new entry before eviction, sieve growth for prime
 modes, scalar fields where applicable, retained projection products and later
 metric/display phases. Scan and placement comparison force a cold estimate
 because their configurations change; interactive rendering composes the
-projection snapshot with analysis, RGB and QImage buffers. If buffer lifetime
+projection snapshot with the selected entropy or FFT analysis, retained analysis
+output, RGB/QImage buffers and subsequent quick metrics. Scalar-field caches
+and projection products are included where applicable. Overlay guards propagate
+the configured entropy bin count to scan and placement-comparison preflights.
+If buffer lifetime
 is uncertain, the model retains it through the next phase. This can reject a
 request conservatively but cannot provide cross-thread reservations or a
 guarantee against concurrent memory pressure.

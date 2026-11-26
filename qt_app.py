@@ -60,7 +60,7 @@ from atlas_engine import (
     placement_geometry_metrics,
     projection,
     _overlay_operation_memory_estimate,
-    _projection_operation_memory_estimate,
+    _render_operation_memory_estimate,
 )
 from app_config import (
     AppConfig,
@@ -82,8 +82,6 @@ from compute_backend import (
 from metrics import entropy_edge_mask
 from memory_policy import (
     MemoryBudgetExceeded,
-    MemoryEstimate,
-    compose_estimates,
     estimate_3d,
     estimate_scan,
     require_memory,
@@ -1909,26 +1907,9 @@ class MainWindow(QMainWindow):
                 raise ValueError(
                     f"Volume {total:,} exceeds the {maximum:,}-cell safety limit"
                 )
-            render_projection = _projection_operation_memory_estimate(
-                cfg, self.plane.currentText(), public_copy=True,
-            )
-            plane_cells = {
-                "XY": cfg.x * cfg.y,
-                "XZ": cfg.x * cfg.z,
-                "YZ": cfg.y * cfg.z,
-            }[self.plane.currentText()]
-            require_memory(compose_estimates(
-                "interactive rendering",
-                (
-                    MemoryEstimate(
-                        "retained projection",
-                        persistent=render_projection.additional_peak,
-                    ),
-                    MemoryEstimate(
-                        "analysis, RGB and QImage buffers",
-                        temporary=plane_cells * 32,
-                    ),
-                ),
+            require_memory(_render_operation_memory_estimate(
+                cfg, self.plane.currentText(), self.view_mode.currentText(),
+                self.overlay.isChecked(),
             ))
             data = projection(
                 cfg,

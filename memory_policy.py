@@ -9,7 +9,10 @@ proof that an admitted operation cannot encounter ``MemoryError``.
 from dataclasses import dataclass, field
 import os
 from pathlib import Path
-import resource
+try:
+    import resource
+except ImportError:  # Optional on platforms without POSIX resource limits.
+    resource = None
 from typing import Mapping
 
 
@@ -210,18 +213,24 @@ def estimate_entropy(shape, bins=8, *, device="host"):
         raise ValueError("entropy shape must be two-dimensional")
     cells = _cells(shape)
     bins = _integer(bins, "bins", 2)
-    # Explicit arrays: float input/ratios, int32 quantized/padding/counts,
-    # float64 probabilities/terms/output, plus comparison temporaries.
+    # Match the existing eager expression, not just its named final arrays.
+    # Input/ratios/quantized/padding can remain live throughout. During
+    # -probs * log2(probs), counts (4B), probs (8B), condition (B), negative
+    # (8B), logarithm (8B) and product (8B) may coexist: 37B bytes/cell.
     padding_cells = (int(shape[0]) + 2) * (int(shape[1]) + 2)
-    bytes_raw = cells * (8 + 8 + 4 + 8 + 1) + padding_cells * 4
-    bytes_raw += bins * cells * (4 + 8 + 8) + cells * 8
+    retained = cells * 20 + padding_cells * 4
+    expression = bins * cells * 37
+    # Other phases are exclusive, not cumulative. Quantization includes
+    # float intermediates; reduction retains counts/probs/terms and output.
+    bytes_raw = max(cells * 44, retained + expression,
+                    retained + bins * cells * 20 + cells * 8)
     transfers = cells * 16 if device == "gpu" else 0
     return MemoryEstimate(
         "local entropy",
         temporary=_margin(bytes_raw),
         transfers=_margin(transfers),
-        components={"bin count/probability tensors": bins * cells * 20,
-                    "quantization and padding": bytes_raw - bins * cells * 20,
+        components={"entropy expression peak": expression,
+                    "retained quantization and padding": retained,
                     "host/device transfers": transfers},
     )
 
@@ -240,19 +249,33 @@ def estimate_fft(shape, *, display=False, device="host"):
     )
 
 
-def estimate_overlay(shape, plane_cells, *, trials=1, placement="Linear"):
+def estimate_overlay(shape, plane_cells, *, trials=1, placement="Linear",
+                     bins=8, plane_shape=None):
     volume_cells = _cells(shape)
     plane_cells = _integer(plane_cells, "plane_cells", 1)
     _integer(trials, "trials", 1)  # sequential: validates but does not multiply peak
     persistent = volume_cells * 9
     factor = 400 if placement == "Linear" else 520
-    temporary = plane_cells * factor
+    # Without dimensions a singleton plane conservatively bounds padding.
+    plane_shape = (1, plane_cells) if plane_shape is None else tuple(plane_shape)
+    if len(plane_shape) != 2 or _cells(plane_shape) != plane_cells:
+        raise ValueError("plane_shape must match plane_cells")
+    envelope = _margin(plane_cells * factor)
+    entropy = estimate_entropy(plane_shape, bins).additional_peak
+    fft = estimate_fft(plane_shape).additional_peak
+    # Caller-side masks, bases, random-control work and retained entropy
+    # output surround sequential entropy/FFT phases. Child work is included
+    # once, already margined; the empirical envelope is an alternative.
+    workspace = _margin(plane_cells * 64)
+    temporary = max(envelope, workspace + max(entropy, fft))
     return MemoryEstimate(
         "overlay metrics",
         already_allocated=persistent,
-        temporary=_margin(temporary),
+        temporary=temporary,
         components={"resident volume": persistent,
-                    "simultaneous metric temporaries": temporary},
+                    "metric envelope": envelope,
+                    "caller workspace": workspace,
+                    "entropy child": entropy, "FFT child": fft},
     )
 
 
@@ -294,7 +317,7 @@ def _read_int(path):
             return None
         value = int(text)
         return value if value >= 0 else None
-    except (OSError, ValueError):
+    except (OSError, ValueError, UnicodeError):
         return None
 
 
@@ -318,37 +341,76 @@ def _os_available_memory():
 
 
 def _cgroup_remaining():
+    """Headroom in the process's visible, mounted memory hierarchies only.
+
+    Ancestors above a mount root or namespace-relative memberships that cannot
+    be mapped to that root are unknown; do not guess a foreign cgroup.
+    """
     candidates = []
-    roots = {Path("/sys/fs/cgroup")}
     try:
-        for line in Path("/proc/self/cgroup").read_text(encoding="ascii").splitlines():
-            _hierarchy, controllers, relative = line.split(":", 2)
-            if controllers == "":  # unified cgroup v2
-                current = Path("/sys/fs/cgroup") / relative.lstrip("/")
-                root = Path("/sys/fs/cgroup")
-                while current != root and root in current.parents:
-                    roots.add(current)
-                    current = current.parent
-            elif "memory" in controllers.split(","):  # legacy cgroup v1
-                roots.add(Path("/sys/fs/cgroup/memory") / relative.lstrip("/"))
-    except (OSError, ValueError):
-        pass
-    for root in roots:
-        maximum = _read_int(root / "memory.max")
-        current = _read_int(root / "memory.current")
-        if maximum is not None and current is not None and maximum >= current:
-            candidates.append(maximum - current)
-        maximum = _read_int(root / "memory/memory.limit_in_bytes")
-        current = _read_int(root / "memory/memory.usage_in_bytes")
-        if maximum is not None and current is not None and maximum >= current:
-            candidates.append(maximum - current)
+        memberships = Path("/proc/self/cgroup").read_text(encoding="ascii").splitlines()
+        mounts = Path("/proc/self/mountinfo").read_text(encoding="ascii").splitlines()
+    except (OSError, UnicodeError):
+        return None
+
+    def unescape(value):
+        # Decode mountinfo's escapes in one pass (including literal backslash).
+        import re
+        return re.sub(r"\\(040|011|012|134)",
+                      lambda match: chr(int(match[1], 8)), value)
+
+    for line in memberships:
+        try:
+            _hierarchy, controllers, membership = line.split(":", 2)
+        except ValueError:
+            continue
+        v2 = controllers == ""
+        if not v2 and "memory" not in controllers.split(","):
+            continue
+        member = Path(membership)
+        if not member.is_absolute() or ".." in member.parts:
+            continue
+        for mount in mounts:
+            try:
+                before, after = mount.split(" - ", 1)
+                fields, options = before.split(), after.split()
+                kind = options[0]
+                if kind != ("cgroup2" if v2 else "cgroup"):
+                    continue
+                if not v2 and "memory" not in options[2].split(","):
+                    continue
+                root, point = Path(unescape(fields[3])), Path(unescape(fields[4]))
+                if not root.is_absolute() or not point.is_absolute():
+                    continue
+                if ".." in root.parts or ".." in point.parts:
+                    continue
+                relative = member.relative_to(root)
+            except (ValueError, IndexError):
+                continue
+            node = point / relative
+            while True:
+                limit_name = "memory.max" if v2 else "memory.limit_in_bytes"
+                usage_name = "memory.current" if v2 else "memory.usage_in_bytes"
+                maximum = _read_int(node / limit_name)
+                current = _read_int(node / usage_name)
+                # Legacy ancestors constrain descendants only when their
+                # hierarchical accounting is enabled. Unknown is not proof.
+                applicable = (v2 or node == point / relative or
+                              _read_int(node / "memory.use_hierarchy") == 1)
+                if applicable and maximum is not None and current is not None:
+                    candidates.append(max(0, maximum - current))
+                if node == point:
+                    break
+                node = node.parent
     return min(candidates) if candidates else None
 
 
 def _rlimit_as_headroom():
+    if resource is None or not hasattr(resource, "RLIMIT_AS"):
+        return None
     try:
         soft, _hard = resource.getrlimit(resource.RLIMIT_AS)
-    except (ValueError, OSError):
+    except (ValueError, OSError, AttributeError):
         return None
     if soft in (resource.RLIM_INFINITY, -1):
         return None

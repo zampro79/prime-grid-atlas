@@ -1,8 +1,283 @@
 import unittest
 from unittest import mock
+import subprocess
+import sys
+import inspect
 
 import memory_policy as policy
 from app_config import AppConfig, get_config, set_config
+
+
+def _fake_files(files):
+    def read(path, *args, **kwargs):
+        try:
+            return files[str(path)]
+        except KeyError:
+            raise OSError("unavailable simulated file") from None
+    return mock.patch.object(policy.Path, "read_text", new=read)
+
+
+class PreReleaseResourceTests(unittest.TestCase):
+    def setUp(self):
+        self.original_config = get_config()
+
+    def tearDown(self):
+        import atlas_engine as engine
+        set_config(self.original_config)
+        engine.clear_volume_cache()
+
+    def test_entropy_live_buffers_shapes_bins_and_constant_fields(self):
+        import metrics
+        import numpy as np
+        original = np.where
+        for shape in ((1, 1), (1, 9), (7, 1), (4, 9), (10, 10)):
+            for bins in (2, 8, 16, 32, 64):
+                for constant in (False, True):
+                    with self.subTest(shape=shape, bins=bins, constant=constant):
+                        values = (np.zeros(shape) if constant else
+                                  np.arange(shape[0] * shape[1], dtype=float).reshape(shape))
+                        observed = []
+                        def measured(*args, **kwargs):
+                            result = original(*args, **kwargs)
+                            frame = inspect.currentframe().f_back
+                            while frame and frame.f_code.co_name != "_local_entropy_grid":
+                                frame = frame.f_back
+                            if frame:
+                                arrays = list(frame.f_locals.values()) + list(args) + [result]
+                                roots = {}
+                                for array in arrays:
+                                    if isinstance(array, np.ndarray):
+                                        while isinstance(array.base, np.ndarray):
+                                            array = array.base
+                                        roots[id(array)] = array
+                                observed.append(sum(a.nbytes for a in roots.values()))
+                            return result
+                        with mock.patch.object(np, "where", side_effect=measured):
+                            result = metrics.local_entropy_grid(values, shape[1], shape[0], bins)
+                        self.assertEqual(result.size, values.size)
+                        self.assertTrue(observed)
+                        estimate = policy.estimate_entropy(shape, bins)
+                        self.assertLessEqual(max(observed), estimate.additional_peak)
+                        for budget in (estimate.additional_peak, estimate.additional_peak + 1):
+                            policy.require_memory(estimate, budget=budget)
+                        with self.assertRaises(policy.MemoryBudgetExceeded):
+                            policy.require_memory(estimate, budget=estimate.additional_peak - 1)
+
+    def test_degenerate_entropy_returns_without_allocation(self):
+        import metrics
+        with mock.patch.object(metrics, "_local_entropy_grid") as heavy:
+            self.assertEqual(len(metrics.local_entropy_grid([], 0, 2)), 0)
+        heavy.assert_not_called()
+        self.assertEqual(AppConfig().entropy_bins, 8)
+        self.assertEqual(AppConfig().memory_budget_mb, 1024)
+
+    def test_entropy_guard_exact_boundaries_before_kernel(self):
+        import metrics
+        for bins in (2, 8, 16, 32, 64):
+            peak = policy.estimate_entropy((4, 9), bins).additional_peak
+            for delta in (-1, 0, 1):
+                with self.subTest(bins=bins, delta=delta), \
+                     mock.patch.object(policy, "effective_budget", return_value=
+                                       policy.BudgetInfo(peak + delta, "synthetic", "test")), \
+                     mock.patch.object(metrics, "_local_entropy_grid") as kernel:
+                    if delta < 0:
+                        with self.assertRaises(policy.MemoryBudgetExceeded):
+                            metrics.local_entropy_grid([0] * 36, 9, 4, bins)
+                        kernel.assert_not_called()
+                    else:
+                        metrics.local_entropy_grid([0] * 36, 9, 4, bins)
+                        kernel.assert_called_once()
+
+    def test_render_refusal_precedes_projection_and_preserves_snapshot(self):
+        from PySide6.QtWidgets import QApplication
+        import qt_app as q
+        app = QApplication.instance() or QApplication([])
+        window = q.MainWindow()
+        try:
+            window.timer.stop()
+            window.set_dims(4, 4, 2)
+            window.render()
+            data, snapshot = window.current_data, window._render_provenance
+            self.assertIsNotNone(data)
+            set_config(AppConfig(entropy_bins=64, memory_budget_mb=1))
+            window.set_dims(100, 100, 1)
+            window.view_mode.setCurrentText("Local entropy")
+            window.timer.stop()
+            with mock.patch.object(q, "projection") as heavy, \
+                 mock.patch.object(q.QMessageBox, "warning") as warning:
+                window.render()
+            heavy.assert_not_called()
+            warning.assert_called_once()
+            self.assertIs(window.current_data, data)
+            self.assertIs(window._render_provenance, snapshot)
+        finally:
+            window.timer.stop()
+            window.close()
+            app.processEvents()
+
+    def test_documented_presets_fit_default_cap_with_available_memory(self):
+        import atlas_engine as engine
+        for x, y, z, mode, overlay, view in (
+            (71, 30, 30, "Primes", True, "Classic"),
+            (37, 32, 30, "Primes", True, "Classic"),
+            (30, 30, 12, "Primes", True, "Classic"),
+            (40, 40, 8, "Primes", True, "Local entropy"),
+            (30, 30, 12, "Twin primes", True, "Classic"),
+            (30, 30, 3, "Residues modulo N", False, "Classic"),
+        ):
+            estimate = engine._render_operation_memory_estimate(
+                engine.GridConfig(x, y, z, mode), "XY", view, overlay)
+            policy.require_memory(estimate, budget=1024 * policy.MIB)
+
+    def test_overlay_scalar_cold_warm_and_render_composition(self):
+        import atlas_engine as engine
+        for bins in (2, 8, 16, 32, 64):
+            set_config(AppConfig(entropy_bins=bins))
+            for mode in ("Primes", "Residues modulo N"):
+                cfg = engine.GridConfig(9, 4, 2, mode, 7)
+                engine.clear_volume_cache()
+                cold = engine._overlay_operation_memory_estimate(cfg, "XY")
+                engine.projection(cfg, "XY")
+                warm = engine._overlay_operation_memory_estimate(cfg, "XY")
+                self.assertGreaterEqual(cold.additional_peak, warm.additional_peak)
+                child = policy.estimate_entropy((4, 9), bins).additional_peak
+                self.assertGreaterEqual(warm.additional_peak, child)
+                for view in ("Classic", "Local entropy", "Entropy edges only", "FFT 2D"):
+                    render = engine._render_operation_memory_estimate(cfg, "XY", view, True)
+                    if mode == "Primes" or view in ("Local entropy", "Entropy edges only"):
+                        self.assertGreaterEqual(render.additional_peak, child)
+
+    def test_overlay_rejection_precedes_projection_with_nondefault_bins(self):
+        import atlas_engine as engine
+        set_config(AppConfig(entropy_bins=64))
+        cfg = engine.GridConfig(100, 100, 2)
+        estimate = engine._overlay_operation_memory_estimate(cfg, "XY")
+        with mock.patch.object(policy, "effective_budget", return_value=
+                               policy.BudgetInfo(estimate.additional_peak - 1, "synthetic", "test")), \
+             mock.patch.object(engine, "_projection_internal") as heavy:
+            with self.assertRaises(policy.MemoryBudgetExceeded):
+                engine.overlay_metrics(cfg, random_trials=2)
+        heavy.assert_not_called()
+
+    def test_scan_and_comparison_preflight_inherit_bins(self):
+        import atlas_engine as engine
+        cfg = engine.GridConfig(9, 4, 2)
+        for bins in (16, 64):
+            set_config(AppConfig(entropy_bins=bins))
+            child = policy.estimate_entropy((4, 9), bins)
+            for placement in ("Linear", "Seeded random", "Hilbert curve"):
+                operation = engine._overlay_operation_memory_estimate(
+                    cfg, "XY", placement=placement, trials=7, force_cold=True)
+                scan = policy.estimate_scan(9, operation_peak=operation.additional_peak)
+                self.assertGreaterEqual(operation.additional_peak, child.additional_peak)
+                self.assertGreaterEqual(scan.additional_peak, operation.additional_peak)
+
+    def test_missing_rlimit_as_and_malformed_configuration(self):
+        with mock.patch.object(policy, "resource", object()):
+            self.assertIsNone(policy._rlimit_as_headroom())
+        for cap, fraction in ((0, .5), ("bad", .5), (64, 0), (64, float("nan"))):
+            with self.subTest(cap=cap, fraction=fraction), self.assertRaises(ValueError):
+                policy.effective_budget(cap, fraction)
+
+    def test_v2_mount_root_escapes_ancestors_and_foreign_groups(self):
+        files = {"/proc/self/cgroup": "0::/tenant/job\n",
+                 "/proc/self/mountinfo": "1 0 0:1 /tenant /limits\\040memory rw - cgroup2 cgroup rw\n"
+                                         "2 0 0:2 /foreign /wrong rw - cgroup2 cgroup rw\n",
+                 "/limits memory/job/memory.max": "100",
+                 "/limits memory/job/memory.current": "20",
+                 "/limits memory/memory.max": "50",
+                 "/limits memory/memory.current": "40",
+                 "/wrong/memory.max": "0", "/wrong/memory.current": "10"}
+        with _fake_files(files):
+            self.assertEqual(policy._cgroup_remaining(), 10)
+        files["/limits memory/memory.current"] = "50"
+        with _fake_files(files):
+            self.assertEqual(policy._cgroup_remaining(), 0)
+            with mock.patch.object(policy, "_os_available_memory", return_value=None), \
+                 mock.patch.object(policy, "_rlimit_as_headroom", return_value=None):
+                self.assertEqual(policy.effective_budget(64, .5).bytes, 0)
+
+    def test_cgroup_unlimited_malformed_missing_and_inapplicable(self):
+        base = {"/proc/self/cgroup": "malformed\n0::/job\n",
+                "/proc/self/mountinfo": "bad\n1 0 0:1 / /limits rw - cgroup2 cgroup rw\n"}
+        for limit, usage in (("max", "20"), ("-1", "20"), ("bad", "20"),
+                             ("100", "bad"), ("100", "-1")):
+            with self.subTest(limit=limit, usage=usage), _fake_files({**base,
+                    "/limits/job/memory.max": limit, "/limits/job/memory.current": usage}):
+                self.assertIsNone(policy._cgroup_remaining())
+        for files in ({}, {"/proc/self/cgroup": "0::/job\n"},
+                      {**base, "/proc/self/cgroup": "5:cpu:/job\n"}):
+            with _fake_files(files):
+                self.assertIsNone(policy._cgroup_remaining())
+
+    def test_v1_nonhierarchical_ancestor_does_not_constrain_leaf(self):
+        files = {"/proc/self/cgroup": "5:memory:/job\n",
+                 "/proc/self/mountinfo": "1 0 0:1 / /limits rw - cgroup cgroup rw,memory\n",
+                 "/limits/job/memory.limit_in_bytes": "100",
+                 "/limits/job/memory.usage_in_bytes": "20",
+                 "/limits/memory.limit_in_bytes": "50",
+                 "/limits/memory.usage_in_bytes": "50",
+                 "/limits/memory.use_hierarchy": "0"}
+        with _fake_files(files):
+            self.assertEqual(policy._cgroup_remaining(), 80)
+
+    def test_entropy_audit_budget_rejected_before_allocations(self):
+        import metrics
+        import numpy as np
+        with mock.patch.object(policy, "effective_budget", return_value=
+                               policy.BudgetInfo(2450000, "synthetic", "test")), \
+             mock.patch.object(metrics, "_local_entropy_grid") as heavy:
+            with self.assertRaises(policy.MemoryBudgetExceeded):
+                metrics.local_entropy_grid(np.arange(10000), 100, 100, 8)
+        heavy.assert_not_called()
+
+    def test_overlay_includes_64_bin_child(self):
+        import atlas_engine as engine
+        set_config(AppConfig(entropy_bins=64))
+        top = engine._overlay_operation_memory_estimate(
+            engine.GridConfig(100, 100, 2), "XY", force_cold=True)
+        self.assertGreaterEqual(top.additional_peak,
+                                policy.estimate_entropy((100, 100), 64).additional_peak)
+
+    def test_nested_v1_mount_mapping_and_ancestor(self):
+        files = {"/proc/self/cgroup": "5:memory:/tenant/job\n",
+                 "/proc/self/mountinfo": "1 0 0:1 /tenant /limits rw - cgroup cgroup rw,memory\n",
+                 "/limits/job/memory.limit_in_bytes": "100",
+                 "/limits/job/memory.usage_in_bytes": "20",
+                 "/limits/memory.limit_in_bytes": "50",
+                 "/limits/memory.usage_in_bytes": "40",
+                 "/limits/memory.use_hierarchy": "1"}
+        with _fake_files(files):
+            self.assertEqual(policy._cgroup_remaining(), 10)
+
+    def test_v2_overlimit_is_zero(self):
+        files = {"/proc/self/cgroup": "0::/job\n",
+                 "/proc/self/mountinfo": "1 0 0:1 / /sys/fs/cgroup rw - cgroup2 cgroup rw\n",
+                 "/sys/fs/cgroup/job/memory.max": "100",
+                 "/sys/fs/cgroup/job/memory.current": "101"}
+        with _fake_files(files):
+            self.assertEqual(policy._cgroup_remaining(), 0)
+
+    def test_import_without_resource_in_isolated_process(self):
+        code = '''
+import builtins
+original = builtins.__import__
+def importing(name, *args, **kwargs):
+    if name == "resource":
+        raise ModuleNotFoundError("simulated missing resource")
+    return original(name, *args, **kwargs)
+builtins.__import__ = importing
+import memory_policy as p
+import atlas_engine
+assert p._rlimit_as_headroom() is None
+from unittest.mock import patch
+with patch.object(p, "_os_available_memory", return_value=None), patch.object(p, "_cgroup_remaining", return_value=None):
+    b = p.effective_budget(64, .5)
+    assert b.bytes == 64 * p.MIB and b.confidence == "configured-cap-only"
+'''
+        completed = subprocess.run([sys.executable, "-c", code],
+                                   capture_output=True, text=True)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
 
 
 class MemoryEstimateTests(unittest.TestCase):
@@ -112,7 +387,9 @@ class MemoryEstimateTests(unittest.TestCase):
             if path.endswith("/a/b/memory.current"):
                 return 100
             return None
-        with mock.patch.object(policy.Path, "read_text", return_value="0::/a/b\n"), \
+        with _fake_files({
+                 "/proc/self/cgroup": "0::/a/b\n",
+                 "/proc/self/mountinfo": "1 0 0:1 / /sys/fs/cgroup rw - cgroup2 cgroup rw\n"}), \
              mock.patch.object(policy, "_read_int", side_effect=read_int):
             self.assertEqual(policy._cgroup_remaining(), 0)
 
