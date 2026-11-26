@@ -70,9 +70,13 @@ resource policy alongside compatible reliability fixes. The title is
 configuration schema 1, provenance schema `pga.provenance/1.0`, declared
 dependencies and the default 1024 MiB cap remain unchanged.
 
-`CITATION.cff` describes preparation and omits the unassigned new-version DOI
-and release date. Historical 1.0.0 citations remain in README/ZENODO. Finalizing
-those fields is a publication gate, not permission to mint or publish a record.
+`CITATION.cff` describes preparation and includes the author-reserved 1.1.0 DOI
+`10.5281/zenodo.24573039`, not yet registered by publication. The
+planned release date 2026-11-27 is recorded under author authorization.
+Publication has not occurred; if the date changes, realign metadata before
+publishing. Historical 1.0.0
+citations remain in README/ZENODO. Metadata completion does not authorize
+publication or any modification of the original record.
 The [capture plan](screenshots/CAPTURE_PLAN_v1.1.0.md) separates application
 source commit S from a later documentation commit D. Preserve actual native
 metadata and never assign historical artifacts to D or to a new runtime label.

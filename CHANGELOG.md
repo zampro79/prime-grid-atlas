@@ -2,7 +2,11 @@
 
 ## v1.1.0 — Integrity, Reproducibility & Reliability Update (in preparation)
 
-Not yet published. No publication date or new version DOI is assigned.
+Not yet published. Version DOI **10.5281/zenodo.24573039** has been reserved
+by the author in a new version draft in the existing Zenodo series; it is not
+yet registered by publication. The author-authorized planned publication date
+is **2026-11-27**; no publication has occurred. If the release is postponed,
+realign the metadata before publishing.
 
 ### Added
 
@@ -37,10 +41,13 @@ Not yet published. No publication date or new version DOI is assigned.
 - Real CUDA, non-Linux platforms and thread safety are not validated. Memory
   estimates and multi-file crash atomicity have limits; historical Research I
   source provenance remains incomplete.
-- Final 1.1.0 screenshots, artifact privacy review and publication metadata are
-  pending. Original v1.0.0 datasets, manifests, tag, DOI and release notes remain
-  preserved. No scientific formula, schema or dependency update is part of this
-  version-label/documentation step.
+- Source-S 1.1.0 screenshots and examples are integrated in commit D. STEP
+  10R.6 completed full-distribution privacy/CFF validation and fresh 11/11
+  Research I plus 4/4 Research II CSV baseline comparisons in both CPU
+  environments. The planned date is authorized; actual publication, final
+  archive acceptance and publication authorization remain pending. Original v1.0.0 datasets,
+  manifests, tag, DOI and release notes remain preserved. No scientific formula,
+  schema or dependency update is part of this metadata-completion step.
 
 ## v1.0.0 — first official release
 

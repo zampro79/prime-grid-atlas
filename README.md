@@ -179,6 +179,16 @@ Research I/II outputs without regenerating those studies. The
 [integration checksum index](EDITORIAL_SHA256SUMS) covers the integrated assets
 and updated documents, excluding the index itself; it is not a complete-distribution checksum.
 
+STEP 10R.6 validated the complete 205-file distribution from documentation
+commit D = 5335d72191458021145c5a6553dd81efc9d3fc67, including full-distribution
+privacy, local links and the current CFF schema. Both existing Linux CPU
+environments passed 169 tests (168 passed, one CUDA skip), compileall and the
+Research II verifier; fresh Research I/II reruns matched 11/11 and 4/4 baseline
+CSVs respectively. This validation does not establish publication or resolve
+R08-08. The author explicitly accepted that residual risk for publication in
+STEP 10R.9; acceptance does not authorize publication. Final archive acceptance
+and explicit publication approval remain gates.
+
 ## Known issues
 
 Read [KNOWN_ISSUES.md](KNOWN_ISSUES.md), including R08-08, platform/CUDA limits,
@@ -187,8 +197,13 @@ Research I provenance. See also [release notes](RELEASE_NOTES_v1.1.0.md).
 
 ## Citation
 
-[CITATION.cff](CITATION.cff) now describes **1.1.0 in preparation**, without an
-invented DOI or release date. Complete those fields only when established.
+[CITATION.cff](CITATION.cff) describes **1.1.0 in preparation** with reserved
+version DOI **10.5281/zenodo.24573039**. The author reserved this DOI in a new
+version draft within the existing Zenodo series; it is **not yet registered by
+publication**. The author-authorized planned release date is **2026-11-27**,
+recorded in `date-released`; publication has not yet occurred. If it cannot
+take place on that date, stop publication and realign the metadata first.
+Do not cite the reserved identifier as an already published archive.
 
 The original publication remains:
 
@@ -197,7 +212,8 @@ The original publication remains:
 
 That version DOI identifies **1.0.0 only**. Concept DOI
 [10.5281/zenodo.24546972](https://doi.org/10.5281/zenodo.24546972) identifies the
-version family. The 1.1.0 version DOI is pending. See [ZENODO.md](ZENODO.md).
+version family; it is distinct from both version-specific DOIs. The reserved
+1.1.0 DOI does not replace the 1.0.0 DOI. See [ZENODO.md](ZENODO.md).
 
 ## License and authorship
 

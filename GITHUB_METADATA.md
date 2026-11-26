@@ -18,9 +18,11 @@ The original scientific archive for v1.0.0 is
 `https://doi.org/10.5281/zenodo.24546973`. For a general archive website, use
 concept DOI `https://doi.org/10.5281/zenodo.24546972` if no dedicated project
 site is configured; neither is a newly assigned 1.1.0 version DOI.
-A future social-preview image must be selected from an authentic, provenance-
-checked 1.1.0 capture after regeneration. Preparatory images remain labelled
-with their original source/runtime and are not final release assets.
+The reserved 1.1.0 version DOI is `10.5281/zenodo.24573039`; it is not yet
+registered by publication. Select any future social-preview image from the
+reviewed source-S/runtime 1.1.0 captures without relabelling their provenance.
+Preparatory images remain labelled with their original source/runtime and are
+not final release assets.
 
 ## Release identity
 
@@ -30,13 +32,17 @@ with their original source/runtime and are not final release assets.
 - License: `MIT`
 - Repository: `https://github.com/zampro79/prime-grid-atlas`
 - Original v1.0.0 version DOI: `10.5281/zenodo.24546973`
-- Version 1.1.0 DOI and publication date: not established
+- Version 1.1.0 reserved DOI: `10.5281/zenodo.24573039` (not yet registered by publication)
+- Version 1.1.0 planned publication date: `2026-11-27` (author-authorized; not a completed publication)
 - Concept DOI: `10.5281/zenodo.24546972`
 
 ## Publication gate
 
 These are local preparation instructions only. Keep a visible link to
-[Known Issues](KNOWN_ISSUES.md) and retain R08-08 as HIGH/open. Complete final
-artifact privacy review, source/asset attribution, citation metadata and the
+[Known Issues](KNOWN_ISSUES.md) and retain R08-08 as HIGH/open. STEP 10R.6
+completed candidate-D distribution validation and privacy review. The author
+authorized the planned date 2026-11-27 and explicitly accepted R08-08 for
+publication in STEP 10R.9; publication itself remains unauthorized. Validate
+the final snapshot/archive, realign metadata if the date changes, and follow the
 [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md) before a separate author decision
 on GitHub publication. No push, tag, release or social-preview upload is implied.

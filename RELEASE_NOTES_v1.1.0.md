@@ -2,8 +2,10 @@
 
 ## Integrity, Reproducibility & Reliability Update
 
-**Release preparation only — not published.** No publication date or new
-version DOI has been assigned. Original author: **zampro79**. MIT License.
+**Release preparation only — not published.** The author has reserved version
+DOI **10.5281/zenodo.24573039**, not yet registered by publication. The
+author-authorized planned publication date is **2026-11-27**; this does not
+assert a completed publication. Original author: **zampro79**. MIT License.
 Read [Known Issues](KNOWN_ISSUES.md), especially the unresolved native crash.
 
 ## Additive capabilities
@@ -64,6 +66,21 @@ scan exports reported 1.1.0 with the existing schemas. Source identity correctly
 reported the uncommitted working tree based on 39b50c4; this is not a new release
 commit or permission to publish. No new native crash was observed in these runs.
 
+STEP 10R.6 subsequently validated the complete 205-file distribution extracted
+from D = 5335d72191458021145c5a6553dd81efc9d3fc67 without Git metadata. Both
+existing Linux CPU environments passed 169 tests (168 passed, one CUDA skip),
+compileall, Research II verification and native runtime/provenance checks. Fresh
+Research I fixed non-DC and Research II reruns matched 11/11 and 4/4 baseline
+CSVs per environment. The seven-example verifier passed 5,953 numerical checks
+against clean S. Native provenance without Git reported file hashes and unknown
+Git fields, without inventing a commit. No new native crash was observed.
+
+The 1.1.0 cache, export-provenance and memory-policy changes listed above address
+pre-existing reliability gaps and cases identified during 1.1.0 development.
+Earlier mathematical-definition corrections, including fixed non-DC spectral
+entropy normalization, already belonged to 1.0.0; they are not new 1.1.0 fixes.
+R08-08 remains unresolved.
+
 ## Integrated visual documentation and project origins
 
 The author approved the source-S [seven demonstrations](examples/release-1.1.0/README.md),
@@ -96,18 +113,36 @@ Real CUDA, non-Linux platforms and general thread safety are not validated.
 Memory estimates vary with libraries/allocators; shared configuration and
 concurrent execution are not isolated (PGA-ARCH-04 remains deferred). Historical
 Research I CSV reconstruction does not identify the complete original source
-snapshot or recover the original environment. R08-07 is FIXED for the reviewed integrated visual/historical material only;
-the complete future distribution must undergo a fresh privacy check. No speculative Qt cleanup change is included.
+snapshot or recover the original environment. STEP 10R.6 completed the full
+candidate-D privacy review: R08-07 is FIXED for those exact reviewed bytes.
+Later metadata/archive changes require their own scoped privacy check. No
+speculative Qt cleanup change is included.
+
+## Citation and archive identity
+
+Reserved version 1.1.0 DOI: **10.5281/zenodo.24573039**, not yet registered by
+publication. Concept DOI: **10.5281/zenodo.24546972**. The published version
+1.0.0 DOI **10.5281/zenodo.24546973** identifies 1.0.0 only.
+
+Use [CITATION.cff](CITATION.cff) for the version actually used. Until the new
+archive is published, do not describe the reserved DOI as an available archived
+release; identify the actual source commit. After publication, cite the verified
+version DOI and actual publication date. Source-S captures and native manifests
+retain their original source identity regardless of a later metadata commit M.
 
 ## Remaining publication gates
 
-- Author approval of the integrated editorial diff and a separately authorized
-  commit D; application source S is already established.
-- Final candidate validation and complete-distribution privacy check; preserve
-  the original source-S evidence and separately retained preparatory material.
-- Verified future version DOI and release date, consistent citation/archive
-  metadata, final source/assets review and explicit publication authorization.
+- Verify that actual publication can take place on the authorized planned date
+  2026-11-27; otherwise stop and realign the metadata before publishing.
+- Complete author review of the prepared final archive and publication texts.
+  Metadata commit M is authorized by STEP 10R.9; D was validated in STEP 10R.6.
+- Identify and verify the final source snapshot, tag and archive, without changing
+  source-S evidence, historical datasets or separately retained preparatory files.
+- Preserve R08-08 as open despite the author’s explicit publication-risk
+  acceptance in STEP 10R.9. Acceptance does not authorize publication.
+- Explicit authorization for any push, merge, tag, GitHub Release or Zenodo
+  publication; verify the reserved DOI and matching final records at that stage.
 
-See [the 1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md) and
-[capture specification](screenshots/CAPTURE_PLAN_v1.1.0.md). No push, merge,
-tag, GitHub release or Zenodo operation is implied.
+See [the 1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md),
+[Known Issues](KNOWN_ISSUES.md) and [Zenodo metadata](ZENODO.md).
+No publication or external operation is implied by these local release notes.

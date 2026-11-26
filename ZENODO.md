@@ -38,42 +38,65 @@ found. Previously excluded local historical materials are absent.
 
 ## Future versions
 
-Do not create an independent upload for the same project and do not enable
-automatic GitHub ingestion without first proving that it will attach to this
-existing concept record.
+Do not create an independent upload for the same project or enable automatic
+GitHub ingestion without proving association with this existing concept record.
+Use **New version** for new files, rather than editing the original publication.
+The original record and its descriptive metadata must remain unchanged.
 
-For a future approved software release:
+For an approved release, the DOI/source-archive sequence is:
 
-1. finalize and publish the GitHub tag and release;
-2. open Zenodo record `24546973` and select **New version**;
-3. import or replace files in that version draft as appropriate;
-4. upload one source ZIP generated from the approved Git tag;
-5. set the new software version and link the matching GitHub release;
-6. verify metadata, license and archive checksum before publishing the draft;
-7. record the new version-specific DOI in that release's citation metadata;
-8. retain concept DOI `10.5281/zenodo.24546972` across the version family.
+1. create a new version draft from record `24546973` in the existing series;
+2. obtain its reserved version DOI before completing local citation metadata;
+3. confirm the actual publication date, complete the local metadata and validate
+   the final CFF; do not use the draft-creation date as an assumed release date;
+4. review and, only with authorization, commit the final metadata as M, preserving
+   application source S and documentation commit D as separate references;
+5. with separate authorization, fix tag `v1.1.0` on the approved final snapshot,
+   prepare the GitHub Release and generate one verified source ZIP from that tag;
+6. use the same verified ZIP bytes for the release asset and new Zenodo version,
+   checking the metadata, license, matching release link, size and checksum;
+7. publish only after explicit approval, then verify both public records and
+   downloaded archive bytes; retain concept DOI `10.5281/zenodo.24546972`.
 
-Zenodo documents that GitHub repository integration automatically ingests new
-GitHub releases once enabled. Because v1.0.0 was deposited manually, enabling
-that integration without an established association could create a second
-record rather than a new version of this concept. It therefore remains disabled.
-Use Zenodo's **New version** workflow unless Zenodo confirms a safe migration of
-the existing manual record into the GitHub integration.
+Reserving the DOI before M avoids a DOI/citation/commit/archive dependency cycle.
+Record the final commit and ZIP checksum externally rather than embedding either
+in its own contents. Keep source-S native manifests unchanged. If the actual
+publication date is not established, the date and final publication remain gates.
 
-## 1.1.0 preparation — no new deposit or DOI
+The manual record must remain in the existing series. Do not enable automatic
+GitHub ingestion or create a duplicate concept record during this preparation.
 
-The application now identifies itself as **1.1.0 — Integrity, Reproducibility &
-Reliability Update**, in preparation. No new release date or version DOI has been
-established. `CITATION.cff` therefore omits those fields temporarily; it must not
-attribute 1.1.0 to the 1.0.0 version DOI.
+## 1.1.0 preparation — reserved DOI, not published
 
-The verified original record, archive checksums, source commit and citation
-above remain historical and unchanged. Version DOI **10.5281/zenodo.24546973**
-continues to identify 1.0.0 only; concept DOI **10.5281/zenodo.24546972** identifies
-the version family. Finalize the actual new DOI/date and source-archive/citation
-sequence under separately authorized publication planning; do not invent either
-value, change the original deposit, or enable automatic ingestion here.
+The application identifies itself as **1.1.0 — Integrity, Reproducibility &
+Reliability Update**. The author reports manually creating a new version draft
+in the existing Zenodo series and reserving **10.5281/zenodo.24573039** for 1.1.0.
+This is a **reserved DOI, not yet registered by publication**; it is not evidence
+that the new archive is available or the DOI already resolves.
 
-R08-08 remains HIGH/open and must be disclosed in release metadata. See
-[Known Issues](KNOWN_ISSUES.md) and the [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
-No Zenodo action has been performed by this preparation.
+`CITATION.cff` records this reserved identifier and the author-authorized
+planned publication date **2026-11-27** in `date-released`. Actual publication
+has not occurred. If release cannot take place on that date, stop publication
+and request metadata realignment before proceeding. The final source snapshot M
+and its archive are prepared under STEP 10R.9; tag creation, final archive
+acceptance and publication remain subject to separate authorization.
+
+| Identifier | Meaning |
+|---|---|
+| `10.5281/zenodo.24546973` | Published version 1.0.0 only |
+| `10.5281/zenodo.24573039` | Reserved version 1.1.0 DOI; not yet registered by publication |
+| `10.5281/zenodo.24546972` | Concept DOI for the version family |
+
+The verified original record, archive checksums, source commit, citation and
+original descriptive metadata remain unchanged. No DOI or date is reassigned
+retroactively to 1.0.0. Metadata completion does not rewrite artifact manifests,
+capture timestamps or their source-S attribution.
+
+STEP 10R.6 validated candidate D, its full-distribution privacy, current CFF and
+scientific baselines. These results do not establish final publication. R08-08
+remains **HIGH / OPEN / NOT REPRODUCED / ROOT CAUSE UNKNOWN**. The author
+explicitly accepted this residual risk for publication in STEP 10R.9, while
+keeping the issue open. That acceptance does not authorize publication. See [Known Issues](KNOWN_ISSUES.md) and the
+[1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
+
+No GitHub or Zenodo operation is performed by this local metadata completion.

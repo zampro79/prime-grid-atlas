@@ -88,12 +88,17 @@ Use the repository root reported by `git rev-parse --show-toplevel`; do not rely
 The author-approved title is **Integrity, Reproducibility & Reliability Update**.
 Source S is eaf6c433722521c5f0dd6a6b07e112e643b5d05b. The approved
 [visual examples](examples/release-1.1.0/README.md) and
-[historical prototype archive](history/README.md) are integrated in the working
-tree; commit D remains separately authorized. Original source-S metadata and
+[historical prototype archive](history/README.md) are preserved in documentation
+commit D = 5335d72191458021145c5a6553dd81efc9d3fc67. Original source-S metadata and
 capture timestamps are preserved. The historical source is MIT by explicit
 author approval, unsupported, and outside the current engine and scientific
 validation. Preparatory bab02ccf/runtime 1.0.0 files remain preserved outside
-the public tree. Publication and the new version DOI/date remain pending. R08-08 stays HIGH/open with unknown cause;
+the public tree. Publication remains pending. The author reserved the 1.1.0 DOI
+10.5281/zenodo.24573039 in the existing Zenodo series; it is not yet registered
+by publication. The authorized planned release date is 2026-11-27; actual
+publication remains pending and any postponement requires metadata realignment.
+The author accepted R08-08 for publication in STEP 10R.9 without authorizing
+publication itself. R08-08 stays HIGH/open with unknown cause;
 consult [Known Issues](KNOWN_ISSUES.md), the
 [release notes](RELEASE_NOTES_v1.1.0.md) and
 [version checklist](RELEASE_CHECKLIST_v1.1.0.md). Do not relabel the original
