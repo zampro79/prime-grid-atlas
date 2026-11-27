@@ -2,7 +2,7 @@
 
 ## Purpose and scope
 
-Prime Grid Atlas is a desktop environment for experimental mathematics: it places consecutive integers in finite volumes, selects arithmetic subsets, visualizes slices and accumulated occupancy, and compares descriptive metrics against explicit controls. The current application version is `1.1.0`, in release preparation; the first official release remains `1.0.0`. See [VERSIONING.md](VERSIONING.md) for the project's version convention.
+Prime Grid Atlas is a desktop environment for experimental mathematics: it places consecutive integers in finite volumes, selects arithmetic subsets, visualizes slices and accumulated occupancy, and compares descriptive metrics against explicit controls. The current application version is `1.1.0`; the first official release remains `1.0.0`. See [VERSIONING.md](VERSIONING.md) for the project's version convention.
 
 The central research question is:
 
@@ -83,7 +83,7 @@ Run commands from this project directory. It is a source application with flat l
 
 Use the repository root reported by `git rev-parse --show-toplevel`; do not rely on machine-specific paths. Local `results/` are ignored/untracked. Earlier audit statements about tracked results describe a former parent repository, not the current index. Preserve those outputs and inspect Git status before staging. The public author and copyright holder are `zampro79`; the project is licensed under MIT.
 
-## 1.1.0 release-preparation status
+## 1.1.0 source and publication identity
 
 The author-approved title is **Integrity, Reproducibility & Reliability Update**.
 Source S is eaf6c433722521c5f0dd6a6b07e112e643b5d05b. The approved
@@ -93,12 +93,10 @@ commit D = 5335d72191458021145c5a6553dd81efc9d3fc67. Original source-S metadata 
 capture timestamps are preserved. The historical source is MIT by explicit
 author approval, unsupported, and outside the current engine and scientific
 validation. Preparatory bab02ccf/runtime 1.0.0 files remain preserved outside
-the public tree. Publication remains pending. The author reserved the 1.1.0 DOI
-10.5281/zenodo.24573039 in the existing Zenodo series; it is not yet registered
-by publication. The authorized planned release date is 2026-11-27; actual
-publication remains pending and any postponement requires metadata realignment.
-The author accepted R08-08 for publication in STEP 10R.9 without authorizing
-publication itself. R08-08 stays HIGH/open with unknown cause;
+the public tree. Version 1.1.0 is identified by DOI 10.5281/zenodo.24573039
+and author-authorized citation date 2026-11-27 in the existing Zenodo series.
+STEP 10R.9 recorded the author’s publication-risk acceptance for R08-08; that
+step did not authorize publication. R08-08 stays HIGH/open with unknown cause;
 consult [Known Issues](KNOWN_ISSUES.md), the
 [release notes](RELEASE_NOTES_v1.1.0.md) and
 [version checklist](RELEASE_CHECKLIST_v1.1.0.md). Do not relabel the original

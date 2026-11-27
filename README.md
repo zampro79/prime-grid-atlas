@@ -2,7 +2,7 @@
 
 **1.1.0 — Integrity, Reproducibility & Reliability Update**
 
-**Release preparation — not yet published.** Original author: **zampro79**.
+Original author: **zampro79**.
 
 Prime Grid Atlas is a desktop laboratory for experimental number theory. It maps
 integers into finite grids, displays arithmetic subsets and compares measured
@@ -89,7 +89,7 @@ See [RESEARCH.md](RESEARCH.md) and [ARCHITECTURE.md](ARCHITECTURE.md) for detail
 
 Use a compatible existing Python environment or create a local environment for
 a new installation. Commands below use relative paths; dependency installation
-is a reader action, not something performed during this preparation step.
+is a reader action.
 
 ```bash
 python -m venv .venv
@@ -98,7 +98,7 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-Use the appropriate relative activation command for another shell. Preparation
+Use the appropriate relative activation command for another shell. Recorded
 validation uses Linux/Python 3.14.10; other platforms are not validated by API
 simulations. A desktop is required for interactive use and OpenGL for 3D.
 The optional CUDA profile is [requirements-gpu-cuda12.txt](requirements-gpu-cuda12.txt).
@@ -163,12 +163,12 @@ reservation or universal upper bound; see [memory policy](ARCHITECTURE.md#preven
 python -X faulthandler -m unittest discover -s tests -v
 ```
 
-The 1.1.0 preparation working tree completed 169 tests in each existing Linux CPU
+The STEP 10R preparation working tree completed 169 tests in each existing Linux CPU
 environment: 168 passed and one real-CUDA test skipped. Fresh Research I fixed
 non-DC and Research II reruns matched 11/11 and 4/4 relevant baseline CSVs in each
 environment; compileall and the Research II verifier also passed. These checks
-apply to the observed source hashes and environments; committed-source and
-final-asset acceptance remain in the [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
+apply to the observed source hashes and environments; source and artifact acceptance checks are documented in the
+[1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
 The integrated desktop evidence identifies S and its actual Linux Wayland/driver
 environment; see [visual validation](examples/release-1.1.0/VALIDATION.md). No CUDA
 or general thread-safety certification is claimed. The historical prototype is
@@ -184,10 +184,9 @@ commit D = 5335d72191458021145c5a6553dd81efc9d3fc67, including full-distribution
 privacy, local links and the current CFF schema. Both existing Linux CPU
 environments passed 169 tests (168 passed, one CUDA skip), compileall and the
 Research II verifier; fresh Research I/II reruns matched 11/11 and 4/4 baseline
-CSVs respectively. This validation does not establish publication or resolve
-R08-08. The author explicitly accepted that residual risk for publication in
-STEP 10R.9; acceptance does not authorize publication. Final archive acceptance
-and explicit publication approval remain gates.
+CSVs respectively. This validation does not resolve R08-08. The author
+explicitly accepted that residual risk for publication in STEP 10R.9; that
+step did not authorize publication.
 
 ## Known issues
 
@@ -197,13 +196,9 @@ Research I provenance. See also [release notes](RELEASE_NOTES_v1.1.0.md).
 
 ## Citation
 
-[CITATION.cff](CITATION.cff) describes **1.1.0 in preparation** with reserved
-version DOI **10.5281/zenodo.24573039**. The author reserved this DOI in a new
-version draft within the existing Zenodo series; it is **not yet registered by
-publication**. The author-authorized planned release date is **2026-11-27**,
-recorded in `date-released`; publication has not yet occurred. If it cannot
-take place on that date, stop publication and realign the metadata first.
-Do not cite the reserved identifier as an already published archive.
+[CITATION.cff](CITATION.cff) provides the citation metadata for **version 1.1.0**:
+DOI **10.5281/zenodo.24573039**, author **zampro79**, and author-authorized
+`date-released` **2026-11-27**. Cite the version used in your work.
 
 The original publication remains:
 
@@ -212,7 +207,7 @@ The original publication remains:
 
 That version DOI identifies **1.0.0 only**. Concept DOI
 [10.5281/zenodo.24546972](https://doi.org/10.5281/zenodo.24546972) identifies the
-version family; it is distinct from both version-specific DOIs. The reserved
+version family; it is distinct from both version-specific DOIs. The
 1.1.0 DOI does not replace the 1.0.0 DOI. See [ZENODO.md](ZENODO.md).
 
 ## License and authorship

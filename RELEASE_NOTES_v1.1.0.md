@@ -2,10 +2,8 @@
 
 ## Integrity, Reproducibility & Reliability Update
 
-**Release preparation only — not published.** The author has reserved version
-DOI **10.5281/zenodo.24573039**, not yet registered by publication. The
-author-authorized planned publication date is **2026-11-27**; this does not
-assert a completed publication. Original author: **zampro79**. MIT License.
+Version DOI: **10.5281/zenodo.24573039**. Author-authorized citation date:
+**2026-11-27**. Original author: **zampro79**. MIT License.
 Read [Known Issues](KNOWN_ISSUES.md), especially the unresolved native crash.
 
 ## Additive capabilities
@@ -50,14 +48,13 @@ algorithm, declared dependency, configuration schema (1), provenance schema
 (`pga.provenance/1.0`) or default cap (1024 MiB). All original scientific datasets,
 manifests and checksums remain preserved, as do the v1.0.0 tag/deposit and notes.
 
-Preparation validation requires one complete unittest run per existing Linux
+The validation protocol requires one complete unittest run per existing Linux
 CPU environment with faulthandler (169 tests: 168 pass, one CUDA skip), compileall,
 Research II theorem verification and fresh Research I fixed non-DC / Research II
 reruns. Required CSV comparisons are 11/11 and 4/4 byte-identical respectively.
 Version-only test assertions may change; numerical expectations must not.
-Local validation evidence must identify the actual working-tree hashes until a
-new source commit exists. A later final candidate still needs its own reviewed
-validation record; these notes do not assert release publication.
+Working-tree validation evidence identifies the actual observed source hashes.
+Each distribution requires its own reviewed validation record.
 
 The STEP 10R preparation working tree passed those checks in both existing
 environments: 169 tests each (168 passed, one CUDA skip), compileall, the Research
@@ -96,8 +93,8 @@ V0.10 source byte for byte under explicitly approved MIT licensing. Its four
 images are contemporary executions, not original 2025 screenshots. The observed
 level_spin startup NameError and layout limits remain documented and unfixed.
 The prototype is not a current feature, dependency or scientifically validated
-part of the 1.1.0 engine. Its future inclusion in the 1.1.0 archive is approved
-in principle; no release or Zenodo publication is performed by this integration.
+part of the 1.1.0 engine. It is included as historical material, separately from
+the current application and its scientific validation.
 
 ## Known unresolved issues and scope
 
@@ -120,29 +117,26 @@ speculative Qt cleanup change is included.
 
 ## Citation and archive identity
 
-Reserved version 1.1.0 DOI: **10.5281/zenodo.24573039**, not yet registered by
-publication. Concept DOI: **10.5281/zenodo.24546972**. The published version
+Version 1.1.0 DOI: **10.5281/zenodo.24573039**.
+Concept DOI: **10.5281/zenodo.24546972**. The published version
 1.0.0 DOI **10.5281/zenodo.24546973** identifies 1.0.0 only.
 
-Use [CITATION.cff](CITATION.cff) for the version actually used. Until the new
-archive is published, do not describe the reserved DOI as an available archived
-release; identify the actual source commit. After publication, cite the verified
-version DOI and actual publication date. Source-S captures and native manifests
-retain their original source identity regardless of a later metadata commit M.
+Use [CITATION.cff](CITATION.cff) for the version actually used and identify
+the source commit when describing a specific checkout. Source-S captures and
+native manifests retain their original source identity across documentary
+metadata commits.
 
-## Remaining publication gates
+## Publication controls and preservation
 
-- Verify that actual publication can take place on the authorized planned date
-  2026-11-27; otherwise stop and realign the metadata before publishing.
-- Complete author review of the prepared final archive and publication texts.
-  Metadata commit M is authorized by STEP 10R.9; D was validated in STEP 10R.6.
-- Identify and verify the final source snapshot, tag and archive, without changing
-  source-S evidence, historical datasets or separately retained preparatory files.
-- Preserve R08-08 as open despite the author’s explicit publication-risk
-  acceptance in STEP 10R.9. Acceptance does not authorize publication.
-- Explicit authorization for any push, merge, tag, GitHub Release or Zenodo
-  publication; verify the reserved DOI and matching final records at that stage.
+Publication operations require explicit author authorization and a verified
+source snapshot, tag, archive and matching citation metadata. If the authorized
+date changes, stop the publication procedure and realign the metadata first.
+Preserve source-S evidence, historical datasets and separately retained
+preparatory files.
+
+STEP 10R.9 authorized local metadata commit M and archive preparation and
+recorded the author's publication-risk acceptance for R08-08. That step did not
+authorize publication or resolve the issue.
 
 See [the 1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md),
 [Known Issues](KNOWN_ISSUES.md) and [Zenodo metadata](ZENODO.md).
-No publication or external operation is implied by these local release notes.

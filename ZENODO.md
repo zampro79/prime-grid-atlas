@@ -64,27 +64,19 @@ in its own contents. Keep source-S native manifests unchanged. If the actual
 publication date is not established, the date and final publication remain gates.
 
 The manual record must remain in the existing series. Do not enable automatic
-GitHub ingestion or create a duplicate concept record during this preparation.
+GitHub ingestion or create a duplicate concept record through metadata maintenance.
 
-## 1.1.0 preparation — reserved DOI, not published
+## Version 1.1.0 identity
 
 The application identifies itself as **1.1.0 — Integrity, Reproducibility &
-Reliability Update**. The author reports manually creating a new version draft
-in the existing Zenodo series and reserving **10.5281/zenodo.24573039** for 1.1.0.
-This is a **reserved DOI, not yet registered by publication**; it is not evidence
-that the new archive is available or the DOI already resolves.
-
-`CITATION.cff` records this reserved identifier and the author-authorized
-planned publication date **2026-11-27** in `date-released`. Actual publication
-has not occurred. If release cannot take place on that date, stop publication
-and request metadata realignment before proceeding. The final source snapshot M
-and its archive are prepared under STEP 10R.9; tag creation, final archive
-acceptance and publication remain subject to separate authorization.
+Reliability Update**. Its version DOI is **10.5281/zenodo.24573039**, within
+concept DOI **10.5281/zenodo.24546972**. `CITATION.cff` records the version
+identifier and the author-authorized `date-released` **2026-11-27**.
 
 | Identifier | Meaning |
 |---|---|
 | `10.5281/zenodo.24546973` | Published version 1.0.0 only |
-| `10.5281/zenodo.24573039` | Reserved version 1.1.0 DOI; not yet registered by publication |
+| `10.5281/zenodo.24573039` | Version 1.1.0 DOI |
 | `10.5281/zenodo.24546972` | Concept DOI for the version family |
 
 The verified original record, archive checksums, source commit, citation and
@@ -99,4 +91,4 @@ explicitly accepted this residual risk for publication in STEP 10R.9, while
 keeping the issue open. That acceptance does not authorize publication. See [Known Issues](KNOWN_ISSUES.md) and the
 [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md).
 
-No GitHub or Zenodo operation is performed by this local metadata completion.
+Local metadata maintenance does not itself authorize GitHub or Zenodo operations.

@@ -1,12 +1,9 @@
 # Changelog
 
-## v1.1.0 — Integrity, Reproducibility & Reliability Update (in preparation)
+## v1.1.0 — Integrity, Reproducibility & Reliability Update
 
-Not yet published. Version DOI **10.5281/zenodo.24573039** has been reserved
-by the author in a new version draft in the existing Zenodo series; it is not
-yet registered by publication. The author-authorized planned publication date
-is **2026-11-27**; no publication has occurred. If the release is postponed,
-realign the metadata before publishing.
+Version DOI: **10.5281/zenodo.24573039**. Author-authorized citation date:
+**2026-11-27**.
 
 ### Added
 
@@ -44,10 +41,9 @@ realign the metadata before publishing.
 - Source-S 1.1.0 screenshots and examples are integrated in commit D. STEP
   10R.6 completed full-distribution privacy/CFF validation and fresh 11/11
   Research I plus 4/4 Research II CSV baseline comparisons in both CPU
-  environments. The planned date is authorized; actual publication, final
-  archive acceptance and publication authorization remain pending. Original v1.0.0 datasets,
-  manifests, tag, DOI and release notes remain preserved. No scientific formula,
-  schema or dependency update is part of this metadata-completion step.
+  environments. Original v1.0.0 datasets, manifests, tag, DOI and release notes
+  remain preserved. Metadata finalization does not change scientific formulas,
+  schemas or dependencies.
 
 ## v1.0.0 — first official release
 

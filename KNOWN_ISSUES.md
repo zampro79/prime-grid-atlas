@@ -44,10 +44,10 @@ respect to abrupt crashes and concurrent writers (PROV-02).
 
 ## Editorial status and historical evidence
 
-R08-07 is **FIXED for the reviewed integrated visual examples and historical
-prototype material only**. The future complete distribution requires another
-privacy review before publication. Original capture metadata and native manifests
+The STEP 10R.4 review classified R08-07 as **FIXED for the reviewed integrated
+visual examples and historical prototype material only**. Distribution privacy
+reviews apply to each concrete source snapshot separately. Original capture metadata and native manifests
 remain unchanged. Preparatory bab02ccf/runtime 1.0.0 images are preserved outside
-the public tree and are not 1.1.0 screenshots. No publication is implied here.
+the public tree and are not 1.1.0 screenshots.
 The diagnostic observation that `ModuleScanTab.thread` shadows `QObject.thread()`
 is not a demonstrated cause of R08-08; that attribute has not been changed.

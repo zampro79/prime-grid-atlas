@@ -4,9 +4,9 @@
 
 Prime Grid Atlas uses **Semantic Versioning (MAJOR.MINOR.PATCH)** to communicate compatibility, including scientific compatibility. Assess every change; never update version strings without explicit owner confirmation. Documentation-only maintenance normally requires no application version change.
 
-The current application label is **`1.1.0`**, in release preparation. The canonical first official release remains **`1.0.0`**. The current label is stored in `qt_app.APP_VERSION` and repeated independently in documentation, citation metadata and a regression assertion. Normal numeric components do not contain leading zeroes, in accordance with [Semantic Versioning 2.0.0, rule 2](https://semver.org/#spec-item-2). Do not relabel historical exports.
+The current application label is **`1.1.0`**. The canonical first official release remains **`1.0.0`**. The current label is stored in `qt_app.APP_VERSION` and repeated independently in documentation, citation metadata and a regression assertion. Normal numeric components do not contain leading zeroes, in accordance with [Semantic Versioning 2.0.0, rule 2](https://semver.org/#spec-item-2). Do not relabel historical exports.
 
-`v1.0.0` is the preserved tag/display shorthand for the first release; no 1.1.0 tag or publication is created by this preparation. `CONFIG_SCHEMA_VERSION = 1` and `cff-version: 1.2.0` are different schema identifiers, not application releases. Dependency versions and recorded experiment environments are also separate.
+`v1.0.0` is the preserved tag/display shorthand for the first release. Version labels alone do not create Git tags or publish releases. `CONFIG_SCHEMA_VERSION = 1` and `cff-version: 1.2.0` are different schema identifiers, not application releases. Dependency versions and recorded experiment environments are also separate.
 
 ## Classifying changes
 
@@ -62,7 +62,7 @@ Before implementing this, preserve the canonical `1.0.0` spelling and check comp
 
 Version approval is not permission to tag, push, create a GitHub release, publish a repository, create a DOI or select/change a license. Each requires the relevant explicit authorization. Follow the [1.1.0 checklist](RELEASE_CHECKLIST_v1.1.0.md) as a set of gates requiring owner decisions, not instructions to publish during ordinary maintenance. The [v1.0.0 checklist](RELEASE_CHECKLIST.md) remains a preserved historical record.
 
-## Approved 1.1.0 preparation
+## Approved 1.1.0 scope
 
 The author approved a MINOR increment for additive provenance and configurable
 resource policy alongside compatible reliability fixes. The title is
@@ -70,13 +70,11 @@ resource policy alongside compatible reliability fixes. The title is
 configuration schema 1, provenance schema `pga.provenance/1.0`, declared
 dependencies and the default 1024 MiB cap remain unchanged.
 
-`CITATION.cff` describes preparation and includes the author-reserved 1.1.0 DOI
-`10.5281/zenodo.24573039`, not yet registered by publication. The
-planned release date 2026-11-27 is recorded under author authorization.
-Publication has not occurred; if the date changes, realign metadata before
-publishing. Historical 1.0.0
-citations remain in README/ZENODO. Metadata completion does not authorize
-publication or any modification of the original record.
+`CITATION.cff` identifies version 1.1.0 with DOI `10.5281/zenodo.24573039`
+and author-authorized date-released 2026-11-27. If the authorized date changes,
+realign the metadata before publishing. Historical 1.0.0 citations remain in
+README/ZENODO. Metadata maintenance does not authorize publication or any
+modification of the original record.
 The [capture plan](screenshots/CAPTURE_PLAN_v1.1.0.md) separates application
 source commit S from a later documentation commit D. Preserve actual native
 metadata and never assign historical artifacts to D or to a new runtime label.
